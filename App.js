@@ -5,6 +5,7 @@ export default function App() {
   return (
     <View style={styles.container}>
       <Text>App quan ly bida</Text>
+      <Text> Tran gia Dai</Text>
       <StatusBar style="auto" />
     </View>
   );
