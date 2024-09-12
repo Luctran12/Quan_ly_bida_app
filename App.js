@@ -1,19 +1,21 @@
-import { StatusBar } from "expo-status-bar";
-import { StyleSheet, Text, View } from "react-native";
-export default function App() {
+import React from 'react';
+import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
+import BookFood from "./components/FoodSource/BookFood.js"
+export default function App(){
   return (
     <View style={styles.container}>
-      <Text>App quan ly bida</Text>
-      <StatusBar style="auto" />
+       <BookFood/>
     </View>
   );
-}
+};
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#fff",
-    alignItems: "center",
-    justifyContent: "center",
+    justifyContent: 'center',
+    alignItems: 'center',
   },
+  
 });
+
+
