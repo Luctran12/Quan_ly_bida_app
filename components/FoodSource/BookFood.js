@@ -1,18 +1,28 @@
 import { useState } from "react";
-import { View, StyleSheet,Modal,Platform,Button, Text, SafeAreaView, ScrollView, TextInput, Alert } from "react-native";
+import { View, StyleSheet,Modal,Platform,Button, Text, SafeAreaView, ScrollView, TextInput, Alert, FlatList } from "react-native";
 import FoodCard from "./FoodCard";
+import FoodData from "./FoodData.json"
 
-
-
+const imageMap = {
+    'Kem': require('../../assets/Food/kem.png'),
+    'Sting': require('../../assets/Food/sting.png'),
+    'Pepsi': require('../../assets/Food/pepsi.png'),
+    'Mì tôm': require('../../assets/Food/mitom.png'),
+    'Trà đá': require('../../assets/Food/trada.png'),
+    'Nui xào': require('../../assets/Food/nui.png'),
+    'Cà phê': require('../../assets/Food/cf.png'),
+    'Cà phê sữa': require('../../assets/Food/cfs.png'),
+    'Trà sữa': require('../../assets/Food/ts.png'),
+    'Trà đào': require('../../assets/Food/td.png'),
+    
+}
 const BookFood = () =>{
     const [isModalVisiable, setIsModalVisisable] = useState(false)
     const [quantity,setQuantity]= useState('')
     const [table,setTable]= useState('')
-    const [selectFood, setSelectFood] = useState('')
 
 
-    const pressFood = (name) =>{
-        setSelectFood(name)
+    const pressFood = () =>{
         setIsModalVisisable(true);
     };
     const pressConfirm= () =>{
@@ -35,58 +45,29 @@ const BookFood = () =>{
 
     return(
     <SafeAreaView style={styles.safe}>
-        <Text style={styles.title}>Đặt đồ ăn</Text>
-        <ScrollView contentContainerStyle={styles.scrollViewContainer}>
-            
+        <Text style={styles.title}>🍴Food and drink😋</Text>
+            <FlatList 
+                contentContainerStyle={styles.list}
+        
+                data={FoodData}
+                numColumns={2}
                 
-                <View style={styles.foodLayout}>
-                    <FoodCard 
-                        indexImage={require('./Food/kem.png')}
-                        name="Kem"
-                        price="10000"
-                        onPress={pressFood}
-                    />
+                renderItem={({ item }) => (
                     <FoodCard
-                        indexImage={require('./Food/sting.png')}
-                        name="Sting"
-                        price="12000"
+                        indexImage={imageMap[item.name]}
+                        name={item.name}
+                        cost={item.cost}
                         onPress={pressFood}
                     />
-                    <FoodCard
-                        indexImage={require('./Food/pepsi.png')}
-                        name="Pepsi"
-                        price="12000"
-                        onPress={pressFood}
-                    />
-                    <FoodCard
-                        indexImage={require('./Food/mitom.png')}
-                        name="Mì 3 con tôm"
-                        price="25.000"
-                        onPress={pressFood}
-                    />
-                    <FoodCard
-                        indexImage={require('./Food/chanhday.png')}
-                        name="Chanh dây"
-                        price="12000"
-                        onPress={pressFood}
-                    />
-                    <FoodCard
-                        indexImage={require('./Food/nui.png')}
-                        name="Nui xào bò"
-                        price="35000"
-                        onPress={pressFood}
-                    />
-                    
-                </View>
+                )}
+            /> 
                     <Modal 
                         animationType="fade"
                         visible={isModalVisiable}
                         onRequestClose={()=> setIsModalVisisable(!isModalVisiable)}
                         transparent= {true}
                     >
-                    {/* <View>
-                        <Text>Bạn đã chọn </Text>
-                    </View> */}
+                    
                     
                         <View style={styles.popup}>
                             <View style={styles.inputQuantityContainer}>
@@ -122,7 +103,7 @@ const BookFood = () =>{
                         </View>
                     </Modal>
             
-        </ScrollView>
+        
         
     </SafeAreaView>
 
@@ -132,8 +113,8 @@ const BookFood = () =>{
     )
 }
 const styles=StyleSheet.create({
-    scrollViewContainer: {
-        alignItems: "center",
+    list: {
+        padding: 10
     },
     title: {
         fontSize: 30,

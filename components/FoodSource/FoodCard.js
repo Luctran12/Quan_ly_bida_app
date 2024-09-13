@@ -1,5 +1,5 @@
 import { TouchableOpacity, onPress,Image ,Text,View,StyleSheet} from "react-native";
-const FoodCard= ({onPress, indexImage, name, price}) =>{
+const FoodCard= ({onPress, indexImage, name, cost}) =>{
     return (
         
         <TouchableOpacity style={styles.item} onPress={onPress}>
@@ -7,7 +7,7 @@ const FoodCard= ({onPress, indexImage, name, price}) =>{
             <Image source={indexImage} style={styles.image} resizeMode="contain"></Image>
             <View style={styles.detail}>
                 <Text style={styles.nameFood}>{name}</Text>
-                <Text style={styles.price}>{price}</Text>
+                <Text style={styles.cost}>{cost}</Text>
             </View>
             
         </TouchableOpacity>
@@ -17,14 +17,18 @@ const FoodCard= ({onPress, indexImage, name, price}) =>{
 
 const styles=StyleSheet.create({
     item:{
-        width: "100%",
-        height: 200,
+        
+        width: "50%",
+        height: 220,
         backgroundColor: "#F0FFFF",
-        marginBottom: 20,
-        borderWidth: 1.5,
+        marginBottom: 10,
+        marginLeft: 1.5,
+        marginRight: 1.5,
+        borderWidth: 2,
         borderRadius: 10,
         borderColor: "green",
         justifyContent: "center",
+        alignItems: "center",
         shadowColor: "lightgreen",
         shadowOpacity: 3,
         shadowOffset: {
@@ -34,23 +38,26 @@ const styles=StyleSheet.create({
         elevation: 4,
     },
     image: {
-        height: "70%",
-        width: "100%",
+        marginTop: 10,
+        height: "50%",
+        width: "70%",
         borderRadius: 5,
     },
     nameFood: {
-        marginTop: 10,
+        
         fontSize: 20,
         fontWeight:  "bold"
     },
-    price: {
+    cost: {
         fontSize: 16,
-        paddingTop: 20
-
+        marginTop: 30,
+        marginLeft: 30
     },
     detail: {
+        padding: 10,
         flexDirection: "row",
-        justifyContent: "space-around",
+        alignItems:"flex-start",
+        marginTop: 10,
         
     },
 })
