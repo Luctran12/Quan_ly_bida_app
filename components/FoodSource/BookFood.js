@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { View, StyleSheet,Modal,Platform,Button, Text, SafeAreaView, ScrollView, TextInput } from "react-native";
+import { View, StyleSheet,Modal,Platform,Button, Text, SafeAreaView, ScrollView, TextInput, Alert } from "react-native";
 import FoodCard from "./FoodCard";
 
 
@@ -8,17 +8,28 @@ const BookFood = () =>{
     const [isModalVisiable, setIsModalVisisable] = useState(false)
     const [quantity,setQuantity]= useState('')
     const [table,setTable]= useState('')
+    const [selectFood, setSelectFood] = useState('')
 
 
-
-    const pressFood = () =>{
+    const pressFood = (name) =>{
+        setSelectFood(name)
         setIsModalVisisable(true);
     };
     const pressConfirm= () =>{
-        setIsModalVisisable(false);
+        Alert.alert(
+            "Thông báo",
+            "Đặt món thành công!"
+           
+        );
         setQuantity('')
         setTable('')
         console.log(quantity,table);
+        setIsModalVisisable(false);
+    }
+    const pressCancel= () =>{
+        setQuantity('')
+        setTable('')
+        setIsModalVisisable(false)
     }
 
 
@@ -61,54 +72,55 @@ const BookFood = () =>{
                     />
                     <FoodCard
                         indexImage={require('./Food/nui.png')}
-                        name="Nui xào bò trứng"
+                        name="Nui xào bò"
                         price="35000"
                         onPress={pressFood}
                     />
                     
                 </View>
-                <Modal 
-                    animationType="fade"
-                    visible={isModalVisiable}
-                    onRequestClose={()=> setIsModalVisisable(!isModalVisiable)}
-                    presentationStyle="pageSheet"
-
-                >
-                    <View style={styles.inputFoodContainer}>
-                        <TextInput
-                            style={styles.inputFood}
-                            placeholder="Nhập số lượng cho món ăn đã chọn."
-                            keyboardType="numeric"
-                            value={quantity}
-                            onChangeText={setQuantity}
-                        />
-                    </View>
-                    <View style={styles.inputFoodContainer}>
-                        <TextInput
-                            style={styles.inputFood}
-                            placeholder="Nhập số bàn của khách."
-                            keyboardType="numeric"
-                            value={table}
-                            onChangeText={setTable}
-                        />
-                    </View>
+                    <Modal 
+                        animationType="fade"
+                        visible={isModalVisiable}
+                        onRequestClose={()=> setIsModalVisisable(!isModalVisiable)}
+                        transparent= {true}
+                    >
+                    {/* <View>
+                        <Text>Bạn đã chọn </Text>
+                    </View> */}
                     
-                    <View style={styles.button}>
-                       <Button
-                        title="Xác nhận"
-                        onPress={pressConfirm}
-                       
-                       
-                       /> 
-                       <Button
-                        title= "Huỷ"
-                        onPress={() => setIsModalVisisable(false)}
-                        color="red"
-                       />
-                    </View>
-
-                
-                </Modal>
+                        <View style={styles.popup}>
+                            <View style={styles.inputQuantityContainer}>
+                                <TextInput
+                                    style={styles.inputQuantity}
+                                    placeholder="Nhập số lượng cho món ăn."
+                                    keyboardType="numeric"
+                                    value={quantity}
+                                    onChangeText={setQuantity}
+                                />
+                            </View>
+                            <View style={styles.inputTableNumContainer}>
+                                <TextInput
+                                    style={styles.inputTableNum}
+                                    placeholder="Nhập số bàn của khách."
+                                    keyboardType="numeric"
+                                    value={table}
+                                    onChangeText={setTable}
+                                />
+                            </View>
+                    
+                            <View style={styles.button}>
+                                <Button
+                                    title="Xác nhận"
+                                    onPress={pressConfirm}
+                                /> 
+                                <Button
+                                    title= "Huỷ"
+                                    onPress={pressCancel}
+                                    color="red"
+                                />
+                            </View>
+                        </View>
+                    </Modal>
             
         </ScrollView>
         
@@ -141,24 +153,44 @@ const styles=StyleSheet.create({
         alignItems:"center"
 
     },
-    inputFood: {
+    inputQuantity: {
+        fontSize: 15,
         padding: 10,
-        fontSize: 15
     },
-    inputFoodContainer: {
-        margin: 20,
+    inputTableNum: {
+        fontSize: 15,
+        padding: 10,
+    },
+    inputQuantityContainer: {
+        
         justifyContent: "center",
-        alignItems: "center",
-        borderWidth: 3,
-        borderRadius: 15,
+        height: "25%",
+        backgroundColor: "lightblue",
+        alignItems: "center"
+
+    },
+    inputTableNumContainer:{
+        justifyContent: "center",
+        height: "25%",
         marginBottom: 10,
-        backgroundColor: "lightblue"
+        backgroundColor: "lightblue",
+        alignItems: "center",
     },
     button:{
-        marginTop: 10,
+        marginTop: 5,
         flexDirection:"row",
-        alignItems:"center",
-        justifyContent:"space-around",
+        justifyContent: "space-evenly",
+
+    },
+    popup:{
+        backgroundColor:"#FFFFFF",
+        borderRadius: 5,
+        borderWidth: 1,
+        height: Platform.OS === "android" ? "30%" : "20%",
+        width: Platform.OS === "android" ? "80%" : "80%%",
+        alignSelf: "center",
+        marginVertical: Platform.OS === "android" ? 100 : 250,
+        justifyContent: "center",
 
     }
 

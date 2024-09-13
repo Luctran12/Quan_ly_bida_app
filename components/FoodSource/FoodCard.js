@@ -5,8 +5,11 @@ const FoodCard= ({onPress, indexImage, name, price}) =>{
         <TouchableOpacity style={styles.item} onPress={onPress}>
             
             <Image source={indexImage} style={styles.image} resizeMode="contain"></Image>
-            <Text style={styles.nameFood}>{name}</Text>
-            <Text style={styles.price}>{price}</Text>
+            <View style={styles.detail}>
+                <Text style={styles.nameFood}>{name}</Text>
+                <Text style={styles.price}>{price}</Text>
+            </View>
+            
         </TouchableOpacity>
       
     )
@@ -22,13 +25,13 @@ const styles=StyleSheet.create({
         borderRadius: 10,
         borderColor: "green",
         justifyContent: "center",
-        alignItems: "center",
         shadowColor: "lightgreen",
         shadowOpacity: 3,
         shadowOffset: {
             width: 2,
             height: 2
         },
+        elevation: 4,
     },
     image: {
         height: "70%",
@@ -36,12 +39,18 @@ const styles=StyleSheet.create({
         borderRadius: 5,
     },
     nameFood: {
-        paddingBottom: 5,
+        marginTop: 10,
         fontSize: 20,
         fontWeight:  "bold"
     },
     price: {
-        fontSize: 18,
+        fontSize: 16,
+        paddingTop: 20
+
+    },
+    detail: {
+        flexDirection: "row",
+        justifyContent: "space-around",
         
     },
 })
