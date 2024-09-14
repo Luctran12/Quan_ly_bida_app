@@ -1,4 +1,4 @@
-import { TouchableOpacity, onPress,Image ,Text,View,StyleSheet} from "react-native";
+import { TouchableOpacity,Image ,Text,View,StyleSheet, Platform} from "react-native";
 const FoodCard= ({onPress, indexImage, name, cost}) =>{
     return (
         
@@ -18,7 +18,7 @@ const FoodCard= ({onPress, indexImage, name, cost}) =>{
 const styles=StyleSheet.create({
     item:{
         
-        width: "50%",
+        width: "49%",
         height: 220,
         backgroundColor: "#F0FFFF",
         marginBottom: 10,

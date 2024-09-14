@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { View, StyleSheet,Modal,Platform,Button, Text, SafeAreaView, ScrollView, TextInput, Alert, FlatList } from "react-native";
+import { View, StyleSheet,Modal,Platform,Button, Text, SafeAreaView, TextInput, Alert, FlatList } from "react-native";
 import FoodCard from "./FoodCard";
 import FoodData from "./FoodData.json"
 
@@ -11,7 +11,7 @@ const imageMap = {
     'Trà đá': require('../../assets/Food/trada.png'),
     'Nui xào': require('../../assets/Food/nui.png'),
     'Cà phê': require('../../assets/Food/cf.png'),
-    'Cà phê sữa': require('../../assets/Food/cfs.png'),
+    'Bạc xỉu': require('../../assets/Food/cfs.png'),
     'Trà sữa': require('../../assets/Food/ts.png'),
     'Trà đào': require('../../assets/Food/td.png'),
     
@@ -114,7 +114,8 @@ const BookFood = () =>{
 }
 const styles=StyleSheet.create({
     list: {
-        padding: 10
+        padding
+        : 8,
     },
     title: {
         fontSize: 30,
@@ -131,7 +132,8 @@ const styles=StyleSheet.create({
     },
     safe: {
         flex: 1,
-        alignItems:"center"
+        alignItems:"center",
+        marginTop: Platform.OS ==="android" ? 15 : 0,
 
     },
     inputQuantity: {
