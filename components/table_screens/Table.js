@@ -10,6 +10,8 @@ export default function Table({
   timePlayFromSourceTable,
   handleChangeTable,
   handleSelectItem,
+  change,
+  autoOpen,
 }) {
   const [available, setAvailable] = useState(false);
   const [startTime, setStartTime] = useState(null); // Lưu thời gian bắt đầu
@@ -20,6 +22,12 @@ export default function Table({
   const [openTableModalVisible, setOpenTableModalVisible] = useState(false);
   const [changeOrCheckoutModalVisible, setChangeOrCheckoutVisible] =
     useState(false);
+
+  useEffect(() => {
+    if (autoOpen) {
+      handleStart();
+    }
+  }, [autoOpen]);
 
   useEffect(() => {
     let interval;
@@ -36,27 +44,30 @@ export default function Table({
 
   const handleStart = () => {
     //nếu id bàn bằng với id bàn được chọn để chuyển sang
-    if (id === idSelected) {
+    if (String(id) === String(idSelected)) {
       console.log("=>>>>id selected ", idSelected);
       //đặt thời gian bắt đầu là thời gian bắt đầu của bàn mà khách sử dụng trước khi chuyển
       setStartTime(timePlayFromSourceTable);
     } else {
       // nếu không thì đặt thời gian bắt đầu là timestamp hiện tại
       setStartTime(Date.now()); // Lưu thời gian bắt đầu
+      console.log("========================", typeof id);
+      console.log("========================", typeof idSelected);
     }
     setIsRunning(true); // Bắt đầu bộ đếm
     setAvailable(true);
     setCountTimeButtonState(!countTimeButtonState);
+    console.log("======>", idSelected);
   };
 
   const handleStop = () => {
     setIsRunning(false); // Dừng bộ đếm
   };
 
-  const handleResetAllStatus = () => {
+  function handleResetAllStatus() {
     setAvailable(false);
     handleStop();
-  };
+  }
 
   const handleCheckout = (timePlay) => {
     const cash = Math.round((elapsedTime / (60000 * 60)) * 30000);
@@ -141,6 +152,8 @@ export default function Table({
         handleSelect={handleSelectItem}
         id={id}
         startTime={startTime}
+        handleChangeTable={handleChangeTable}
+        handleResetAllStatuss={handleResetAllStatus}
       />
     </View>
   );

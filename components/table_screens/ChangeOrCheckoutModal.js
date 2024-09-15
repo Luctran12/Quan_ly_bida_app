@@ -10,12 +10,16 @@ export default function ChangeOrCheckoutModal({
   id,
   handleSelect,
   startTime,
+  handleChangeTable,
+  handleResetAllStatuss,
 }) {
   const [changeTableVisible, setChangeTableVisible] = useState(false);
   const [idChangeTable, setIdChangeTable] = useState(0);
-  const handleChangeTable = () => {
+  const handleChangeTables = () => {
     setChangeTableVisible(false);
     handleSelect(idChangeTable, startTime);
+    handleChangeTable(idChangeTable);
+    handleResetAllStatuss();
     console.log("idchangetable:", idChangeTable);
     console.log("id", id);
     console.log("start time", startTime);
@@ -116,7 +120,7 @@ export default function ChangeOrCheckoutModal({
               placeholder="số bàn"
             />
             <TouchableOpacity
-              onPress={handleChangeTable}
+              onPress={handleChangeTables}
               style={{ height: 30, width: 70, backgroundColor: "#e0e0eb" }}
             >
               <Text>Chuyển</Text>
