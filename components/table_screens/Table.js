@@ -69,6 +69,11 @@ export default function Table({
     handleStop();
   }
 
+  const checkoutAndTurnOffModal = () => {
+    handleResetAllStatus();
+    setChangeOrCheckoutVisible(false);
+  };
+
   const handleCheckout = (timePlay) => {
     const cash = Math.round((elapsedTime / (60000 * 60)) * 30000);
     Alert.alert("tính tiền", "tổng tiền: " + "" + cash + "đ", [
@@ -78,7 +83,7 @@ export default function Table({
       },
       {
         text: "hoàn thành",
-        onPress: handleResetAllStatus,
+        onPress: checkoutAndTurnOffModal,
       },
     ]);
   };

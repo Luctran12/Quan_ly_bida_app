@@ -16,6 +16,7 @@ export default function ChangeOrCheckoutModal({
   const [changeTableVisible, setChangeTableVisible] = useState(false);
   const [idChangeTable, setIdChangeTable] = useState(0);
   const handleChangeTables = () => {
+    onClose();
     setChangeTableVisible(false);
     handleSelect(idChangeTable, startTime);
     handleChangeTable(idChangeTable);
@@ -27,7 +28,6 @@ export default function ChangeOrCheckoutModal({
 
   const handleChangeTableButton = () => {
     setChangeTableVisible(true);
-    onClose();
   };
 
   return (
