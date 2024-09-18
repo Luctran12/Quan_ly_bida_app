@@ -1,8 +1,8 @@
 import { StyleSheet, Text, View } from "react-native";
-export default function App() {
+export default function Header({ title }) {
   return (
     <View style={styles.container}>
-      <Text>Header</Text>
+      <Text>{title}</Text>
     </View>
   );
 }
@@ -12,5 +12,10 @@ const styles = StyleSheet.create({
     backgroundColor: "#fff",
     alignItems: "center",
     justifyContent: "center",
+    marginTop: 50,
+    borderWidth: 1,
+    width: "100%",
+    height: "8%",
+    backgroundColor: "red",
   },
 });

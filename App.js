@@ -1,21 +1,20 @@
-import React from 'react';
-import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
-import BookFood from "./components/FoodSource/BookFood.js"
-export default function App(){
+import React from "react";
+import { StyleSheet, Text, View } from "react-native";
+
+export default function App() {
   return (
     <View style={styles.container}>
-       <BookFood/>
+      <Text>abc</Text>
     </View>
   );
-};
+}
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "#fff",
+    alignItems: "center",
   },
-  
 });
-
-
