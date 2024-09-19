@@ -1,11 +1,38 @@
+import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
+import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
+import { NavigationContainer } from "@react-navigation/native";
 import React from "react";
-import { StyleSheet, Text, View } from "react-native";
-
+import { StyleSheet } from "react-native";
+import BookFood from "./components/FoodSource/BookFood";
+import TablesScreen from "./components/table_screens/TablesScreen";
+const Tab = createBottomTabNavigator();
 export default function App() {
   return (
-    <View style={styles.container}>
-      <Text>abc</Text>
-    </View>
+    <NavigationContainer>
+      <Tab.Navigator
+        screenOptions={({ route }) => ({
+          tabBarIcon: ({ focused, color, size }) => {
+            let iconName;
+
+            if (route.name === "Bida") {
+              iconName = "billiards";
+            } else if (route.name === "BookFood") {
+              iconName = "food";
+            }
+
+            // You can return any component that you like here!
+            return (
+              <MaterialCommunityIcons name={iconName} size={24} color="black" />
+            );
+          },
+          tabBarActiveTintColor: "#45e143",
+          tabBarInactiveTintColor: "gray",
+        })}
+      >
+        <Tab.Screen name="Bida" component={TablesScreen} />
+        <Tab.Screen name="BookFood" component={BookFood} />
+      </Tab.Navigator>
+    </NavigationContainer>
   );
 }
 
