@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Modal, Text, TextInput, TouchableOpacity, View } from "react-native";
+import { Modal, SafeAreaView, Text, TextInput, TouchableOpacity, View } from "react-native";
 
 export default function ChangeOrCheckoutModal({
   visible,
@@ -28,6 +28,8 @@ export default function ChangeOrCheckoutModal({
 
   const handleChangeTableButton = () => {
     setChangeTableVisible(true);
+    console.log("chuyen ban");
+    console.log("visible:",changeTableVisible)
   };
 
   return (
@@ -101,13 +103,13 @@ export default function ChangeOrCheckoutModal({
         </View>
       </Modal>
       <Modal visible={changeTableVisible} transparent={true}>
-        <View
-          style={{ flex: 1, justifyContent: "center", alignItems: "center" }}
+        <SafeAreaView
+          style={{ flex: 1, justifyContent: "center", alignItems: "center", height:180, width: 250 }}
         >
           <View
             style={{
-              backgroundColor: "gray",
-              height: 180,
+              backgroundColor: "black",
+              height: "20%",
               width: 250,
               justifyContent: "center",
               alignItems: "center",
@@ -126,7 +128,7 @@ export default function ChangeOrCheckoutModal({
               <Text>Chuyển</Text>
             </TouchableOpacity>
           </View>
-        </View>
+        </SafeAreaView>
       </Modal>
     </View>
   );
