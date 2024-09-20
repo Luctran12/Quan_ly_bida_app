@@ -1,7 +1,8 @@
 import { useState } from "react";
-import { View, StyleSheet,Modal,Platform,Button, Text, SafeAreaView, TextInput, Alert, FlatList } from "react-native";
+import { View, StyleSheet,Modal,Platform,Button, Text, SafeAreaView, TextInput, Alert, FlatList, Pressable } from "react-native";
 import FoodCard from "./FoodCard";
 import FoodData from "./FoodData.json"
+import { setStatusBarNetworkActivityIndicatorVisible } from "expo-status-bar";
 
 const imageMap = {
     'Kem': require('../../assets/Food/kem.png'),
@@ -18,27 +19,54 @@ const imageMap = {
 }
 const BookFood = () =>{
     const [isModalVisiable, setIsModalVisisable] = useState(false)
-    const [quantity,setQuantity]= useState('')
-    const [table,setTable]= useState('')
+    const [quantity,setQuantity]= useState(null)
+    const [selectedFood, setSelectFood]= useState(null)
+    const [table,setTable]= useState(null)
+    const [bill,setBill]= useState(0)
 
 
-    const pressFood = () =>{
+
+    const pressFood = (food) =>{
+        setSelectFood(food)
         setIsModalVisisable(true);
+        
     };
-    const pressConfirm= () =>{
-        Alert.alert(
-            "Thông báo",
-            "Đặt món thành công!"
-           
-        );
-        setQuantity('')
-        setTable('')
-        console.log(quantity,table);
+    const addFood= () =>{
+        if(!quantity|| parseInt(quantity)<=0|| !table || parseInt(table)<=0){
+            Alert.alert("Thông báo","Vui lòng nhập số lượng và chọn bàn hợp lệ!")
+        }else{
+            Alert.alert(
+                "Thông báo",
+                "Thêm món thành công!"
+               
+            );
+        }
+        const price=  parseFloat(selectedFood.cost);
+        const totalPerFood= price*parseInt(quantity);
+        setBill(bill+ totalPerFood)
+        setQuantity(null)
+        setTable(null)
         setIsModalVisisable(false);
     }
+    const PressPay= ()=>{
+        if(bill<=0){
+            Alert.alert("Thông báo", "Vui lòng thêm món ăn")
+        }else{
+            console.log(bill);
+        }
+        
+    }
+    const resetBill=()=>{
+        setSelectFood(null)
+        setQuantity(null)
+        setTable(null)
+        setIsModalVisisable(false)
+        setBill(0);
+        Alert.alert("Thông báo", "Làm mới thành công")
+    }
     const pressCancel= () =>{
-        setQuantity('')
-        setTable('')
+        setQuantity(null)
+        setTable(null)
         setIsModalVisisable(false)
     }
 
@@ -57,18 +85,20 @@ const BookFood = () =>{
                         indexImage={imageMap[item.name]}
                         name={item.name}
                         cost={item.cost}
-                        onPress={pressFood}
+                        onPress={() => pressFood(item)}
                     />
                 )}
+                
             /> 
+           
                     <Modal 
                         animationType="fade"
                         visible={isModalVisiable}
-                        onRequestClose={()=> setIsModalVisisable(!isModalVisiable)}
+                        //onRequestClose={()=> setIsModalVisisable(!isModalVisiable)}
                         transparent= {true}
                     >
                     
-                    
+
                         <View style={styles.popup}>
                             <View style={styles.inputQuantityContainer}>
                                 <TextInput
@@ -89,22 +119,29 @@ const BookFood = () =>{
                                 />
                             </View>
                     
-                            <View style={styles.button}>
+                            <View style={styles.buttonInPopup}>
                                 <Button
-                                    title="Xác nhận"
-                                    onPress={pressConfirm}
+                                    title="Thêm món"
+                                    onPress={addFood}
                                 /> 
                                 <Button
                                     title= "Huỷ"
                                     onPress={pressCancel}
                                     color="red"
                                 />
+                                
+                            </View >
+                            <View style={styles.button}>
+                                
                             </View>
                         </View>
                     </Modal>
-            
-        
-        
+
+        <View style={styles.bottom}>
+            <Pressable onLongPress={PressPay}><Text style={styles.totalButton}>Tính tiền</Text></Pressable>                
+            <Pressable onLongPress={resetBill}><Text style={styles.resetButton}>Làm mới</Text></Pressable>                
+
+        </View>
     </SafeAreaView>
 
     
@@ -123,6 +160,10 @@ const styles=StyleSheet.create({
         marginBottom: 10,
         marginVertical: 20
     },
+    text: {
+        fontSize:15,
+    },
+    
     foodLayout: {
         flexDirection: "row",
         flexWrap: "wrap",
@@ -159,23 +200,41 @@ const styles=StyleSheet.create({
         backgroundColor: "lightblue",
         alignItems: "center",
     },
-    button:{
-        marginTop: 5,
+    buttonInPopup:{
+        marginTop: 19,
         flexDirection:"row",
         justifyContent: "space-evenly",
 
     },
+    
     popup:{
         backgroundColor:"#FFFFFF",
         borderRadius: 5,
         borderWidth: 1,
-        height: Platform.OS === "android" ? "30%" : "20%",
+        height: Platform.OS === "android" ? "30%" : "25%",
         width: Platform.OS === "android" ? "80%" : "80%%",
         alignSelf: "center",
         marginVertical: Platform.OS === "android" ? 100 : 250,
         justifyContent: "center",
 
-    }
+    },
+    bottom: {
+        padding: 10,        
+        flexDirection:"row",
+        justifyContent: "space-around",
+    },
+    totalButton:{
+        
+        fontSize: 18,
+        marginRight: 20,
+        color: "grey"
+    },
+    resetButton:{
+        
+        fontSize: 18,
+        marginLeft: 20,
+        color: "grey"
+    },
 
 })
 export default BookFood;
