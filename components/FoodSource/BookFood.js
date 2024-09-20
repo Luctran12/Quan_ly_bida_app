@@ -138,7 +138,7 @@ const BookFood = () =>{
                     </Modal>
 
         <View style={styles.bottom}>
-            <Pressable onLongPress={PressPay}><Text style={styles.totalButton}>Tính tiền</Text></Pressable>                
+            <Pressable onPress={PressPay}><Text style={styles.totalButton}>Tính tiền</Text></Pressable>                
             <Pressable onLongPress={resetBill}><Text style={styles.resetButton}>Làm mới</Text></Pressable>                
 
         </View>
