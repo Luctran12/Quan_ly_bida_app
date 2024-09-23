@@ -28,6 +28,7 @@ export default function ChangeOrCheckoutModal({
 
   const handleChangeTableButton = () => {
     setChangeTableVisible(true);
+    onClose();
   };
 
   return (
