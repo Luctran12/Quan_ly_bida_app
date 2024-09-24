@@ -27,8 +27,9 @@ const BookFood = () =>{
     const [table,setTable]= useState('')
 
 
-    const pressFood = () =>{
+    const pressFood = (food) =>{
         setIsModalVisisable(true);
+        setSelectFood(food);
     };
     const pressConfirm= () =>{
         Alert.alert(
