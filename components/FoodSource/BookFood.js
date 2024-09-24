@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { View, StyleSheet,Modal,Platform,Button, Text, SafeAreaView, TextInput, Alert, FlatList, Pressable } from "react-native";
+import {  StyleSheet, Platform, Text, SafeAreaView,  Alert, FlatList, Button } from "react-native";
 import FoodCard from "./FoodCard";
 import FoodData from "./FoodData.json"
 import FoodModal from "./FoodModal";
@@ -20,8 +20,6 @@ const BookFood = () =>{
     
     const [selectedFood, setSelectFood]= useState(null)
     const [bill,setBill]= useState(0)
-    const [quantity,setQuantity]= useState(null)
-    const [table,setTable]= useState(null)
     const [isModalVisiable, setIsModalVisisable] = useState(false)
     const [quantity,setQuantity]= useState('')
     const [table,setTable]= useState('')
@@ -31,12 +29,26 @@ const BookFood = () =>{
         setIsModalVisisable(true);
         setSelectFood(food);
     };
-    const pressConfirm= () =>{
-        Alert.alert(
-            "Thông báo",
-            "Đặt món thành công!"
-           
-        );
+
+    const addFood= () =>{
+        if (!selectedFood) {
+            Alert.alert("Thông báo", "Vui lòng chọn món ăn!");
+            return;
+        }
+        if(!quantity|| parseInt(quantity)<=0|| !table || parseInt(table)<=0){
+            Alert.alert("Thông báo","Vui lòng nhập số lượng và chọn bàn hợp lệ!")
+        }else{
+            Alert.alert(
+                "Thông báo",
+                "Thêm món thành công!"
+               
+            );
+        }
+        const price=  parseInt(selectedFood.cost);
+        const totalPerFood= price*parseInt(quantity);
+        console.log(totalPerFood);
+        setBill(bill+ totalPerFood)
+
         setQuantity('')
         setTable('')
         console.log(quantity,table);
@@ -76,7 +88,7 @@ const BookFood = () =>{
             setTable={setTable}
             onConfirm={addFood}
             onCancel={pressCancel}
-            nameFood={selectedFood.name}
+            nameFood={selectedFood ? selectedFood.name : ''}
            />
         {/* <View style={styles.buttonContainer}>
             <Button
@@ -122,6 +134,11 @@ const styles=StyleSheet.create({
 
     },
 
+    // bottom: {
+    //     padding: 10,        
+    //     flexDirection:"row",
+    //     justifyContent: "space-around",
+    // },
 
 })
 export default BookFood;
