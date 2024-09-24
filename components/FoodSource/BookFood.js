@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { View, StyleSheet,Modal,Platform,Button, Text, SafeAreaView, TextInput, Alert, FlatList, Pressable } from "react-native";
+import {  StyleSheet, Platform, Text, SafeAreaView,  Alert, FlatList, Button } from "react-native";
 import FoodCard from "./FoodCard";
 import FoodData from "./FoodData.json"
 import FoodModal from "./FoodModal";
@@ -31,6 +31,10 @@ const BookFood = () =>{
         
     };
     const addFood= () =>{
+        if (!selectedFood) {
+            Alert.alert("Thông báo", "Vui lòng chọn món ăn!");
+            return;
+        }
         if(!quantity|| parseInt(quantity)<=0|| !table || parseInt(table)<=0){
             Alert.alert("Thông báo","Vui lòng nhập số lượng và chọn bàn hợp lệ!")
         }else{
@@ -99,7 +103,7 @@ const BookFood = () =>{
             setTable={setTable}
             onConfirm={addFood}
             onCancel={pressCancel}
-            nameFood={selectedFood.name}
+            nameFood={selectedFood ? selectedFood.name : ''}
            />
         {/* <View style={styles.buttonContainer}>
             <Button
@@ -165,6 +169,10 @@ const styles=StyleSheet.create({
         justifyContent: "space-evenly",
         marginTop: 20,
     },
-
+    // bottom: {
+    //     padding: 10,        
+    //     flexDirection:"row",
+    //     justifyContent: "space-around",
+    // },
 })
 export default BookFood;
