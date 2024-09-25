@@ -24,7 +24,7 @@ const styles=StyleSheet.create({
         marginBottom: 8,
         marginLeft: 4,
         marginRight: 4,
-        borderWidth: 2,
+        borderWidth: 1,
         borderRadius: 10,
         borderColor: "green",
         justifyContent: "center",
@@ -32,10 +32,10 @@ const styles=StyleSheet.create({
         shadowColor: "lightgreen",
         shadowOpacity: 3,
         shadowOffset: {
-            width: 2,
-            height: 2
+            width: 1,
+            height: 1
         },
-        elevation: 4,
+        elevation: 2,
     },
     image: {
         marginTop: 10,
