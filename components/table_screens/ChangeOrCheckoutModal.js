@@ -28,8 +28,12 @@ export default function ChangeOrCheckoutModal({
 
   const handleChangeTableButton = () => {
     setChangeTableVisible(true);
+
     console.log("chuyen ban");
     console.log("visible:",changeTableVisible)
+
+    onClose();
+
   };
 
   return (
