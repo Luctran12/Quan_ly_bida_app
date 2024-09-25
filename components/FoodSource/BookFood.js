@@ -31,10 +31,10 @@ const BookFood = () =>{
     };
 
     const addFood= () =>{
-        if (!selectedFood) {
-            Alert.alert("Thông báo", "Vui lòng chọn món ăn!");
-            return;
-        }
+        // if (!selectedFood) {
+        //     Alert.alert("Thông báo", "Vui lòng chọn món ăn!");
+        //     return;
+        // }
         if(!quantity|| parseInt(quantity)<=0|| !table || parseInt(table)<=0){
             Alert.alert("Thông báo","Vui lòng nhập số lượng và chọn bàn hợp lệ!")
         }else{
@@ -44,7 +44,7 @@ const BookFood = () =>{
                
             );
         }
-        const price=  parseInt(selectedFood.cost);
+        const price=  parseFloat(selectedFood.cost.replace(".",''));
         const totalPerFood= price*parseInt(quantity);
         console.log(totalPerFood);
         setBill(bill+ totalPerFood)
@@ -63,7 +63,7 @@ const BookFood = () =>{
 
     return(
     <SafeAreaView style={styles.safe}>
-        <Text style={styles.title}>🍴Food and drink😋</Text>
+        {/* <Text style={styles.title}>🍴Food and drink😋</Text> */}
             <FlatList 
                 contentContainerStyle={styles.list}
         
@@ -115,11 +115,11 @@ const styles=StyleSheet.create({
         padding
         : 8,
     },
-    title: {
-        fontSize: 25,
-        fontWeight: "bold",
-        marginBottom: 15,
-    },
+    // title: {
+    //     fontSize: 25,
+    //     fontWeight: "bold",
+    //     marginBottom: 15,
+    // },
     foodLayout: {
         flexDirection: "row",
         flexWrap: "wrap",

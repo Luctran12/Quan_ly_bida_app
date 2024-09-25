@@ -18,12 +18,12 @@ const FoodCard= ({onPress, indexImage, name, cost}) =>{
 const styles=StyleSheet.create({
     item:{
         
-        width: "49%",
+        width: "48%",
         height: 220,
         backgroundColor: "#F0FFFF",
-        marginBottom: 10,
-        marginLeft: 1.5,
-        marginRight: 1.5,
+        marginBottom: 8,
+        marginLeft: 4,
+        marginRight: 4,
         borderWidth: 2,
         borderRadius: 10,
         borderColor: "green",

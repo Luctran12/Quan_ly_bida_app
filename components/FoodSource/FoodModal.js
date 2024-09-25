@@ -10,8 +10,11 @@ export default function FoodModal({
     onCancel,
     onConfirm,
     nameFood,
+    
 })  {
+    //const nameDisplay= nameFood.toLowerCase();
     return (
+        
         <Modal
             animationType="slide"
             visible={isVisible}
@@ -19,14 +22,15 @@ export default function FoodModal({
         >
             <View style={styles.popup}>
                 <View style={styles.textFoodContainer}>
-                <Text style={styles.textFood}>Bạn đã chọn {nameFood}</Text>
+                <Text style={styles.textFood}>Bạn đã chọn {nameFood.toLowerCase()}</Text>
                 </View>
             
                 <View style={styles.inputQuantityContainer}>
                     
                 <TextInput
                     style={styles.inputQuantity}
-                    placeholder="Nhập số lượng món"
+                    placeholder="Vui lòng nhập số lượng"
+                    placeholderTextColor="#3399CC"
                     keyboardType="numeric"
                     value={quantity}
                     onChangeText={setQuantity}
@@ -35,7 +39,8 @@ export default function FoodModal({
                 <View style={styles.inputTableNumContainer}>
                 <TextInput
                     style={styles.inputTableNum}
-                    placeholder="Nhập số bàn"
+                    placeholder="Vui lòng nhập số bàn"
+                    placeholderTextColor="#3399CC"
                     keyboardType="numeric"
                     value={table}
                     onChangeText={setTable}
@@ -91,6 +96,7 @@ const styles = StyleSheet.create({
         
         justifyContent: "center",
         height: "25%",
+        width: "100%",
         backgroundColor: "lightblue",
         alignItems: "center"
 
@@ -100,14 +106,14 @@ const styles = StyleSheet.create({
         height: "25%",
         width: "100%",
         marginBottom: 10,
+        
         backgroundColor: "lightblue",
         alignItems: "center",
     },
     buttonInPopup:{
-        marginTop: 19,
         flexDirection:"row",
-        justifyContent: "space-evenly",
-
+        justifyContent: "space-around",
+        
     },
     inputQuantity: {
         fontSize: 15,
@@ -123,15 +129,12 @@ const styles = StyleSheet.create({
     },
     textFood:{
         fontSize: 15,
-        fontStyle: "italic"
+        fontStyle: "italic",
+        marginBottom: 10,
     },
     
    
-    bottom: {
-        padding: 10,        
-        flexDirection:"row",
-        justifyContent: "space-around",
-    },
+   
 });
 
 
