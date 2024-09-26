@@ -19,6 +19,7 @@ export default function FoodModal({
             animationType="slide"
             visible={isVisible}
             transparent={true}
+            onRequestClose={true}
         >
             <View style={styles.popup}>
                 <View style={styles.textFoodContainer}>
