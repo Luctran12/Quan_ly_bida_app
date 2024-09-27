@@ -1,4 +1,5 @@
-import { TouchableOpacity,Image ,Text,View,StyleSheet, Platform} from "react-native";
+import { TouchableOpacity,Image ,Dimensions,Text,View,StyleSheet, Platform} from "react-native";
+import { useFonts, Roboto_400Regular } from '@expo-google-fonts/roboto';
 const FoodCard= ({onPress, indexImage, name, cost}) =>{
     return (
         
@@ -14,22 +15,22 @@ const FoodCard= ({onPress, indexImage, name, cost}) =>{
       
     )
 }
-
+const { width}= Dimensions.get("window");
 const styles=StyleSheet.create({
     item:{
         
-        width: "48%",
-        height: 220,
-        backgroundColor: "#F0FFFF",
+        width: width * 0.45,
+        height: width * 0.55,
+        backgroundColor: "#f0f0f0",
         marginBottom: 8,
         marginLeft: 4,
         marginRight: 4,
         borderWidth: 1,
         borderRadius: 10,
-        borderColor: "green",
+        borderColor: "#3498db",
         justifyContent: "center",
         alignItems: "center",
-        shadowColor: "lightgreen",
+        shadowColor: "#95a5a6",
         shadowOpacity: 3,
         shadowOffset: {
             width: 1,
@@ -44,18 +45,20 @@ const styles=StyleSheet.create({
         borderRadius: 5,
     },
     nameFood: {
-        
         fontSize: 20,
-        fontWeight:  "bold"
+        fontWeight:  "bold",
+        color: "#2c3e50"
     },
     cost: {
         fontSize: 16,
         marginTop: 30,
-        marginLeft: 30
+        marginLeft: 30,
+        color: "#e74c3c"
     },
     detail: {
         padding: 10,
         flexDirection: "row",
+        justifyContent: "space-between",
         alignItems:"flex-start",
         marginTop: 10,
         

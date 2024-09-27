@@ -3,6 +3,7 @@ import {  StyleSheet, Platform, Text, SafeAreaView,  Alert, FlatList, Button } f
 import FoodCard from "./FoodCard";
 import FoodData from "./FoodData.json"
 import FoodModal from "./FoodModal";
+import BillModal from "./BillModal";
 const imageMap = {
     'Kem': require('../../assets/Food/kem.png'),
     'Sting': require('../../assets/Food/sting.png'),
@@ -19,17 +20,24 @@ const imageMap = {
 const BookFood = () =>{
     
     const [selectedFood, setSelectFood]= useState(null)
-    const [bill,setBill]= useState(0)
+    //const [bill,setBill]= useState(0)
     const [isModalVisiable, setIsModalVisisable] = useState(false)
     const [quantity,setQuantity]= useState('')
     const [table,setTable]= useState('')
-
-
+    
+    const [orderedItems, setOrderedItems] = useState([]); // Danh sách món đã đặt
+    const [isBillModalVisible, setIsBillModalVisible] = useState(false);
+    const openBillModal = () => {
+        setIsBillModalVisible(true);
+    };
+    const closeBillModal = () => {
+        setIsBillModalVisible(false);
+    };
     const pressFood = (food) =>{
         setIsModalVisisable(true);
         setSelectFood(food);
     };
-
+    
     const addFood= () =>{
         // if (!selectedFood) {
         //     Alert.alert("Thông báo", "Vui lòng chọn món ăn!");
@@ -37,6 +45,7 @@ const BookFood = () =>{
         // }
         if(!quantity|| parseInt(quantity)<=0|| !table || parseInt(table)<=0){
             Alert.alert("Thông báo","Vui lòng nhập số lượng và chọn bàn hợp lệ!")
+            return;
         }else{
             Alert.alert(
                 "Thông báo",
@@ -47,8 +56,14 @@ const BookFood = () =>{
         const price=  parseFloat(selectedFood.cost.replace(".",''));
         const totalPerFood= price*parseInt(quantity);
         console.log(totalPerFood);
-        setBill(bill+ totalPerFood)
-
+        //setBill(bill+ totalPerFood)
+        setOrderedItems(prevItems => [...prevItems, { 
+            name: selectedFood.name, 
+            cost: selectedFood.cost, 
+            quantity: quantity,
+            table: table,
+            total: totalPerFood 
+        }]);
         setQuantity('')
         setTable('')
         console.log(quantity,table);
@@ -59,7 +74,11 @@ const BookFood = () =>{
         setTable('')
         setIsModalVisisable(false)
     }
-
+    const resetBill= () =>{
+        setOrderedItems([])
+        setIsBillModalVisible(false);
+        Alert.alert("Hoá đơn đã làm mới");
+    }
 
     return(
     <SafeAreaView style={styles.safe}>
@@ -90,20 +109,18 @@ const BookFood = () =>{
             onCancel={pressCancel}
             nameFood={selectedFood ? selectedFood.name : ''}
            />
-        {/* <View style={styles.buttonContainer}>
-            <Button
-            style= {styles.totalButton}
-            title= "Thanh toan"
-            onPress={PressPay}
-            />   
-            <Button
-                title="Lam moi"
-                style={styles.resetButton}
-                onPress={resetBill}
-            />
-        </View>         */}
         
+          
+                
         
+        <Button title="Xem lại hóa đơn" onPress={openBillModal} />
+        <BillModal 
+            isVisible={isBillModalVisible}
+            onClose={closeBillModal}
+            orderedItems={orderedItems}
+            onResetBill={resetBill}
+            //bill={bill}
+        />
     </SafeAreaView>
 
 
@@ -112,8 +129,7 @@ const BookFood = () =>{
 }
 const styles=StyleSheet.create({
     list: {
-        padding
-        : 8,
+        paddingHorizontal: 8,
     },
     // title: {
     //     fontSize: 25,

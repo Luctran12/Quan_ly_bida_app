@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, StyleSheet, Modal, TextInput, Button,Platform, Text } from 'react-native';
+import { View, StyleSheet, Modal, TextInput, Button,Platform, Text, Dimensions } from 'react-native';
 
 export default function FoodModal({
     isVisible,
@@ -62,18 +62,19 @@ export default function FoodModal({
         </Modal>
     );
 };
-
+const {height} = Dimensions.get("window")
 const styles = StyleSheet.create({
-    popup: {
-        backgroundColor: "#FFFFFF",
-        borderRadius: 5,
-        borderWidth: 1,
-        height: "30%",
-        width: "80%",
-        alignSelf: "center",
-        marginVertical: 100,
-        justifyContent: "center",
-    },
+    // popup: {
+    //     backgroundColor: "#FFFFFF",
+    //     borderRadius: 10,
+    //     borderWidth: 1,
+    //     borderColor: "#2ecc71",
+    //     height: "30%",
+    //     width: "80%",
+    //     alignSelf: "center",
+    //     marginVertical: 100,
+    //     justifyContent: "center",
+    // },
     
     input: {
         fontSize: 15,
@@ -83,10 +84,13 @@ const styles = StyleSheet.create({
    
     popup:{
         backgroundColor:"#FFFFFF",
-        borderRadius: 5,
+        borderRadius: 10,
         borderWidth: 1,
-        height: Platform.OS === "android" ? "30%" : "25%",
-        width: Platform.OS === "android" ? "80%" : "80%%",
+        borderColor: "#2ecc71",
+        // height: Platform.OS === "android" ? "30%" : "25%",
+        // width: Platform.OS === "android" ? "80%" : "80%%",
+        height: height* 0.3,
+        width: "85%",
         alignSelf: "center",
         marginVertical: Platform.OS === "android" ? 100 : 250,
         justifyContent: "center",
@@ -98,7 +102,7 @@ const styles = StyleSheet.create({
         justifyContent: "center",
         height: "25%",
         width: "100%",
-        backgroundColor: "lightblue",
+        backgroundColor: "#ecf0f1",
         alignItems: "center"
 
     },
@@ -108,7 +112,7 @@ const styles = StyleSheet.create({
         width: "100%",
         marginBottom: 10,
         
-        backgroundColor: "lightblue",
+        backgroundColor: "#ecf0f1",
         alignItems: "center",
     },
     buttonInPopup:{
@@ -129,6 +133,7 @@ const styles = StyleSheet.create({
         padding: 10,
     },
     textFood:{
+        color: "#2c3e50",
         fontSize: 15,
         fontStyle: "italic",
         marginBottom: 10,
