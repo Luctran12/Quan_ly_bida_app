@@ -28,6 +28,10 @@ export default function ChangeOrCheckoutModal({
 
   const handleChangeTableButton = () => {
     setChangeTableVisible(true);
+
+    console.log("chuyen ban");
+    console.log("visible:", changeTableVisible);
+
     onClose();
   };
 
@@ -118,49 +122,68 @@ export default function ChangeOrCheckoutModal({
               backgroundColor: "#e6e6e6",
               height: 180,
               width: 300,
-              justifyContent: "center",
-              alignItems: "center",
-              borderRadius: 20,
-              borderWidth: 1,
             }}
           >
-            <Text style={{ fontSize: 20 }}>Chuyển sang bàn số: </Text>
             <View
               style={{
-                width: 100,
-                backgroundColor: "white",
-                borderWidth: 1,
-                borderRadius: 10,
-              }}
-            >
-              <TextInput
-                onChangeText={(idTable) => setIdChangeTable(idTable)}
-                keyboardType="numeric"
-                placeholder="số bàn"
-              />
-            </View>
-
-            <TouchableOpacity
-              onPress={handleChangeTables}
-              style={{
-                height: 30,
-                width: 70,
-                marginTop: 10,
-                backgroundColor: "#1bafc8",
+                flex: 1,
                 justifyContent: "center",
-                borderRadius: 8,
+                alignItems: "center",
+                height: 180,
+                width: 250,
               }}
             >
-              <Text
+              <View
                 style={{
-                  alignSelf: "center",
-                  fontSize: 14,
-                  fontWeight: "bold",
+                  // backgroundColor: "black",
+                  // height: "20%",
+                  // width: 250,
+
+                  justifyContent: "center",
+                  alignItems: "center",
+                  borderRadius: 20,
+                  borderWidth: 1,
                 }}
               >
-                Chuyển
-              </Text>
-            </TouchableOpacity>
+                <Text style={{ fontSize: 20 }}>Chuyển sang bàn số: </Text>
+                <View
+                  style={{
+                    width: 100,
+                    backgroundColor: "white",
+                    borderWidth: 1,
+                    borderRadius: 10,
+                  }}
+                >
+                  <TextInput
+                    onChangeText={(idTable) => setIdChangeTable(idTable)}
+                    keyboardType="numeric"
+                    placeholder="số bàn"
+                  />
+                </View>
+
+                <TouchableOpacity
+                  onPress={handleChangeTables}
+                  style={{
+                    height: 30,
+                    width: 70,
+                    marginTop: 10,
+                    backgroundColor: "#1bafc8",
+                    justifyContent: "center",
+                    borderRadius: 8,
+                  }}
+                >
+                  <Text
+                    style={{
+                      alignSelf: "center",
+                      fontSize: 14,
+                      fontWeight: "bold",
+                    }}
+                  >
+                    Chuyển
+                  </Text>
+                </TouchableOpacity>
+              </View>
+            </View>
           </View>
         </View>
       </Modal>

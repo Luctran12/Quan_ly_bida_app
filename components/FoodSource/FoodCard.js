@@ -1,4 +1,11 @@
-import { Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import {
+  Dimensions,
+  Image,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+} from "react-native";
 const FoodCard = ({ onPress, indexImage, name, cost }) => {
   return (
     <TouchableOpacity style={styles.item} onPress={onPress}>
@@ -14,27 +21,27 @@ const FoodCard = ({ onPress, indexImage, name, cost }) => {
     </TouchableOpacity>
   );
 };
-
+const { width } = Dimensions.get("window");
 const styles = StyleSheet.create({
   item: {
-    width: "49%",
-    height: 220,
-    backgroundColor: "#F0FFFF",
-    marginBottom: 10,
-    marginLeft: 1.5,
-    marginRight: 1.5,
-    borderWidth: 2,
+    width: width * 0.45,
+    height: width * 0.55,
+    backgroundColor: "#f0f0f0",
+    marginBottom: 8,
+    marginLeft: 4,
+    marginRight: 4,
+    borderWidth: 1,
     borderRadius: 10,
-    borderColor: "green",
+    borderColor: "#3498db",
     justifyContent: "center",
     alignItems: "center",
-    shadowColor: "lightgreen",
+    shadowColor: "#95a5a6",
     shadowOpacity: 3,
     shadowOffset: {
-      width: 2,
-      height: 2,
+      width: 1,
+      height: 1,
     },
-    elevation: 4,
+    elevation: 2,
   },
   image: {
     marginTop: 10,
@@ -45,15 +52,18 @@ const styles = StyleSheet.create({
   nameFood: {
     fontSize: 20,
     fontWeight: "bold",
+    color: "#2c3e50",
   },
   cost: {
     fontSize: 16,
     marginTop: 30,
     marginLeft: 30,
+    color: "#e74c3c",
   },
   detail: {
     padding: 10,
     flexDirection: "row",
+    justifyContent: "space-between",
     alignItems: "flex-start",
     marginTop: 10,
   },

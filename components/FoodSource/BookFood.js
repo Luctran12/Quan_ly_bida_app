@@ -1,8 +1,9 @@
 import { useState } from "react";
-import { View, StyleSheet,Modal,Platform,Button, Text, SafeAreaView, TextInput, Alert, FlatList } from "react-native";
+import {  StyleSheet, Platform, Text, SafeAreaView,  Alert, FlatList, Button } from "react-native";
 import FoodCard from "./FoodCard";
 import FoodData from "./FoodData.json"
-
+import FoodModal from "./FoodModal";
+import BillModal from "./BillModal";
 const imageMap = {
     'Kem': require('../../assets/Food/kem.png'),
     'Sting': require('../../assets/Food/sting.png'),
@@ -17,20 +18,52 @@ const imageMap = {
     
 }
 const BookFood = () =>{
+    
+    const [selectedFood, setSelectFood]= useState(null)
+    //const [bill,setBill]= useState(0)
     const [isModalVisiable, setIsModalVisisable] = useState(false)
     const [quantity,setQuantity]= useState('')
     const [table,setTable]= useState('')
-
-
-    const pressFood = () =>{
-        setIsModalVisisable(true);
+    
+    const [orderedItems, setOrderedItems] = useState([]); // Danh sách món đã đặt
+    const [isBillModalVisible, setIsBillModalVisible] = useState(false);
+    const openBillModal = () => {
+        setIsBillModalVisible(true);
     };
-    const pressConfirm= () =>{
-        Alert.alert(
-            "Thông báo",
-            "Đặt món thành công!"
-           
-        );
+    const closeBillModal = () => {
+        setIsBillModalVisible(false);
+    };
+    const pressFood = (food) =>{
+        setIsModalVisisable(true);
+        setSelectFood(food);
+    };
+    
+    const addFood= () =>{
+        // if (!selectedFood) {
+        //     Alert.alert("Thông báo", "Vui lòng chọn món ăn!");
+        //     return;
+        // }
+        if(!quantity|| parseInt(quantity)<=0|| !table || parseInt(table)<=0){
+            Alert.alert("Thông báo","Vui lòng nhập số lượng và chọn bàn hợp lệ!")
+            return;
+        }else{
+            Alert.alert(
+                "Thông báo",
+                "Thêm món thành công!"
+               
+            );
+        }
+        const price=  parseFloat(selectedFood.cost.replace(".",''));
+        const totalPerFood= price*parseInt(quantity);
+        console.log(totalPerFood);
+        //setBill(bill+ totalPerFood)
+        setOrderedItems(prevItems => [...prevItems, { 
+            name: selectedFood.name, 
+            cost: selectedFood.cost, 
+            quantity: quantity,
+            table: table,
+            total: totalPerFood 
+        }]);
         setQuantity('')
         setTable('')
         console.log(quantity,table);
@@ -41,11 +74,15 @@ const BookFood = () =>{
         setTable('')
         setIsModalVisisable(false)
     }
-
+    const resetBill= () =>{
+        setOrderedItems([])
+        setIsBillModalVisible(false);
+        Alert.alert("Hoá đơn đã làm mới");
+    }
 
     return(
     <SafeAreaView style={styles.safe}>
-        <Text style={styles.title}>🍴Food and drink😋</Text>
+        {/* <Text style={styles.title}>🍴Food and drink😋</Text> */}
             <FlatList 
                 contentContainerStyle={styles.list}
         
@@ -57,72 +94,48 @@ const BookFood = () =>{
                         indexImage={imageMap[item.name]}
                         name={item.name}
                         cost={item.cost}
-                        onPress={pressFood}
+                        onPress={() => pressFood(item)}
                     />
                 )}
+                
             /> 
-                    <Modal 
-                        animationType="fade"
-                        visible={isModalVisiable}
-                        onRequestClose={()=> setIsModalVisisable(!isModalVisiable)}
-                        transparent= {true}
-                    >
-                    
-                    
-                        <View style={styles.popup}>
-                            <View style={styles.inputQuantityContainer}>
-                                <TextInput
-                                    style={styles.inputQuantity}
-                                    placeholder="Nhập số lượng cho món ăn."
-                                    keyboardType="numeric"
-                                    value={quantity}
-                                    onChangeText={setQuantity}
-                                />
-                            </View>
-                            <View style={styles.inputTableNumContainer}>
-                                <TextInput
-                                    style={styles.inputTableNum}
-                                    placeholder="Nhập số bàn của khách."
-                                    keyboardType="numeric"
-                                    value={table}
-                                    onChangeText={setTable}
-                                />
-                            </View>
-                    
-                            <View style={styles.button}>
-                                <Button
-                                    title="Xác nhận"
-                                    onPress={pressConfirm}
-                                /> 
-                                <Button
-                                    title= "Huỷ"
-                                    onPress={pressCancel}
-                                    color="red"
-                                />
-                            </View>
-                        </View>
-                    </Modal>
-            
+           <FoodModal
+            isVisible={isModalVisiable}
+            quantity={quantity}
+            setQuantity={setQuantity}
+            table={table}
+            setTable={setTable}
+            onConfirm={addFood}
+            onCancel={pressCancel}
+            nameFood={selectedFood ? selectedFood.name : ''}
+           />
         
+          
+                
         
+        <Button title="Xem lại hóa đơn" onPress={openBillModal} />
+        <BillModal 
+            isVisible={isBillModalVisible}
+            onClose={closeBillModal}
+            orderedItems={orderedItems}
+            onResetBill={resetBill}
+            //bill={bill}
+        />
     </SafeAreaView>
 
-    
 
 
     )
 }
 const styles=StyleSheet.create({
     list: {
-        padding
-        : 8,
+        paddingHorizontal: 8,
     },
-    title: {
-        fontSize: 30,
-        fontWeight: "bold",
-        marginBottom: 10,
-        marginVertical: 20
-    },
+    // title: {
+    //     fontSize: 25,
+    //     fontWeight: "bold",
+    //     marginBottom: 15,
+    // },
     foodLayout: {
         flexDirection: "row",
         flexWrap: "wrap",
@@ -136,46 +149,12 @@ const styles=StyleSheet.create({
         marginTop: Platform.OS ==="android" ? 15 : 0,
 
     },
-    inputQuantity: {
-        fontSize: 15,
-        padding: 10,
-    },
-    inputTableNum: {
-        fontSize: 15,
-        padding: 10,
-    },
-    inputQuantityContainer: {
-        
-        justifyContent: "center",
-        height: "25%",
-        backgroundColor: "lightblue",
-        alignItems: "center"
 
-    },
-    inputTableNumContainer:{
-        justifyContent: "center",
-        height: "25%",
-        marginBottom: 10,
-        backgroundColor: "lightblue",
-        alignItems: "center",
-    },
-    button:{
-        marginTop: 5,
-        flexDirection:"row",
-        justifyContent: "space-evenly",
-
-    },
-    popup:{
-        backgroundColor:"#FFFFFF",
-        borderRadius: 5,
-        borderWidth: 1,
-        height: Platform.OS === "android" ? "30%" : "20%",
-        width: Platform.OS === "android" ? "80%" : "80%%",
-        alignSelf: "center",
-        marginVertical: Platform.OS === "android" ? 100 : 250,
-        justifyContent: "center",
-
-    }
+    // bottom: {
+    //     padding: 10,        
+    //     flexDirection:"row",
+    //     justifyContent: "space-around",
+    // },
 
 })
 export default BookFood;

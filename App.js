@@ -16,7 +16,7 @@ export default function App() {
 
             if (route.name === "Bida") {
               iconName = "billiards";
-            } else if (route.name === "BookFood") {
+            } else if (route.name === "Food & Drink") {
               iconName = "food";
             }
 
@@ -30,7 +30,7 @@ export default function App() {
         })}
       >
         <Tab.Screen name="Bida" component={TablesScreen} />
-        <Tab.Screen name="BookFood" component={BookFood} />
+        <Tab.Screen name="Food & Drink" component={BookFood} />
       </Tab.Navigator>
     </NavigationContainer>
   );
