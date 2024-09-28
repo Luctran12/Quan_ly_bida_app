@@ -1,0 +1,10 @@
+[
+    { "id": 1, "type": "classic", "cost": "30000", "status": "Hỏng"},
+    { "id": 2, "type": "classic", "cost": "30000", "status": "Đang sửa chữa" },
+    { "id": 3, "type": "classic", "cost": "30000", "status": "Hỏng" },
+    { "id": 4, "type": "classic", "cost": "30000", "status": "Bình thường" },
+    { "id": 5, "type": "classic", "cost": "30000", "status": "Đang sửa chữa" },
+    { "id": 6, "type": "classic", "cost": "30000", "status": "Hỏng" },
+    { "id": 7, "type": "Pro", "cost": "50000","status": "Bình thường" },
+    { "id": 8, "type": "Pro", "cost": "50000" ,"status": "Bình thường"}
+  ]
