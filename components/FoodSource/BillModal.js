@@ -29,7 +29,6 @@ const sortedItems = [...orderedItems].sort((a, b) => parseInt(a.table) - parseIn
                     )}
                 />
                 </View>
-                {/* <Text style={styles.totalText}>Tổng tiền: {bill.toLocaleString()} VND</Text> */}
             <View style={styles.button}>
                 <Button
                 title="Lam moi"

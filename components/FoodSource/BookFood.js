@@ -1,7 +1,8 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import axios from "axios";
 import {  StyleSheet, Platform, Text, SafeAreaView,  Alert, FlatList, Button } from "react-native";
 import FoodCard from "./FoodCard";
-import FoodData from "./FoodData.json"
+//import FoodData from "./FoodData.json"
 import FoodModal from "./FoodModal";
 import BillModal from "./BillModal";
 const imageMap = {
@@ -24,9 +25,21 @@ const BookFood = () =>{
     const [isModalVisiable, setIsModalVisisable] = useState(false)
     const [quantity,setQuantity]= useState('')
     const [table,setTable]= useState('')
-    
     const [orderedItems, setOrderedItems] = useState([]); // Danh sách món đã đặt
     const [isBillModalVisible, setIsBillModalVisible] = useState(false);
+    const [foodData,setFoodData]= useState(null)
+    // Dùng để gọi API khi component mount, API được gọi 1 lần khi component xuất hiện trên màn hình
+    useEffect(()=> {
+        fetchFoodData();
+    }, []);
+    const fetchFoodData = async() => {
+        try{
+            const response = await axios.get('https://quan-ly-bida-backend.onrender.com/food/getAll')
+            setFoodData(( response).data.result)
+        }catch(error){
+            console.error(error);
+        }
+    }
     const openBillModal = () => {
         setIsBillModalVisible(true);
     };
@@ -38,36 +51,45 @@ const BookFood = () =>{
         setSelectFood(food);
     };
     
-    const addFood= () =>{
-        // if (!selectedFood) {
-        //     Alert.alert("Thông báo", "Vui lòng chọn món ăn!");
-        //     return;
-        // }
+    const addFood= async() =>{
+        
         if(!quantity|| parseInt(quantity)<=0|| !table || parseInt(table)<=0){
             Alert.alert("Thông báo","Vui lòng nhập số lượng và chọn bàn hợp lệ!")
             return;
-        }else{
-            Alert.alert(
-                "Thông báo",
-                "Thêm món thành công!"
-               
-            );
         }
-        const price=  parseFloat(selectedFood.cost.replace(".",''));
-        const totalPerFood= price*parseInt(quantity);
-        console.log(totalPerFood);
-        //setBill(bill+ totalPerFood)
-        setOrderedItems(prevItems => [...prevItems, { 
-            name: selectedFood.name, 
-            cost: selectedFood.cost, 
-            quantity: quantity,
-            table: table,
-            total: totalPerFood 
-        }]);
-        setQuantity('')
-        setTable('')
-        console.log(quantity,table);
-        setIsModalVisisable(false);
+        try{
+            console.log(selectedFood.id, quantity, table)
+            const response= await axios.post('https://quan-ly-bida-backend.onrender.com/food/create',{
+                
+                foodId: selectedFood.id,
+                quantity: quantity,
+                tableId: table,
+
+            })
+            console.log("==========succcess==========",response.data)
+            setOrderedItems(prevItems => [...prevItems, { 
+                name: selectedFood.name, 
+                cost: selectedFood.cost, 
+                quantity: quantity,
+                table: table,
+                total: totalPerFood 
+            }]);
+            setQuantity('')
+            setTable('')
+            console.log(quantity,table);
+            setIsModalVisisable(false);
+
+        }catch(error){
+            Alert.alert("thông báo, có lỗi xảy ra!?")
+            console.error(error);
+        }
+    
+        
+        // const price=  parseFloat(selectedFood.cost.replace(".",''));
+        // const totalPerFood= price*parseInt(quantity);
+        // console.log(totalPerFood);
+        // //setBill(bill+ totalPerFood)
+        
     }
     const pressCancel= () =>{
         setQuantity('')
@@ -86,15 +108,15 @@ const BookFood = () =>{
             <FlatList 
                 contentContainerStyle={styles.list}
         
-                data={FoodData}
+                data={foodData}
                 numColumns={2}
                 
                 renderItem={({ item }) => (
                     <FoodCard
-                        indexImage={imageMap[item.name]}
+                        indexImage={imageMap[item.id]}
                         name={item.name}
                         cost={item.cost}
-                        onPress={() => pressFood(item)}
+                        onPress={()=> pressFood(item)}
                     />
                 )}
                 
@@ -131,11 +153,7 @@ const styles=StyleSheet.create({
     list: {
         paddingHorizontal: 8,
     },
-    // title: {
-    //     fontSize: 25,
-    //     fontWeight: "bold",
-    //     marginBottom: 15,
-    // },
+   
     foodLayout: {
         flexDirection: "row",
         flexWrap: "wrap",
@@ -150,11 +168,7 @@ const styles=StyleSheet.create({
 
     },
 
-    // bottom: {
-    //     padding: 10,        
-    //     flexDirection:"row",
-    //     justifyContent: "space-around",
-    // },
+   
 
 })
 export default BookFood;
