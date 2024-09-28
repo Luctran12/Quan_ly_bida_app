@@ -1,49 +1,84 @@
-import React from "react";
-import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
+import React, {useState} from "react";
+import { View, Text, StyleSheet, ImageBackground,TouchableOpacity } from "react-native";
+import UpdateTableModal from "./UpdateTableModal";
+const AdminTable = ({ id, type, cost, status, onUpdateTable }) => {
+  const [modalVisible, setModalVisible] = useState(false);
 
-export default function AdminTable({ id, type, cost, status }) {
+  const getBackgroundColor = () => {
+    switch (status) {
+      case "Hỏng":
+        return "#ffcccc"; 
+      case "Đang sửa chữa":
+        return "#d3d3d3"; 
+      default:
+        return "#F0FFFF"; 
+    }
+  };
+
   return (
-    <TouchableOpacity style={styles.container}>
-      <View style={styles.idTable}>
-      <Text style={styles.idText}>Bàn: {id}</Text>
-      <Text>Loại: {type}</Text>
-      </View>
-      <View style={styles.idTable}>
-      <Text>Giá: {cost} vnđ/h</Text>
-      <Text>Tình trạng: {status}</Text>
-      </View>
-    </TouchableOpacity>
+    
+    <View style={[styles.tableItem, { backgroundColor: getBackgroundColor(status) }]}>
+      <TouchableOpacity onPress={() => setModalVisible(true)}>
+        <View style={{alignItems: "center"}}>
+          <Text style={styles.tableText}>Bàn {id}</Text>
+        </View>
+        
+        <Text style={styles.typeText}>Loại: {type}</Text>
+        <Text style={styles.costText}>Giá: {cost} VND/h</Text>
+        <Text style={styles.statusText}>Trạng thái: {status}</Text>
+      </TouchableOpacity>
+
+      <UpdateTableModal
+        isVisible={modalVisible}
+        onClose={() => setModalVisible(false)}
+        onUpdate={onUpdateTable}
+        tableId={id}
+        initialCost={cost}
+        initialStatus={status}
+      />
+    </View>
+    
   );
-}
+};
 
 const styles = StyleSheet.create({
-  container: {
-    width: 330 ,
-    height: 120,
-    backgroundColor: "#F0FFFF",
+  tableItem: {
     marginBottom: 10,
-    borderWidth: 2,
-    borderRadius: 10,
-    borderColor: "green",
-    justifyContent: "center",
-    //alignItems: "center",
-    shadowColor: "lightgreen",
-    shadowOpacity: 3,
-    shadowOffset: {
-        width: 2,
-        height: 2
-    },
-    elevation: 4,
-    padding: 16,
+    padding: 5,
+    borderWidth: 1,
+    borderColor: "#000",
+    borderRadius: 5,
+    width: 170,
+    height: 120,
+    margin: 5
   },
-  idTable: {
-    flexDirection: "row",
-    justifyContent: "space-around"
-  },
-  idText: {
+  tableText: {
     fontSize: 20,
     fontWeight: "bold",
-    marginBottom: 10,
+  },
+  typeText:{
+    fontSize: 16,
+    marginBottom: 5,
+  },
+  costText:{
+    fontSize: 16,
+    marginBottom: 5,
+  },
+  statusText:{
+    fontSize: 16,
+    marginBottom: 5,
+  },
+  tableID: {
+    fontSize: 10, 
+    fontWeight: "bold",
     
-  }
+    color: "#333", 
+  }, 
+  cost: {
+    fontSize: 16,
+    textAlign: "center", 
+    color: "#888", 
+  },
 });
+
+export default AdminTable;
