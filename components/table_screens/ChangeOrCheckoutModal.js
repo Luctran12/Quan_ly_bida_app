@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Modal, SafeAreaView, Text, TextInput, TouchableOpacity, View } from "react-native";
+import { Modal, Text, TextInput, TouchableOpacity, View } from "react-native";
 
 export default function ChangeOrCheckoutModal({
   visible,
@@ -30,10 +30,9 @@ export default function ChangeOrCheckoutModal({
     setChangeTableVisible(true);
 
     console.log("chuyen ban");
-    console.log("visible:",changeTableVisible)
+    console.log("visible:", changeTableVisible);
 
     onClose();
-
   };
 
   return (
@@ -54,6 +53,7 @@ export default function ChangeOrCheckoutModal({
               alignItems: "center",
               borderRadius: 10,
               justifyContent: "center",
+              borderWidth: 1,
             }}
           >
             <View style={{ justifyContent: "center", alignItems: "center" }}>
@@ -62,9 +62,10 @@ export default function ChangeOrCheckoutModal({
                 style={{
                   height: 30,
                   width: 100,
-                  backgroundColor: "red",
+                  backgroundColor: "#1daec9",
                   justifyContent: "center",
                   alignItems: "center",
+                  borderRadius: 10,
                 }}
               >
                 <Text>Back</Text>
@@ -107,32 +108,84 @@ export default function ChangeOrCheckoutModal({
         </View>
       </Modal>
       <Modal visible={changeTableVisible} transparent={true}>
-        <SafeAreaView
-          style={{ flex: 1, justifyContent: "center", alignItems: "center", height:180, width: 250 }}
+        <View
+          style={{
+            flex: 1,
+            justifyContent: "center",
+            alignItems: "center",
+            borderRadius: 12,
+            borderWidth: 1,
+          }}
         >
           <View
             style={{
-              backgroundColor: "black",
-              height: "20%",
-              width: 250,
-              justifyContent: "center",
-              alignItems: "center",
+              backgroundColor: "#e6e6e6",
+              height: 180,
+              width: 300,
             }}
           >
-            <Text>Chuyển sang bàn số: </Text>
-            <TextInput
-              onChangeText={(idTable) => setIdChangeTable(idTable)}
-              keyboardType="numeric"
-              placeholder="số bàn"
-            />
-            <TouchableOpacity
-              onPress={handleChangeTables}
-              style={{ height: 30, width: 70, backgroundColor: "#e0e0eb" }}
+            <View
+              style={{
+                flex: 1,
+                justifyContent: "center",
+                alignItems: "center",
+                height: 180,
+                width: 250,
+              }}
             >
-              <Text>Chuyển</Text>
-            </TouchableOpacity>
+              <View
+                style={{
+                  // backgroundColor: "black",
+                  // height: "20%",
+                  // width: 250,
+
+                  justifyContent: "center",
+                  alignItems: "center",
+                  borderRadius: 20,
+                  borderWidth: 1,
+                }}
+              >
+                <Text style={{ fontSize: 20 }}>Chuyển sang bàn số: </Text>
+                <View
+                  style={{
+                    width: 100,
+                    backgroundColor: "white",
+                    borderWidth: 1,
+                    borderRadius: 10,
+                  }}
+                >
+                  <TextInput
+                    onChangeText={(idTable) => setIdChangeTable(idTable)}
+                    keyboardType="numeric"
+                    placeholder="số bàn"
+                  />
+                </View>
+
+                <TouchableOpacity
+                  onPress={handleChangeTables}
+                  style={{
+                    height: 30,
+                    width: 70,
+                    marginTop: 10,
+                    backgroundColor: "#1bafc8",
+                    justifyContent: "center",
+                    borderRadius: 8,
+                  }}
+                >
+                  <Text
+                    style={{
+                      alignSelf: "center",
+                      fontSize: 14,
+                      fontWeight: "bold",
+                    }}
+                  >
+                    Chuyển
+                  </Text>
+                </TouchableOpacity>
+              </View>
+            </View>
           </View>
-        </SafeAreaView>
+        </View>
       </Modal>
     </View>
   );

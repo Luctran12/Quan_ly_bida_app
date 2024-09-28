@@ -10,7 +10,7 @@ const imageMap = {
     'Sting': require('../../assets/Food/sting.png'),
     'Pepsi': require('../../assets/Food/pepsi.png'),
     'Mì tôm': require('../../assets/Food/mitom.png'),
-    'Trà đá': require('../../assets/Food/trada.png'),
+    'trà đá': require('../../assets/Food/trada.png'),
     'Nui xào': require('../../assets/Food/nui.png'),
     'Cà phê': require('../../assets/Food/cf.png'),
     'Bạc xỉu': require('../../assets/Food/cfs.png'),
@@ -113,7 +113,7 @@ const BookFood = () =>{
                 
                 renderItem={({ item }) => (
                     <FoodCard
-                        indexImage={imageMap[item.id]}
+                        indexImage={imageMap[item.name]}
                         name={item.name}
                         cost={item.cost}
                         onPress={()=> pressFood(item)}

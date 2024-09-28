@@ -1,3 +1,4 @@
+import Ionicons from "@expo/vector-icons/Ionicons";
 import { useEffect, useState } from "react";
 import { Alert, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import ChangeOrCheckoutModal from "./ChangeOrCheckoutModal";
@@ -124,7 +125,8 @@ export default function Table({
     <View
       style={[
         styles.container,
-        { backgroundColor: available ? "#8cff66" : "#e0e0d1" },
+        { backgroundColor: available ? "#5acddf" : "white" },
+        { borderWidth: 1, marginRight:15, marginLeft:15,marginBottom:10 },
       ]}
     >
       <TouchableOpacity
@@ -132,12 +134,42 @@ export default function Table({
         onPress={available ? handleChangOrCheckout : handleClickTable}
       >
         <View>
-          <Text style={{ alignSelf: "center", marginBottom: 5 }}>Bàn {id}</Text>
-          <Text>Trạng thái: </Text>
-          <Text style={{ marginBottom: 5 }}>
+          <Text
+            style={{
+              alignSelf: "center",
+              marginBottom: 5,
+              marginTop: 5,
+              fontWeight: "500",
+              fontSize: 20,
+            }}
+          >
+            Bàn {id}
+          </Text>
+          <View style={{ alignItems: "center" }}>
+            {available ? (
+              <Ionicons name="tablet-landscape" size={75} color="black" />
+            ) : (
+              <Ionicons
+                name="tablet-landscape-outline"
+                size={75}
+                color="black"
+              />
+            )}
+          </View>
+
+          <Text style={{ paddingLeft: 10 }}>Trạng thái: </Text>
+          <Text
+            style={{
+              marginBottom: 5,
+              paddingLeft: 10,
+              fontSize: 16,
+              color: "red",
+              fontWeight: "bold",
+            }}
+          >
             {available ? "đang dùng" : "trống"}
           </Text>
-          <Text>
+          <Text style={{ alignSelf: "center" }}>
             {available ? "thời gian chơi: " + formatTime(elapsedTime) : ""}
           </Text>
         </View>
@@ -166,8 +198,8 @@ export default function Table({
 
 const styles = StyleSheet.create({
   container: {
-    height: 240,
-    width: 170,
+    height: 270,
+    width: 190,
     borderRadius: 10,
     marginRight: 10,
     marginTop: 10,

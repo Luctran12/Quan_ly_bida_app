@@ -20,7 +20,7 @@ export default function TablesScreen() {
   };
 
   return (
-    <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
+    <View style={{ flex: 1, justifyContent: "center", alignItems: "center", backgroundColor: "black" }}>
       <FlatList
         numColumns={2}
         data={TableData}
