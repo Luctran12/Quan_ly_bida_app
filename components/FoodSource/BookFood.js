@@ -25,7 +25,7 @@ const BookFood = () =>{
     const [isModalVisiable, setIsModalVisisable] = useState(false)
     const [quantity,setQuantity]= useState('')
     const [table,setTable]= useState('')
-    const [orderedItems, setOrderedItems] = useState([]); // Danh sách món đã đặt
+    // const [orderedItems, setOrderedItems] = useState([]); // Danh sách món đã đặt
     const [isBillModalVisible, setIsBillModalVisible] = useState(false);
     const [foodData,setFoodData]= useState(null)
     // Dùng để gọi API khi component mount, API được gọi 1 lần khi component xuất hiện trên màn hình
@@ -61,19 +61,20 @@ const BookFood = () =>{
             console.log(selectedFood.id, quantity, table)
             const response= await axios.post('https://quan-ly-bida-backend.onrender.com/food/create',{
                 
-                foodId: selectedFood.id,
-                quantity: quantity,
-                tableId: table,
+                foodId: parseInt(selectedFood.id),
+                quantity: parseInt(quantity),
+                tableId: parseInt(table),
+                name: "Tra sua de",
+                cost: 500000
 
             })
             console.log("==========succcess==========",response.data)
-            setOrderedItems(prevItems => [...prevItems, { 
-                name: selectedFood.name, 
-                cost: selectedFood.cost, 
-                quantity: quantity,
-                table: table,
-                total: totalPerFood 
-            }]);
+            // setOrderedItems(prevItems => [...prevItems, { 
+            //     name: selectedFood.name, 
+            //     cost: selectedFood.cost, 
+            //     quantity: quantity,
+            //     table: table,
+            // }]);
             setQuantity('')
             setTable('')
             console.log(quantity,table);
@@ -96,11 +97,11 @@ const BookFood = () =>{
         setTable('')
         setIsModalVisisable(false)
     }
-    const resetBill= () =>{
-        setOrderedItems([])
-        setIsBillModalVisible(false);
-        Alert.alert("Hoá đơn đã làm mới");
-    }
+    // const resetBill= () =>{
+    //     setOrderedItems([])
+    //     setIsBillModalVisible(false);
+    //     Alert.alert("Hoá đơn đã làm mới");
+    // }
 
     return(
     <SafeAreaView style={styles.safe}>
@@ -135,14 +136,14 @@ const BookFood = () =>{
           
                 
         
-        <Button title="Xem lại hóa đơn" onPress={openBillModal} />
-        <BillModal 
+        {/* <Button title="Xem lại hóa đơn" onPress={openBillModal} /> */}
+        {/* <BillModal 
             isVisible={isBillModalVisible}
             onClose={closeBillModal}
             orderedItems={orderedItems}
             onResetBill={resetBill}
             //bill={bill}
-        />
+        /> */}
     </SafeAreaView>
 
 
