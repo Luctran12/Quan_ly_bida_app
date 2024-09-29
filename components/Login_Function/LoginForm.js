@@ -5,6 +5,7 @@ import RegisterNewAcc from "./RegisterForm";
 
 export default function Login() {
   const [press, isPress] = useState(false);
+  const [loGin, setLogin]= useState('')
 
   return (
     <KeyboardAvoidingView
@@ -24,7 +25,12 @@ export default function Login() {
 
             <View style={styles.mid}>
               <View style={styles.userInput}>
-                <TextInput style={styles.placeholderText} placeholder="Username" />
+                <TextInput 
+                style={styles.placeholderText} placeholder="Username" 
+                value={loGin}
+                onChangeText={setLogin}
+                
+                />
               </View>
               <View style={styles.userInput}>
                 <TextInput style={styles.placeholderText} placeholder="Password" secureTextEntry={true} />
@@ -32,6 +38,7 @@ export default function Login() {
               <View style={styles.buttonMid}>
                 <TouchableOpacity style={styles.button}>
                   <Text style={styles.text}>Đăng nhập</Text>
+
                 </TouchableOpacity>
                 <TouchableOpacity>
                   <Text style={styles.textForgotPass}>Quên mật khẩu</Text>
