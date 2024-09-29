@@ -1,13 +1,7 @@
+import {Dimensions,Image,StyleSheet,Text,TouchableOpacity,View,} from "react-native";
 
-import {
-  Dimensions,
-  Image,
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  View,
-} from "react-native";
-const FoodCard = ({ onPress, indexImage, name, cost }) => {
+
+const FoodCard = ({ onPress,nameId, indexImage, name, cost }) => {
   return (
     <TouchableOpacity style={styles.item} onPress={onPress}>
       <Image
@@ -22,6 +16,9 @@ const FoodCard = ({ onPress, indexImage, name, cost }) => {
     </TouchableOpacity>
   );
 };
+
+
+
 const { width } = Dimensions.get("window");
 const styles = StyleSheet.create({
   item: {
@@ -29,8 +26,8 @@ const styles = StyleSheet.create({
     height: width * 0.55,
     backgroundColor: "#f0f0f0",
     marginBottom: 8,
-    marginLeft: 4,
-    marginRight: 4,
+    marginLeft: 10,
+    marginRight: 5,
     borderWidth: 1,
     borderRadius: 10,
     borderColor: "#3498db",
@@ -47,7 +44,7 @@ const styles = StyleSheet.create({
   image: {
     marginTop: 10,
     height: "50%",
-    width: "100%",
+    width: "90%",
     borderRadius: 5,
   },
   nameFood: {

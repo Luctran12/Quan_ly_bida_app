@@ -62,26 +62,17 @@ export default function FoodModal({
         </Modal>
     );
 };
+
+
+
+
 const {height} = Dimensions.get("window")
 const styles = StyleSheet.create({
-    // popup: {
-    //     backgroundColor: "#FFFFFF",
-    //     borderRadius: 10,
-    //     borderWidth: 1,
-    //     borderColor: "#2ecc71",
-    //     height: "30%",
-    //     width: "80%",
-    //     alignSelf: "center",
-    //     marginVertical: 100,
-    //     justifyContent: "center",
-    // },
-    
     input: {
         fontSize: 15,
         padding: 10,
         marginVertical: 10,
     },
-   
     popup:{
         backgroundColor:"#FFFFFF",
         borderRadius: 10,

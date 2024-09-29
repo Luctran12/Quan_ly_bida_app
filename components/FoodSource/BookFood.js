@@ -1,32 +1,30 @@
 import { useEffect, useState } from "react";
-import axios from "axios";
+import { useOrder } from "../context/OrderContext";
 import {  StyleSheet, Platform, Text, SafeAreaView,  Alert, FlatList, Button } from "react-native";
 import FoodCard from "./FoodCard";
-//import FoodData from "./FoodData.json"
 import FoodModal from "./FoodModal";
-import BillModal from "./BillModal";
+import request from "../utils/request";
+//import PostOrderId from "../utils/PostOrderId";
+
 const imageMap = {
     'Kem': require('../../assets/Food/kem.png'),
     'Sting': require('../../assets/Food/sting.png'),
     'Pepsi': require('../../assets/Food/pepsi.png'),
     'Mì tôm': require('../../assets/Food/mitom.png'),
-    'trà đá': require('../../assets/Food/trada.png'),
+    'Trà đá': require('../../assets/Food/trada.png'),
     'Nui xào': require('../../assets/Food/nui.png'),
-    'Cà phê': require('../../assets/Food/cf.png'),
+    'Cà Phê': require('../../assets/Food/cf.png'),
     'Bạc xỉu': require('../../assets/Food/cfs.png'),
     'Trà sữa': require('../../assets/Food/ts.png'),
     'Trà đào': require('../../assets/Food/td.png'),
     
 }
 const BookFood = () =>{
-    
+    const {orderId, tableId}= useOrder();
     const [selectedFood, setSelectFood]= useState(null)
-    //const [bill,setBill]= useState(0)
     const [isModalVisiable, setIsModalVisisable] = useState(false)
     const [quantity,setQuantity]= useState('')
     const [table,setTable]= useState('')
-    // const [orderedItems, setOrderedItems] = useState([]); // Danh sách món đã đặt
-    const [isBillModalVisible, setIsBillModalVisible] = useState(false);
     const [foodData,setFoodData]= useState(null)
     // Dùng để gọi API khi component mount, API được gọi 1 lần khi component xuất hiện trên màn hình
     useEffect(()=> {
@@ -34,62 +32,56 @@ const BookFood = () =>{
     }, []);
     const fetchFoodData = async() => {
         try{
-            const response = await axios.get('https://quan-ly-bida-backend.onrender.com/food/getAll')
+            const response = await request.get('/food/getAll')
             setFoodData(( response).data.result)
+           // console.log((response).data.result)
         }catch(error){
             console.error(error);
         }
     }
-    const openBillModal = () => {
-        setIsBillModalVisible(true);
-    };
-    const closeBillModal = () => {
-        setIsBillModalVisible(false);
-    };
+  
     const pressFood = (food) =>{
         setIsModalVisisable(true);
         setSelectFood(food);
     };
-    
+  
     const addFood= async() =>{
-        
+       
         if(!quantity|| parseInt(quantity)<=0|| !table || parseInt(table)<=0){
             Alert.alert("Thông báo","Vui lòng nhập số lượng và chọn bàn hợp lệ!")
             return;
+        }else if(table!=tableId){
+            Alert.alert("Thông báo","Vui lòng nhập đúng số bàn")
+            return;
         }
         try{
-            console.log(selectedFood.id, quantity, table)
-            const response= await axios.post('https://quan-ly-bida-backend.onrender.com/food/create',{
+            console.log("FoodId: ",selectedFood.id,"Quantity: ", quantity,"TableId: ", table,"OrderId: ",orderId)
+            if(orderId==null){
+                Alert.alert("Thông báo", "Vui lòng đặt bàn trước")
+                return
+            }else{
+            const response= await request.post('OrderFoodItem/create',{
                 
-                foodId: parseInt(selectedFood.id),
-                quantity: parseInt(quantity),
-                tableId: parseInt(table),
-                name: "Tra sua de",
-                cost: 500000
+                foodId: selectedFood.id,
+                quantity: quantity,
+                tableId: table,
+                
+                orderId: orderId
 
             })
-            console.log("==========succcess==========",response.data)
-            // setOrderedItems(prevItems => [...prevItems, { 
-            //     name: selectedFood.name, 
-            //     cost: selectedFood.cost, 
-            //     quantity: quantity,
-            //     table: table,
-            // }]);
+            console.log("==========success==========",response.data)
+          
             setQuantity('')
             setTable('')
-            console.log(quantity,table);
             setIsModalVisisable(false);
-
+            Alert.alert("Thông báo", "Thêm món thành công")
+        }
         }catch(error){
             Alert.alert("thông báo, có lỗi xảy ra!?")
             console.error(error);
         }
     
-        
-        // const price=  parseFloat(selectedFood.cost.replace(".",''));
-        // const totalPerFood= price*parseInt(quantity);
-        // console.log(totalPerFood);
-        // //setBill(bill+ totalPerFood)
+  
         
     }
     const pressCancel= () =>{
@@ -97,11 +89,7 @@ const BookFood = () =>{
         setTable('')
         setIsModalVisisable(false)
     }
-    // const resetBill= () =>{
-    //     setOrderedItems([])
-    //     setIsBillModalVisible(false);
-    //     Alert.alert("Hoá đơn đã làm mới");
-    // }
+
 
     return(
     <SafeAreaView style={styles.safe}>
@@ -136,14 +124,6 @@ const BookFood = () =>{
           
                 
         
-        {/* <Button title="Xem lại hóa đơn" onPress={openBillModal} /> */}
-        {/* <BillModal 
-            isVisible={isBillModalVisible}
-            onClose={closeBillModal}
-            orderedItems={orderedItems}
-            onResetBill={resetBill}
-            //bill={bill}
-        /> */}
     </SafeAreaView>
 
 
@@ -152,7 +132,7 @@ const BookFood = () =>{
 }
 const styles=StyleSheet.create({
     list: {
-        paddingHorizontal: 8,
+        margin: 16
     },
    
     foodLayout: {
@@ -165,8 +145,9 @@ const styles=StyleSheet.create({
     safe: {
         flex: 1,
         alignItems:"center",
-        marginTop: Platform.OS ==="android" ? 15 : 0,
-
+        //marginTop: Platform.OS ==="android" ? 15 : 0,
+        backgroundColor: "black",
+        
     },
 
    

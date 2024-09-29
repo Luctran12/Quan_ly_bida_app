@@ -5,9 +5,11 @@ import React from "react";
 import { StyleSheet } from "react-native";
 import BookFood from "./components/FoodSource/BookFood";
 import TablesScreen from "./components/table_screens/TablesScreen";
+import { OrderProvider } from "./components/context/OrderContext";
 const Tab = createBottomTabNavigator();
 export default function App() {
   return (
+    <OrderProvider>
     <NavigationContainer>
       <Tab.Navigator
         screenOptions={({ route }) => ({
@@ -33,6 +35,7 @@ export default function App() {
         <Tab.Screen name="Food & Drink" component={BookFood} />
       </Tab.Navigator>
     </NavigationContainer>
+    </OrderProvider>
   );
 }
 

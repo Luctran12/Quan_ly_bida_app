@@ -3,6 +3,8 @@ import { useEffect, useState } from "react";
 import { Alert, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import ChangeOrCheckoutModal from "./ChangeOrCheckoutModal";
 import OpenTableModal from "./OpenTableModal";
+import axios from "axios";
+import { useOrder } from "../context/OrderContext";
 export default function Table({
   id,
   type,
@@ -14,6 +16,7 @@ export default function Table({
   change,
   autoOpen,
 }) {
+  const {setOrderId, setTableId} = useOrder();//bien thay doi gia tri orderId
   const [available, setAvailable] = useState(false);
   const [startTime, setStartTime] = useState(null); // Lưu thời gian bắt đầu
   const [elapsedTime, setElapsedTime] = useState(0); // Thời gian đã trôi qua
@@ -29,7 +32,7 @@ export default function Table({
       handleStart();
     }
   }, [autoOpen]);
-
+  
   useEffect(() => {
     let interval;
     if (isRunning) {
@@ -52,13 +55,13 @@ export default function Table({
     } else {
       // nếu không thì đặt thời gian bắt đầu là timestamp hiện tại
       setStartTime(Date.now()); // Lưu thời gian bắt đầu
-      console.log("========================", typeof id);
-      console.log("========================", typeof idSelected);
+      // console.log("========================", typeof id);
+      // console.log("========================", typeof idSelected);
     }
     setIsRunning(true); // Bắt đầu bộ đếm
     setAvailable(true);
     setCountTimeButtonState(!countTimeButtonState);
-    console.log("======>", idSelected);
+    //console.log("======>", idSelected);
   };
 
   const handleStop = () => {
@@ -74,7 +77,7 @@ export default function Table({
     handleResetAllStatus();
     setChangeOrCheckoutVisible(false);
   };
-
+  
   const handleCheckout = (timePlay) => {
     const cash = Math.round((elapsedTime / (60000 * 60)) * 30000);
     Alert.alert("tính tiền", "tổng tiền: " + "" + cash + "đ", [
@@ -110,14 +113,33 @@ export default function Table({
     //setAvailable(!available);
     setOpenTableModalVisible(true);
   }
+  // useEffect(() => {
+  //   console.log(orderId, "Order ID đã được cập nhật");
+  // }, [orderId]);
+  
+  const handleAcceptOpenTable= async() =>{
+    try{
+      const response=await axios.post('https://quan-ly-bida-backend.onrender.com/order_table/create',{
+        orderId: parseInt(id)
 
-  function handleAcceptOpenTable() {
+      })
+      console.log(response.data.result,"======");
+      setOrderId(response.data.result);
+      setTableId(id)
+      console.log(id)
+    }catch(error){
+      console.log(error,"===x===error===x===")
+
+    }
+    
     setOpenTableModalVisible(false);
     setAvailable(!available);
     handleStart();
   }
+  
 
   const handleChangOrCheckout = () => {
+    
     setChangeOrCheckoutVisible(true);
   };
 
@@ -199,7 +221,7 @@ export default function Table({
 const styles = StyleSheet.create({
   container: {
     height: 270,
-    width: 190,
+    width: 177,
     borderRadius: 10,
     marginRight: 10,
     marginTop: 10,
