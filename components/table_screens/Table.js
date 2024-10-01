@@ -3,8 +3,8 @@ import { useEffect, useState } from "react";
 import { Alert, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import ChangeOrCheckoutModal from "./ChangeOrCheckoutModal";
 import OpenTableModal from "./OpenTableModal";
-import axios from "axios";
 import { useOrder } from "../context/OrderContext";
+import request from "../utils/request";
 export default function Table({
   id,
   type,
@@ -16,9 +16,19 @@ export default function Table({
   change,
   autoOpen,
 }) {
+  
+  const orderIdMap = {
+    0:0,
+    
+}
+
+  const [date,setDate] = useState();
+  const [endTime,setEndTime]= useState('');
+  const [totalTime,setTotalTime]= useState('');
+  const [startTimeReq, setStartTimeReq] = useState('');
   const {setOrderId, setTableId} = useOrder();//bien thay doi gia tri orderId
   const [available, setAvailable] = useState(false);
-  const [startTime, setStartTime] = useState(null); // Lưu thời gian bắt đầu
+  const [startTime, setStartTime] = useState(0); // Lưu thời gian bắt đầu
   const [elapsedTime, setElapsedTime] = useState(0); // Thời gian đã trôi qua
   const [isRunning, setIsRunning] = useState(false); // Kiểm tra bộ đếm có đang chạy hay không
   const [countTimeButtonState, setCountTimeButtonState] = useState(false);
@@ -46,6 +56,62 @@ export default function Table({
     return () => clearInterval(interval);
   }, [isRunning, startTime]);
 
+  useEffect(() => {
+    console.log("Start Time Req:", startTimeReq);
+  }, [startTimeReq]);
+  
+  useEffect(() => {
+    console.log("End Time:", endTime);
+  }, [endTime]);
+  
+  useEffect(() => {
+    console.log("Total Time:", totalTime);
+  }, [totalTime]);
+
+  useEffect(() => {
+    console.log("Ngay hom nay:", date);
+  }, [date]);
+
+  function convertMillisecondsToTime(ms) {
+    let date = new Date(ms);
+  
+    let hours = date.getUTCHours() +7; // Giờ UTC
+    let minutes = date.getUTCMinutes();
+    let seconds = date.getUTCSeconds();
+
+    let time =  `${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
+    console.log(typeof time);
+    return time;
+  }
+
+  function getCurrentDate() {
+  let today = new Date();
+
+  let day = today.getDate(); // Lấy ngày (1-31)
+  let month = today.getMonth() + 1; // Lấy tháng (tháng trong JavaScript bắt đầu từ 0, nên cần +1)
+  let year = today.getFullYear(); // Lấy năm (ví dụ: 2024)
+
+  let date = `${String(day).padStart(2, '0')}/${String(month).padStart(2, '0')}/${year}`;
+  // Định dạng ngày theo dạng dd/mm/yyyy
+  return date;
+}
+    
+
+  function convertElapsedToTime(ms) {
+    let date = new Date(ms);
+  
+    let hours = date.getUTCHours() ; // Giờ UTC
+    let minutes = date.getUTCMinutes();
+    let seconds = date.getUTCSeconds();
+    let time= `${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
+    console.log(typeof time);
+    return time;
+  }
+  
+  // let time = convertMillisecondsToTime(1727782849746);
+  // console.log(time);  // Kết quả là: "16:07:09"
+  
+
   const handleStart = () => {
     //nếu id bàn bằng với id bàn được chọn để chuyển sang
     if (String(id) === String(idSelected)) {
@@ -61,11 +127,25 @@ export default function Table({
     setIsRunning(true); // Bắt đầu bộ đếm
     setAvailable(true);
     setCountTimeButtonState(!countTimeButtonState);
+
+    setDate(getCurrentDate);
     //console.log("======>", idSelected);
   };
 
   const handleStop = () => {
     setIsRunning(false); // Dừng bộ đếm
+
+    setStartTimeReq(convertMillisecondsToTime(startTime));
+    setEndTime(convertMillisecondsToTime(startTime+elapsedTime));
+    setTotalTime(convertElapsedToTime(elapsedTime));
+
+
+  //   console.log("=========>",startTimeReq);
+  //   console.log("=>>>>>>>>",endTime);
+   
+  //  console.log(totalTime);
+
+   
   };
 
   function handleResetAllStatus() {
@@ -73,10 +153,52 @@ export default function Table({
     handleStop();
   }
 
-  const checkoutAndTurnOffModal = () => {
+  const checkoutAndTurnOffModal = async() => {
     handleResetAllStatus();
     setChangeOrCheckoutVisible(false);
-  };
+
+    // try{
+    //   const response=await request.post('/status/create',{
+        
+    //     orderId:orderIdMap[id] ,
+    //     billiardTableId: id,
+    //     startTime: startTimeReq,
+    //     endTime: endTime,
+    //     totalTime: totalTime,
+    //     date: date,
+        
+
+    //   })
+    //   console.log("====", startTimeReq+ " "+ endTime+ " "+ totalTime+ " "+ date)
+    //   console.log(response.data.result,"======");
+      
+    //   console.log("map:  ",id+ "  " + orderIdMap[id]);
+    //   console.log(id + ": " + orderIdMap[id]);
+    //   console.log("=====================================");
+    //   console.log("Dữ liệu gửi đi: ", {
+    //     orderId: orderIdMap[id],
+    //     billiardTableId: id,
+    //     startTime: startTimeReq,
+    //     endTime: endTime,
+    //     totalTime: totalTime,
+    //     date: date
+    //   });
+      
+    // }catch(error){
+    //   console.log(error,"===x===error===x===")
+
+    // }
+    console.log("====", startTimeReq + " " + endTime + " " + totalTime + " " + date);
+    console.log(response.data.result, "======");
+    
+    console.log("Dữ liệu gửi đi: ", {
+        orderId: orderIdMap[id],
+        billiardTableId: id,
+        startTime: startTimeReq,
+        endTime: endTime,
+        totalTime: totalTime,
+        date: date
+  });
   
   const handleCheckout = (timePlay) => {
     const cash = Math.round((elapsedTime / (60000 * 60)) * 30000);
@@ -119,14 +241,21 @@ export default function Table({
   
   const handleAcceptOpenTable= async() =>{
     try{
-      const response=await axios.post('https://quan-ly-bida-backend.onrender.com/order_table/create',{
+      const response=await request.post('/order_table/create',{
         orderId: parseInt(id)
 
       })
       console.log(response.data.result,"======");
       setOrderId(response.data.result);
       setTableId(id)
-      console.log(id)
+      orderIdMap[id] = response.data.result;
+      console.log("map:  ",id+ "  " + response.data.result);
+      console.log(id + ": " + orderIdMap[id]);
+      console.log("=======================================================");
+      console.log("ID hiện tại:", id);  // Kiểm tra giá trị của id
+console.log("orderIdMap hiện tại:", orderIdMap);  // Kiểm tra map
+console.log("orderId từ map:", orderIdMap[id]);  // Kiểm tra giá trị lấy từ map
+
     }catch(error){
       console.log(error,"===x===error===x===")
 
@@ -233,3 +362,4 @@ const styles = StyleSheet.create({
     marginBottom: 5,
   },
 });
+}
