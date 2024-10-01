@@ -8,6 +8,7 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import SettingPage from "./components/User_Page/SettingUser";
 import { ModalManage } from "./components/User_Page/ModalofManage";
+import RegisterScreen from "./components/Login_Function/RegisterForm";
 
 export default function App() {
   const Stack = createNativeStackNavigator();
@@ -23,9 +24,9 @@ export default function App() {
      
       {/* <Login/> */}
 
-      {/* <RegisterNewAcc/> */}
+      <RegisterScreen/>
       {/* <UserPage/> */}
-      <ManageEmployeePage/>
+      {/* <ManageEmployeePage/> */}
 
       {/* <NavigationContainer>
         <Stack.Navigator initialRouteName="Login" screenOptions={{headerShown:false}}>

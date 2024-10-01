@@ -1,99 +1,87 @@
-import { StatusBar } from "expo-status-bar";
-import { useState } from "react";
-import { StyleSheet, Text, View, Button, TextInput,Image, TouchableOpacity } from "react-native";
-import Login from "./LoginForm";
+import React, { useState } from 'react';
+import { View, Text, TextInput, TouchableOpacity, StyleSheet } from 'react-native';
 
-export default function RegisterNewAcc({ onCancel }) {
+export default function RegisterScreen({ navigation }) {
+  const [username, setUsername] = useState('');
+  const [phoneNumber, setPhoneNumber] = useState('');
+  const [password, setPassword] = useState('');
 
   return (
-
-
     <View style={styles.container}>
-      <View style={styles.titleFrame}>
-      <Image
-                style={styles.logo}
-                source={require('../../assets/LoGo.png')}
-        />
-        <Text style={styles.titleText}>Đăng ký</Text>
-      </View>
+      <Text style={styles.title}>Welcome</Text>
       
-      <View style={styles.inputFrames}>
-        <View style={styles.inputFrameEach}>
-          <TextInput
-            style={styles.TextInput}
-            placeholder="tên đăng nhập"
-          />
-        </View>
-
-        <View style={styles.inputFrameEach}>
-          <TextInput
-            style={styles.TextInput}
-            placeholder="mật khẩu"
-          />
-        </View>
-        <View style={styles.inputFrameEach}>
-          <TextInput
-            style={styles.TextInput}
-            placeholder="nhập lại mật khẩu"
-          />
-        </View>
-      </View>
-      
-
-
-
-
-
-      <Button
-        title="thoát"
-        onPress={onCancel}
-
+      <TextInput
+        style={styles.input}
+        placeholder="Username"
+        value={username}
+        onChangeText={setUsername}
       />
-      <StatusBar style="auto" />
-
-
-
+      
+      <TextInput
+        style={styles.input}
+        placeholder="Phone Number"
+        keyboardType="phone-pad"
+        value={phoneNumber}
+        onChangeText={setPhoneNumber}
+      />
+      
+      <TextInput
+        style={styles.input}
+        placeholder="Password"
+        secureTextEntry={true}
+        value={password}
+        onChangeText={setPassword}
+      />
+      
+      <TouchableOpacity style={styles.button} onPress={() => alert('Registering...')}>
+        <Text style={styles.buttonText}>Đăng ký</Text>
+      </TouchableOpacity>
+      
+      <TouchableOpacity >
+        <Text style={styles.linkText}>Quay lại</Text>
+      </TouchableOpacity>
     </View>
-
-
-
-
   );
 }
 
 const styles = StyleSheet.create({
   container: {
-    borderWidth: 2,
     flex: 1,
-    backgroundColor: "#fff",
-    alignItems: "center",
-    width: "100%"
-  },
-  titleFrame:{
-    borderWidth:2,
-    marginTop:80
-  },
-  titleText: {
-    fontSize: 40
-  },
-  logo:{
-    width: 150,
-    height: 150,
-    marginBottom: 12,
-  },
-  text: {
-    
-  },
-  inputFrames: {
-    borderWidth:1,
-    width:'70%',
-    
-  },
-  inputFrameEach: {
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: '#f5e0b7',
     width:'100%'
   },
-  TextInput: {
-    marginLeft: 5
-  }
-
+  title: {
+    fontSize: 36,
+    fontWeight: 'bold',
+    marginBottom: 20,
+  },
+  input: {
+    width: '80%',
+    height: 50,
+    borderWidth: 1,
+    borderColor: '#ccc',
+    borderRadius: 10,
+    padding: 10,
+    marginBottom: 15,
+  },
+  button: {
+    width: '80%',
+    height: 50,
+    backgroundColor: '#000',
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderRadius: 10,
+    marginBottom: 10,
+  },
+  buttonText: {
+    color: '#fff',
+    fontSize: 18,
+  },
+  linkText: {
+    color: '#000',
+    fontSize: 16,
+    marginTop: 10,
+  },
 });

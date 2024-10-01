@@ -7,7 +7,11 @@ import {
     Dimensions
 }from 'react-native'
 const height_modal =150;
-const ModalManage=()=>{
+const ModalManage=(props)=>{
+    const closeModal= (bool,data)=>{
+        props.changeModalVisible(bool);
+        props.setData(data);
+    }
     return(
             <TouchableOpacity
                 disabled={true}
@@ -24,43 +28,52 @@ const ModalManage=()=>{
                         </Text>
 
                     </View>
-
-                </View>
-                <View style={styles.buttonsView}>
+                    <View style={styles.buttonsView}>
                     <TouchableOpacity
                         style={styles.touchableOpacity}
+                        onPress={()=>closeModal(false,'cancel')}
                     >
-                        <Text style={styles.text}>
+                        <Text style={[styles.text,{color:'blue'}]}>
                             Cancel
                         </Text>
                     </TouchableOpacity>
 
                     <TouchableOpacity
                         style={styles.touchableOpacity}
+                        onPress={()=>closeModal(false,'ok')}
                     >
-                        <Text style={styles.text}>
+                        <Text style={[styles.text,{color:'blue'}]}>
                             OK
                         </Text>
                     </TouchableOpacity>
                 </View>
+
+                </View>
+                
             </TouchableOpacity>
     )
 }
 const styles = StyleSheet.create({
     container:{
+        borderWidth:10,
         // flex:1,
         alignItems:'center',
-        backgroundColor:'black',
-        height:100,
-        width:100,
+        justifyContent:'center',
+        backgroundColor:'yellow',
+        height:'100%',
+        width:'100%',
     },
     modal:{
+        borderWidth:2,
         height:height_modal,
         paddingTop:10,
-        backgroundColor:'black',
-        borderRadius:10
+        backgroundColor:'red',
+        borderRadius:10,
+        width:'80%'
     },
     text:{
+        borderWidth:2,
+        borderColor:'white',
         margin:5,
         fontSize:16,
         fontWeight:'bold'
@@ -69,7 +82,17 @@ const styles = StyleSheet.create({
         flex:1,
         paddingVertical:10,
         alignItems:'center'
+    },
+    textView:{
+        flex:1,
+        alignItems:'center'
+    },
+    buttonsView:{
+        borderWidth:2,
+        width:'100%',
+        flexDirection:'row',
     }
+
 
 
 

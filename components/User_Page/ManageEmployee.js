@@ -6,10 +6,14 @@ const EmployeeForm = () => {
   const [fullName, setName] = useState('');
   const [userName, setUserName] = useState('');
   const [password, setPassword] = useState('');
-  const [isModalVisible, setIsModalVisible]= useState(false)
+  const [isModalVisible, setIsModalVisible]= useState(true)
+  const [chooseData,setChooseData]=useState()
   const changeModalVisible=(bool)=>{
     setIsModalVisible(bool)
 
+  }
+  const setData=(data)=>{
+    setChooseData(data)
   }
 
 //   const handleAddEmployee = () => {
@@ -87,9 +91,13 @@ const EmployeeForm = () => {
         visible={isModalVisible}
         nRequestClose={()=> changeModalVisible(false)}
       >
-        <View style={styles.modalView}>
+        {/* <View style={styles.modalView}>
             <ModalManage/>
-        </View> 
+        </View>  */}
+         <ModalManage
+          changeModalVisible={changeModalVisible}
+          setData={setData}
+         />
       </Modal>
     </View>
   );
@@ -118,7 +126,7 @@ const styles = StyleSheet.create({
     backgroundColor:'red',
     height:500,
     width:600,
-    
+
   }
 });
 
