@@ -1,7 +1,7 @@
 // import React, { useState } from 'react';
 // import { View, Text, Modal, FlatList, Button, StyleSheet } from 'react-native';
 
-// const BillModal = ({ isVisible, onClose, orderedItems ,onResetBill}) => {
+// const BillModal = ({ isVisible, onClose, orderedItems, bill ,onResetBill}) => {
 // const sortedItems = [...orderedItems].sort((a, b) => parseInt(a.table) - parseInt(b.table));
 
 //     return (

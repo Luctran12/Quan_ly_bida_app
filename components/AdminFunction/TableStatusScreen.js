@@ -46,13 +46,14 @@ export default function TableStatusScreen() {
   };
 
   return (
-    
-    <SafeAreaView style={styles.container}>
-      <Text style={styles.header}>Trạng thái bàn</Text>
-      <ImageBackground
+    <ImageBackground
       source={require('../../assets/bida/bidascreen.jpg')}
       style={styles.backgroundImage}
+      resizeMode="cover"
     >
+    <View style={styles.container}>
+      <Text style={styles.header}>Trạng thái bàn</Text>
+      
       
       <FlatList
         data={tableData}
@@ -69,33 +70,34 @@ export default function TableStatusScreen() {
           </TouchableOpacity>
         )}
       />
-
-      {/* Modal cập nhật trạng thái */}
+{/* 
       {selectedTable && (
         <UpdateStatusModal
           visible={modalVisible}
           onClose={handleCloseModal}
           onUpdateStatus={handleUpdateStatus}
         />
-      )}
+      )} */}
 
       {/* Modal cập nhật giá */}
-      {selectedTable && (
+      {/* {selectedTable && (
         <UpdateCostModal
           visible={costModalVisible}
           onClose={handleCloseCostModal}
           currentCost={selectedTable.cost}
           onUpdateCost={handleUpdateCost}
         />
-      )}
-      </ImageBackground>
-    </SafeAreaView>
+      )} */}
+      
+    </View>
+    </ImageBackground>
     
   );
 }
 
 const styles = StyleSheet.create({
   container: {
+    flex: 1,
     padding: 10,
     marginLeft: 5,
     alignItems: "center",
@@ -106,7 +108,8 @@ const styles = StyleSheet.create({
     marginBottom: 10,
   },
   backgroundImage: {
-    
-    resizeMode: 'contain', // Chỉnh sửa tỷ lệ hình ảnh để nó phù hợp với màn hình
+    flex: 1,
+    width: "100%",
+    height: "100%",
   },
 });
