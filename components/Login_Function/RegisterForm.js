@@ -22,6 +22,7 @@ export default function RegisterScreen({ navigation }) {
       );
       console.log(response);
       alert("Success create account");
+      navigation.navigate("Login");
     } catch (error) {
       console.log(error);
       alert(error);
@@ -52,7 +53,11 @@ export default function RegisterScreen({ navigation }) {
         <Text style={styles.buttonText}>Đăng ký</Text>
       </TouchableOpacity>
 
-      <TouchableOpacity>
+      <TouchableOpacity
+        onPress={() => {
+          navigation.navigate("Login");
+        }}
+      >
         <Text style={styles.linkText}>Quay lại</Text>
       </TouchableOpacity>
     </View>

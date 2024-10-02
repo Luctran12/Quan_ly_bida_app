@@ -3,7 +3,7 @@ import { useState } from "react";
 import { StyleSheet, Text, View, TextInput, TouchableOpacity, Image, ScrollView, KeyboardAvoidingView, Platform } from "react-native";
 import RegisterNewAcc from "./RegisterForm";
 
-export default function Login() {
+export default function Login({navigation}) {
   const [press, isPress] = useState(false);
   const [email, setEmail]= useState('');
   const [password,setPassword]= useState('');
@@ -43,7 +43,13 @@ export default function Login() {
                 />
               </View>
               <View style={styles.buttonMid}>
-                <TouchableOpacity style={styles.button}>
+                <TouchableOpacity 
+                style={styles.button}
+                onPress={()=>{
+                  navigation.navigate('Home')
+                }}
+                >
+                  
                   <Text style={styles.text}>Đăng nhập</Text>
 
                 </TouchableOpacity>
@@ -55,7 +61,12 @@ export default function Login() {
 
             <View style={styles.bot}>
               <View style={styles.buttonBot}>
-                <TouchableOpacity style={styles.ButCreateNewAcc} onPress={() => isPress(true)}>
+                <TouchableOpacity 
+                style={styles.ButCreateNewAcc} 
+                onPress={() => {
+                  navigation.navigate('Register')
+                }}
+                >
                   <Text style={styles.txtCreateAcc}>Tạo tài khoản</Text>
                 </TouchableOpacity>
                 

@@ -85,7 +85,7 @@ const EmployeeForm = () => {
         <Button title="Xóa nhân viên" onPress={handleDeleteEmployee} color="red" />
 
       </View>
-      <Modal
+      {/* <Modal
         transparent={true}
         animationType='fade'
         visible={isModalVisible}
@@ -96,7 +96,7 @@ const EmployeeForm = () => {
           changeModalVisible={changeModalVisible}
           setData={setData}
          />
-      </Modal>
+      </Modal> */}
     </View>
   );
 };
