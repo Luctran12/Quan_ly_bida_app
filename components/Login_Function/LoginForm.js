@@ -5,7 +5,8 @@ import RegisterNewAcc from "./RegisterForm";
 
 export default function Login() {
   const [press, isPress] = useState(false);
-  const [loGin, setLogin]= useState('')
+  const [email, setEmail]= useState('');
+  const [password,setPassword]= useState('');
 
   return (
     <KeyboardAvoidingView
@@ -26,14 +27,20 @@ export default function Login() {
             <View style={styles.mid}>
               <View style={styles.userInput}>
                 <TextInput 
-                style={styles.placeholderText} placeholder="Username" 
-                value={loGin}
-                onChangeText={setLogin}
+                style={styles.placeholderText} placeholder="Email" 
+                value={email}
+                onChangeText={setEmail}
                 
                 />
               </View>
               <View style={styles.userInput}>
-                <TextInput style={styles.placeholderText} placeholder="Password" secureTextEntry={true} />
+                <TextInput 
+                style={styles.placeholderText} 
+                placeholder="Password" 
+                secureTextEntry={true} 
+                value={password}
+                onChangeText={setPassword}
+                />
               </View>
               <View style={styles.buttonMid}>
                 <TouchableOpacity style={styles.button}>
@@ -92,7 +99,7 @@ const styles = StyleSheet.create({
   },
   mid: {
     // borderWidth:2,
-    width: '80%',
+    width: '90%',
     alignItems: 'center',
   },
   userInput: {
@@ -101,13 +108,14 @@ const styles = StyleSheet.create({
     borderRadius: 20,
     margin: 15,
     paddingVertical: 10,
+    borderColor: '#ccc',
   },
   placeholderText: {
     fontSize: 18,
     marginLeft: 20,
   },
   buttonMid: {
-    width: '60%',
+    width: '90%',
     alignItems: 'center',
     marginVertical: 10,
   },
@@ -123,6 +131,7 @@ const styles = StyleSheet.create({
   },
   text: {
     color: 'white',
+    fontSize:16,
   },
   textForgotPass: {
     color: 'black',
@@ -137,7 +146,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   buttonBot: {
-    width: '60%',
+    width: '80%',
     alignItems: 'center',
   },
   ButCreateNewAcc: {

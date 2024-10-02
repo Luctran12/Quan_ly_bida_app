@@ -91,9 +91,7 @@ const EmployeeForm = () => {
         visible={isModalVisible}
         nRequestClose={()=> changeModalVisible(false)}
       >
-        {/* <View style={styles.modalView}>
-            <ModalManage/>
-        </View>  */}
+      
          <ModalManage
           changeModalVisible={changeModalVisible}
           setData={setData}

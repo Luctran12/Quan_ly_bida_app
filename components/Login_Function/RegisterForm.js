@@ -3,26 +3,20 @@ import { View, Text, TextInput, TouchableOpacity, StyleSheet } from 'react-nativ
 
 export default function RegisterScreen({ navigation }) {
   const [username, setUsername] = useState('');
-  const [phoneNumber, setPhoneNumber] = useState('');
+  const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Welcome</Text>
       
-      <TextInput
-        style={styles.input}
-        placeholder="Username"
-        value={username}
-        onChangeText={setUsername}
-      />
+    
       
       <TextInput
         style={styles.input}
-        placeholder="Phone Number"
-        keyboardType="phone-pad"
-        value={phoneNumber}
-        onChangeText={setPhoneNumber}
+        placeholder="Email"
+        value={email}
+        onChangeText={setEmail}
       />
       
       <TextInput
@@ -49,7 +43,7 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: '#f5e0b7',
+    backgroundColor: '#eed5b2',
     width:'100%'
   },
   title: {
@@ -59,21 +53,26 @@ const styles = StyleSheet.create({
   },
   input: {
     width: '80%',
-    height: 50,
-    borderWidth: 1,
+    height: 60,
+    borderBottomWidth: 1,
     borderColor: '#ccc',
     borderRadius: 10,
     padding: 10,
     marginBottom: 15,
+    fontSize: 18,
   },
   button: {
     width: '80%',
-    height: 50,
+    height: 40,
     backgroundColor: '#000',
     justifyContent: 'center',
     alignItems: 'center',
     borderRadius: 10,
     marginBottom: 10,
+  },
+  placeholderText: {
+    fontSize: 18,
+    marginLeft: 20,
   },
   buttonText: {
     color: '#fff',

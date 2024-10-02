@@ -18,37 +18,14 @@ export default function App() {
 
   }
   return (
-    <View style={styles.container}>
-      
-      {/* <Text>App quan ly bida</Text> */}
-     
-      {/* <Login/> */}
+   
 
-      <RegisterScreen/>
-      {/* <UserPage/> */}
-      {/* <ManageEmployeePage/> */}
-
-      {/* <NavigationContainer>
-        <Stack.Navigator initialRouteName="Login" screenOptions={{headerShown:false}}>
-          <Stack.Screen name="Login" component={Login} />
-          <Stack.Screen name="Home" component={UserPage} />
-         
-        </Stack.Navigator>
-        </NavigationContainer> */}
-
-     {/* <SettingPage/> */}
-      
-     {/* <Modal
-        transparent={true}
-        animationType='fade'
-        visible={isModalVisible}
-        nRequestClose={()=> changeModalVisible(false)}
-      >
-         
-        <ModalManage/>
-      </Modal> */}
+      <View style={styles.container}>
       <StatusBar style="auto" />
-    </View>
+         {/* <ManageEmployeePage/> */}
+         <RegisterScreen/>
+         {/* <Login/> */}
+      </View>
     
   );
 }
