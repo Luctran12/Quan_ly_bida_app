@@ -11,9 +11,7 @@ export default function HomePage (navigation){
     var x='hello';
     {console.log(x)}
     return (
-    <Tab.Navigator>
-
-   
+    
     
     <View style={styles.container}>
         <View style={styles.header}>
@@ -62,7 +60,6 @@ export default function HomePage (navigation){
 
         
     </View>
-    </Tab.Navigator>
     );
 }
 const styles = StyleSheet.create({
