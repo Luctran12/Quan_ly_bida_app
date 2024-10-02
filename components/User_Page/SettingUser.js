@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { View, Text, TextInput, Button, Image, TouchableOpacity, StyleSheet } from 'react-native';
 
-const SettingPage = () => {
+const SettingPage = (navigation) => {
   const [username, setUsername] = useState('John Doe');
   const [password, setPassword] = useState('******');
   const [selectedAvatar, setSelectedAvatar] = useState(null);

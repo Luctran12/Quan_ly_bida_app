@@ -7,11 +7,13 @@ import Octicons from '@expo/vector-icons/Octicons';
 
 
 
-export default function HomePage (){
+export default function HomePage (navigation){
     var x='hello';
     {console.log(x)}
     return (
+    <Tab.Navigator>
 
+   
     
     <View style={styles.container}>
         <View style={styles.header}>
@@ -28,8 +30,12 @@ export default function HomePage (){
         </View>
 
         <View style={styles.gridContainer}>
-            <TouchableOpacity style={styles.gridItems} 
-             
+            <TouchableOpacity 
+            style={styles.gridItems} 
+             onPress={()=>{
+                navigation.navigate('Manage')
+             }}
+
             >
                 <Octicons name="people" size={100} color="black" style={styles.gridIcon}/>
                 <Text> Quản Lý Nhân Viên</Text>
@@ -42,7 +48,12 @@ export default function HomePage (){
                 <MaterialCommunityIcons name="table-furniture" size={100} color="black" style={styles.gridIcon}/>
                 <Text>Tình Trạng Bàn</Text>
             </TouchableOpacity>
-            <TouchableOpacity style={styles.gridItems}>
+            <TouchableOpacity 
+            style={styles.gridItems}
+            onPress={()=>{
+                navigation.navigate('Setting')
+             }}
+            >
                 <SimpleLineIcons name="settings" size={100} color="black"  style={styles.gridIcon}/>
                 <Text>Chỉnh Sửa</Text>
             </TouchableOpacity>
@@ -51,6 +62,7 @@ export default function HomePage (){
 
         
     </View>
+    </Tab.Navigator>
     );
 }
 const styles = StyleSheet.create({

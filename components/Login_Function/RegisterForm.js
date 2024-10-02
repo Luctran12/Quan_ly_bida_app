@@ -31,7 +31,11 @@ export default function RegisterScreen({ navigation }) {
         <Text style={styles.buttonText}>Đăng ký</Text>
       </TouchableOpacity>
       
-      <TouchableOpacity >
+      <TouchableOpacity 
+        onPress={()=>{
+          navigation.navigate('Login')
+        }}
+      >
         <Text style={styles.linkText}>Quay lại</Text>
       </TouchableOpacity>
     </View>
