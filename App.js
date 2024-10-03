@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   View,
   Text,
@@ -17,11 +17,20 @@ import SettingPage from "./components/User_Page/SettingUser";
 import { ModalManage } from "./components/User_Page/ModalofManage";
 import RegisterScreen from "./components/Login_Function/RegisterForm";
 import HomePage from "./components/User_Page/HomePage";
+import { onAuthStateChanged } from "firebase/auth";
+import { FIREBASE_AUTH } from "./components/Login_Function/firebaseConfig.js";
 
 const Stack = createNativeStackNavigator();
 export default function App() {
   const Stack = createNativeStackNavigator();
   const [isModalVisible, setIsModalVisible] = useState(false);
+  const [user, setUser] = useState(null);
+  useEffect(() => {
+    onAuthStateChanged(FIREBASE_AUTH, (user) => {
+      console.log("user", user);
+      setUser(user);
+    });
+  }, []);
   // const changeModalVisible=(bool)=>{
   //   setIsModalVisible(bool)
 
@@ -29,12 +38,14 @@ export default function App() {
   return (
     <NavigationContainer>
       <Stack.Navigator initialRouteName="Login">
-        <Stack.Screen name="Login" component={Login} />
-        <Stack.Screen name="Register" component={RegisterScreen} />
+        {/* {user ? ( */}
         <Stack.Screen name="Home" component={HomePage} />
-      </Stack.Navigator>
+        {/* ) : ( */}
+        <Stack.Screen name="Login" component={Login} />
+        {/* )} */}
 
-      {/* <StatusBar style="auto" /> */}
+        <Stack.Screen name="Register" component={RegisterScreen} />
+      </Stack.Navigator>
     </NavigationContainer>
   );
 }

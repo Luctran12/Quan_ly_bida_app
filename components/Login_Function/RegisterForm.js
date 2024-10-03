@@ -22,7 +22,7 @@ export default function RegisterScreen({ navigation }) {
       );
       console.log(response);
       alert("Success create account");
-      navigation.navigate("Login");
+      // navigation.navigate("Login");
     } catch (error) {
       console.log(error);
       alert(error);
