@@ -1,10 +1,10 @@
 import Ionicons from "@expo/vector-icons/Ionicons";
+import axios from "axios";
 import { useEffect, useState } from "react";
 import { Alert, StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { useOrder } from "../context/OrderContext";
 import ChangeOrCheckoutModal from "./ChangeOrCheckoutModal";
 import OpenTableModal from "./OpenTableModal";
-import axios from "axios";
-import { useOrder } from "../context/OrderContext";
 export default function Table({
   id,
   type,
@@ -16,7 +16,7 @@ export default function Table({
   change,
   autoOpen,
 }) {
-  const {setOrderId, setTableId} = useOrder();//bien thay doi gia tri orderId
+  const { setOrderId, setTableId } = useOrder(); //bien thay doi gia tri orderId
   const [available, setAvailable] = useState(false);
   const [startTime, setStartTime] = useState(null); // Lưu thời gian bắt đầu
   const [elapsedTime, setElapsedTime] = useState(0); // Thời gian đã trôi qua
@@ -32,7 +32,7 @@ export default function Table({
       handleStart();
     }
   }, [autoOpen]);
-  
+
   useEffect(() => {
     let interval;
     if (isRunning) {
@@ -77,7 +77,7 @@ export default function Table({
     handleResetAllStatus();
     setChangeOrCheckoutVisible(false);
   };
-  
+
   const handleCheckout = (timePlay) => {
     const cash = Math.round((elapsedTime / (60000 * 60)) * 30000);
     Alert.alert("tính tiền", "tổng tiền: " + "" + cash + "đ", [
@@ -116,39 +116,61 @@ export default function Table({
   // useEffect(() => {
   //   console.log(orderId, "Order ID đã được cập nhật");
   // }, [orderId]);
-  
-  const handleAcceptOpenTable= async() =>{
-    try{
-      const response=await axios.post('https://quan-ly-bida-backend.onrender.com/order_table/create',{
-        orderId: parseInt(id)
 
-      })
-      console.log(response.data.result,"======");
+  const handleAcceptOpenTable = async () => {
+    try {
+      const response = await axios.post(
+        "https://quan-ly-bida-backend.onrender.com/order_table/create",
+        {
+          orderId: parseInt(id),
+        }
+      );
+      console.log(response.data.result, "======");
       setOrderId(response.data.result);
-      setTableId(id)
-      console.log(id)
-    }catch(error){
-      console.log(error,"===x===error===x===")
-
+      setTableId(id);
+      console.log(id);
+    } catch (error) {
+      console.log(error, "===x===error===x===");
     }
-    
+
     setOpenTableModalVisible(false);
     setAvailable(!available);
     handleStart();
-  }
-  
-
-  const handleChangOrCheckout = () => {
-    
-    setChangeOrCheckoutVisible(true);
   };
 
+  const handleChangOrCheckout = () => {
+    setChangeOrCheckoutVisible(true);
+  };
+  function convertMillisecondsToTime(ms) {
+    let date = new Date(ms);
+
+    // Cộng thêm 7 giờ để chuyển từ UTC sang giờ Việt Nam
+    let hours = date.getUTCHours() + 7;
+
+    // Xử lý khi số giờ vượt quá 24 hoặc âm
+    if (hours >= 24) {
+      hours -= 24; // Điều chỉnh để đảm bảo giờ nằm trong khoảng 0-23
+    } else if (hours < 0) {
+      hours += 24; // Điều chỉnh khi giờ nhỏ hơn 0
+    }
+
+    let minutes = date.getUTCMinutes();
+    let seconds = date.getUTCSeconds();
+
+    // Tạo chuỗi thời gian định dạng hh:mm:ss
+    let time = `${String(hours).padStart(2, "0")}:${String(minutes).padStart(
+      2,
+      "0"
+    )}:${String(seconds).padStart(2, "0")}`;
+    console.log("ham convert: " + time);
+    return time;
+  }
   return (
     <View
       style={[
         styles.container,
         { backgroundColor: available ? "#5acddf" : "white" },
-        { borderWidth: 1, marginRight:15, marginLeft:15,marginBottom:10 },
+        { borderWidth: 1, marginRight: 15, marginLeft: 15, marginBottom: 10 },
       ]}
     >
       <TouchableOpacity
