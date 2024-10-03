@@ -3,7 +3,6 @@ import { useEffect, useState } from "react";
 import { Alert, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import ChangeOrCheckoutModal from "./ChangeOrCheckoutModal";
 import OpenTableModal from "./OpenTableModal";
-import axios from "axios";
 import { useOrder } from "../context/OrderContext";
 import request from "../utils/request";
 export default function Table({
@@ -18,14 +17,14 @@ export default function Table({
   autoOpen,
   orderMap
 }) {
-  const [checkoutStatus,setCheckoutStatus]= useState();
+
   const [date,setDate] = useState();
   const [endTime,setEndTime]= useState('');
   const [totalTime,setTotalTime]= useState('');
   const [startTimeReq, setStartTimeReq] = useState('');
   const {setOrderId, setTableId} = useOrder();//bien thay doi gia tri orderId
   const [available, setAvailable] = useState(false);
-  const [startTime, setStartTime] = useState(null); // Lưu thời gian bắt đầu
+  const [startTime, setStartTime] = useState(0); // Lưu thời gian bắt đầu
   const [elapsedTime, setElapsedTime] = useState(0); // Thời gian đã trôi qua
   const [isRunning, setIsRunning] = useState(false); // Kiểm tra bộ đếm có đang chạy hay không
   const [countTimeButtonState, setCountTimeButtonState] = useState(false);
@@ -41,7 +40,11 @@ export default function Table({
   const tableId = 4;
 
 
-
+  useEffect(() => {
+    console.log(startTime);
+    console.log(convertMillisecondsToTime(startTime));
+    setStartTimeReq(convertMillisecondsToTime(startTime));
+  }, [startTime]);
     useEffect(() => {
       console.log("Start Time Req:", startTimeReq);
     }, [startTimeReq]);
@@ -84,6 +87,7 @@ export default function Table({
   }, [isRunning, startTime]);
 
 
+
   const delay = (ms) => 
     new Promise(resov => setTimeout(resov,ms));
   
@@ -99,6 +103,22 @@ export default function Table({
   //   console.log("ham convert: "+time);
   //   return time;
   // }
+
+  useEffect(() => {
+    console.log("Start Time Req:", startTimeReq);
+  }, [startTimeReq]);
+  
+  useEffect(() => {
+    console.log("End Time:", endTime);
+  }, [endTime]);
+  
+  useEffect(() => {
+    console.log("Total Time:", totalTime);
+  }, [totalTime]);
+
+  useEffect(() => {
+    console.log("Ngay hom nay:", date);
+  }, [date]);
 
   function convertMillisecondsToTime(ms) {
     let date = new Date(ms);
@@ -124,6 +144,14 @@ export default function Table({
 
 
 
+  //   let hours = date.getUTCHours() +7; // Giờ UTC
+  //   let minutes = date.getUTCMinutes();
+  //   let seconds = date.getUTCSeconds();
+
+  //   let time =  `${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
+  //   console.log(typeof time);
+  //   return time;
+  // }
 
   function getCurrentDate() {
   let today = new Date();
@@ -149,6 +177,7 @@ export default function Table({
     return time;
   }
 
+
   const handleStart = () => {
     //nếu id bàn bằng với id bàn được chọn để chuyển sang
     if (String(id) === String(idSelected)) {
@@ -167,16 +196,26 @@ export default function Table({
     setDate(getCurrentDate);
     setStartTimeReq(convertMillisecondsToTime(startTime));
     console.log(startTime+" Gia tri start time");
+
     //console.log("======>", idSelected);
   };
 
   const handleStop = () => {
     setIsRunning(false); // Dừng bộ đếm
 
-    
+
+
+    setStartTimeReq(convertMillisecondsToTime(startTime));
     setEndTime(convertMillisecondsToTime(startTime+elapsedTime));
     setTotalTime(convertElapsedToTime(elapsedTime));
 
+
+  //   console.log("=========>",startTimeReq);
+  //   console.log("=>>>>>>>>",endTime);
+   
+  //  console.log(totalTime);
+
+   
   };
 
   function handleResetAllStatus() {
@@ -187,14 +226,61 @@ export default function Table({
   const checkoutAndTurnOffModal = async () => {
     handleResetAllStatus();
     setChangeOrCheckoutVisible(false);
-    setCheckoutStatus(Math.random());
+    // setCheckoutStatus(Math.random());
     await delay(10000);
-    //postStatus();
+    postStatus();
     
-    console.log("thong tin gui len status :" + isOrderId + " table " + id + 
-    " startTime" + startTimeReq + " endtime" + endTime + " totalTime" + totalTime )
+    
     
   };
+// =======
+//   const checkoutAndTurnOffModal = async() => {
+//     handleResetAllStatus();
+//     setChangeOrCheckoutVisible(false);
+
+//     // try{
+//     //   const response=await request.post('/status/create',{
+        
+//     //     orderId:orderIdMap[id] ,
+//     //     billiardTableId: id,
+//     //     startTime: startTimeReq,
+//     //     endTime: endTime,
+//     //     totalTime: totalTime,
+//     //     date: date,
+        
+
+//     //   })
+//     //   console.log("====", startTimeReq+ " "+ endTime+ " "+ totalTime+ " "+ date)
+//     //   console.log(response.data.result,"======");
+      
+//     //   console.log("map:  ",id+ "  " + orderIdMap[id]);
+//     //   console.log(id + ": " + orderIdMap[id]);
+//     //   console.log("=====================================");
+//     //   console.log("Dữ liệu gửi đi: ", {
+//     //     orderId: orderIdMap[id],
+//     //     billiardTableId: id,
+//     //     startTime: startTimeReq,
+//     //     endTime: endTime,
+//     //     totalTime: totalTime,
+//     //     date: date
+//     //   });
+      
+//     // }catch(error){
+//     //   console.log(error,"===x===error===x===")
+
+//     // }
+//     console.log("====", startTimeReq + " " + endTime + " " + totalTime + " " + date);
+//     console.log(response.data.result, "======");
+    
+//     console.log("Dữ liệu gửi đi: ", {
+//         orderId: orderIdMap[id],
+//         billiardTableId: id,
+//         startTime: startTimeReq,
+//         endTime: endTime,
+//         totalTime: totalTime,
+//         date: date
+//   });
+// >>>>>>> 9c2c2358eebf06f12ccdfa8d46bc3ecb76cb10af
   
   const handleCheckout = (timePlay) => {
     const cash = Math.round((elapsedTime / (60000 * 60)) * 30000);
@@ -236,6 +322,8 @@ export default function Table({
   // }, [orderId]);
   
   const postStatus = async () => {
+    console.log("thong tin gui len status :" + isOrderId + " table " + id + 
+      " startTime" + startTimeReq + " endtime" + endTime + " totalTime" + totalTime )
     console.log("-------- thong tin trong map: ", isOrderId)
     try {
       const response=await request.post('/status/create',{
@@ -256,9 +344,9 @@ export default function Table({
     console.log("======= thong tin trong map", isOrderId);
   }
 
-  const handleAcceptOpenTable = async() =>{
-    // ham post len orderId
-    try {
+ 
+  const handleAcceptOpenTable= async() =>{
+    try{
       const response=await request.post('/order_table/create',{
         orderId: parseInt(id)
 
@@ -269,6 +357,8 @@ export default function Table({
       console.log("Luu vao map: "+"TableId: "+id+ "orderId"+response.data.result)
       setIsOrderId(response.data.result)
 
+
+   
     }catch(Error){
       console.log("===loi o accecptOpenTable");
     } 
@@ -285,7 +375,7 @@ export default function Table({
   const handleChangOrCheckout = () => {
     
     setChangeOrCheckoutVisible(true);
-  };8
+  };
   return (
     <View
       style={[
@@ -361,6 +451,11 @@ export default function Table({
   );
 }
 
+
+
+
+
+
 const styles = StyleSheet.create({
   container: {
     height: 270,
@@ -376,3 +471,4 @@ const styles = StyleSheet.create({
     marginBottom: 5,
   },
 });
+
