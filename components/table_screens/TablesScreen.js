@@ -3,6 +3,7 @@ import { FlatList, View } from "react-native";
 import Table from "./Table";
 import request from "../utils/request";
 export default function TablesScreen() {
+  let myMap = new Map();
   const [tableId, setTableId] = useState(0); // ID bàn nguồn
   const [timePlayFromTableId, setTimePlayFromTableId] = useState(); // Thời gian bắt đầu của bàn nguồn
   const [goalTableId, setGoalTableId] = useState(0); // ID bàn đích
@@ -37,6 +38,7 @@ const fetchTableData = async() => {
         keyExtractor={(item) => item.id.toString()}
         renderItem={({ item }) => (
           <Table
+            orderMap = {myMap}
             id={item.id}
             type={item.type}
             cost={item.cost}

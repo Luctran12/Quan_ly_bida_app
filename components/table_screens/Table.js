@@ -5,6 +5,7 @@ import ChangeOrCheckoutModal from "./ChangeOrCheckoutModal";
 import OpenTableModal from "./OpenTableModal";
 import axios from "axios";
 import { useOrder } from "../context/OrderContext";
+import request from "../utils/request";
 export default function Table({
   id,
   type,
@@ -15,7 +16,13 @@ export default function Table({
   handleSelectItem,
   change,
   autoOpen,
+  orderMap
 }) {
+  const [checkoutStatus,setCheckoutStatus]= useState();
+  const [date,setDate] = useState();
+  const [endTime,setEndTime]= useState('');
+  const [totalTime,setTotalTime]= useState('');
+  const [startTimeReq, setStartTimeReq] = useState('');
   const {setOrderId, setTableId} = useOrder();//bien thay doi gia tri orderId
   const [available, setAvailable] = useState(false);
   const [startTime, setStartTime] = useState(null); // Lưu thời gian bắt đầu
@@ -24,8 +31,38 @@ export default function Table({
   const [countTimeButtonState, setCountTimeButtonState] = useState(false);
   const [total, setTotal] = useState(0);
   const [openTableModalVisible, setOpenTableModalVisible] = useState(false);
-  const [changeOrCheckoutModalVisible, setChangeOrCheckoutVisible] =
-    useState(false);
+  const [changeOrCheckoutModalVisible, setChangeOrCheckoutVisible] = useState(false);
+  const [selectedTable, setSelectedTable]= useState()
+  const [isOrderId, setIsOrderId]= useState()
+  const orderTableMap = new Map();
+
+// Thêm dữ liệu với tableId là key, orderId là value
+  const orderId = 123;
+  const tableId = 4;
+
+
+
+    useEffect(() => {
+      console.log("Start Time Req:", startTimeReq);
+    }, [startTimeReq]);
+    
+    useEffect(() => {
+      console.log("End Time:", endTime);
+    }, [endTime]);
+    
+    useEffect(() => {
+      postStatus();
+      console.log("Total Time:", totalTime);
+    }, [totalTime]);
+  
+    useEffect(() => {
+      console.log("Ngay hom nay:", date);
+    }, [date]);
+
+    // useEffect(() => {
+    //   postStatus();
+    //   console.log("use effect post stt");
+    // },[checkoutStatus])
 
   useEffect(() => {
     if (autoOpen) {
@@ -46,6 +83,72 @@ export default function Table({
     return () => clearInterval(interval);
   }, [isRunning, startTime]);
 
+
+  const delay = (ms) => 
+    new Promise(resov => setTimeout(resov,ms));
+  
+
+  // function convertMillisecondsToTime(ms) {
+  //   let date = new Date(ms);
+  
+  //   let hours = date.getUTCHours() +7; // Giờ UTC
+  //   let minutes = date.getUTCMinutes();
+  //   let seconds = date.getUTCSeconds();
+
+  //   let time =  `${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
+  //   console.log("ham convert: "+time);
+  //   return time;
+  // }
+
+  function convertMillisecondsToTime(ms) {
+    let date = new Date(ms);
+  
+    // Cộng thêm 7 giờ để chuyển từ UTC sang giờ Việt Nam
+    let hours = date.getUTCHours() + 7;
+
+    // Xử lý khi số giờ vượt quá 24 hoặc âm
+    if (hours >= 24) {
+        hours -= 24; // Điều chỉnh để đảm bảo giờ nằm trong khoảng 0-23
+    } else if (hours < 0) {
+        hours += 24; // Điều chỉnh khi giờ nhỏ hơn 0
+    }
+
+    let minutes = date.getUTCMinutes();
+    let seconds = date.getUTCSeconds();
+
+    // Tạo chuỗi thời gian định dạng hh:mm:ss
+    let time = `${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
+    console.log("ham convert: " + time);
+    return time;
+}
+
+
+
+
+  function getCurrentDate() {
+  let today = new Date();
+
+  let day = today.getDate(); // Lấy ngày (1-31)
+  let month = today.getMonth() + 1; // Lấy tháng (tháng trong JavaScript bắt đầu từ 0, nên cần +1)
+  let year = today.getFullYear(); // Lấy năm (ví dụ: 2024)
+
+  let date = `${String(day).padStart(2, '0')}/${String(month).padStart(2, '0')}/${year}`;
+  // Định dạng ngày theo dạng dd/mm/yyyy
+  return date;
+}
+    
+
+  function convertElapsedToTime(ms) {
+    let date = new Date(ms);
+  
+    let hours = date.getUTCHours() ; // Giờ UTC
+    let minutes = date.getUTCMinutes();
+    let seconds = date.getUTCSeconds();
+    let time= `${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
+    console.log(typeof time);
+    return time;
+  }
+
   const handleStart = () => {
     //nếu id bàn bằng với id bàn được chọn để chuyển sang
     if (String(id) === String(idSelected)) {
@@ -61,11 +164,19 @@ export default function Table({
     setIsRunning(true); // Bắt đầu bộ đếm
     setAvailable(true);
     setCountTimeButtonState(!countTimeButtonState);
+    setDate(getCurrentDate);
+    setStartTimeReq(convertMillisecondsToTime(startTime));
+    console.log(startTime+" Gia tri start time");
     //console.log("======>", idSelected);
   };
 
   const handleStop = () => {
     setIsRunning(false); // Dừng bộ đếm
+
+    
+    setEndTime(convertMillisecondsToTime(startTime+elapsedTime));
+    setTotalTime(convertElapsedToTime(elapsedTime));
+
   };
 
   function handleResetAllStatus() {
@@ -73,9 +184,16 @@ export default function Table({
     handleStop();
   }
 
-  const checkoutAndTurnOffModal = () => {
+  const checkoutAndTurnOffModal = async () => {
     handleResetAllStatus();
     setChangeOrCheckoutVisible(false);
+    setCheckoutStatus(Math.random());
+    await delay(10000);
+    //postStatus();
+    
+    console.log("thong tin gui len status :" + isOrderId + " table " + id + 
+    " startTime" + startTimeReq + " endtime" + endTime + " totalTime" + totalTime )
+    
   };
   
   const handleCheckout = (timePlay) => {
@@ -117,21 +235,47 @@ export default function Table({
   //   console.log(orderId, "Order ID đã được cập nhật");
   // }, [orderId]);
   
-  const handleAcceptOpenTable= async() =>{
-    try{
-      const response=await axios.post('https://quan-ly-bida-backend.onrender.com/order_table/create',{
+  const postStatus = async () => {
+    console.log("-------- thong tin trong map: ", isOrderId)
+    try {
+      const response=await request.post('/status/create',{
+        orderId: isOrderId,//isOrderId,
+        billiardTableId: id,
+        startTime: startTimeReq,
+        endTime: endTime,
+        totalTime: totalTime,
+        date: date
+
+      })
+      console.log("========response status: " + response.data.result)
+    }catch(Error){
+      console.log("loi roi thg loz.");
+    } 
+    //orderTableMap.delete(id);
+    console.log(id);
+    console.log("======= thong tin trong map", isOrderId);
+  }
+
+  const handleAcceptOpenTable = async() =>{
+    // ham post len orderId
+    try {
+      const response=await request.post('/order_table/create',{
         orderId: parseInt(id)
 
       })
       console.log(response.data.result,"======");
       setOrderId(response.data.result);
       setTableId(id)
-      console.log(id)
-    }catch(error){
-      console.log(error,"===x===error===x===")
+      console.log("Luu vao map: "+"TableId: "+id+ "orderId"+response.data.result)
+      setIsOrderId(response.data.result)
 
-    }
+    }catch(Error){
+      console.log("===loi o accecptOpenTable");
+    } 
+    // orderMap.set(id,orderId);
     
+    console.log("-------- mo ban so: " + id)
+    setSelectedTable(id);
     setOpenTableModalVisible(false);
     setAvailable(!available);
     handleStart();
@@ -141,8 +285,7 @@ export default function Table({
   const handleChangOrCheckout = () => {
     
     setChangeOrCheckoutVisible(true);
-  };
-
+  };8
   return (
     <View
       style={[
