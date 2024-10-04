@@ -1,0 +1,12 @@
+[
+    {"id": 1, "name": "Kem", "cost": "10000"},
+    {"id": 2, "name": "Mì tôm", "cost": "25000"},
+    {"id": 3, "name": "Nui xào", "cost": "35000"},
+    {"id": 4, "name": "Sting", "cost": "12000"},
+    {"id": 5, "name": "Pepsi", "cost": "12000"},
+    {"id": 6, "name": "Trà đá", "cost": "5000"},
+    {"id": 7, "name": "Cà phê", "cost": "15000"},
+    {"id": 8, "name": "Bạc xỉu", "cost": "18000"},
+    {"id": 9, "name": "Trà sữa", "cost": "25000"},
+    {"id": 10, "name": "Trà đào", "cost": "20000"}  
+]
