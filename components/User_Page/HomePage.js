@@ -83,7 +83,7 @@ export default function HomePage (navigation){
         </TouchableOpacity>
       </View>
     </View>
-    </Tab.Navigator>
+    
     );
 }
 const styles = StyleSheet.create({
