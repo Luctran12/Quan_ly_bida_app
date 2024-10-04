@@ -1,57 +1,54 @@
-import React, { useState } from 'react';
-import { View, Text, TextInput, Button, StyleSheet, Alert ,Modal} from 'react-native';
-import axios from 'axios';
-import { ModalManage } from './ModalofManage';
-const EmployeeForm = () => {
-  const [fullName, setName] = useState('');
-  const [userName, setUserName] = useState('');
-  const [password, setPassword] = useState('');
-  const [isModalVisible, setIsModalVisible]= useState(true)
-  const [chooseData,setChooseData]=useState()
-  const changeModalVisible=(bool)=>{
-    setIsModalVisible(bool)
+import axios from "axios";
+import React, { useState } from "react";
+import { Alert, Button, StyleSheet, Text, TextInput, View } from "react-native";
+export default function ManageEmployee() {
+  const [fullName, setName] = useState("");
+  const [userName, setUserName] = useState("");
+  const [password, setPassword] = useState("");
+  const [isModalVisible, setIsModalVisible] = useState(true);
+  const [chooseData, setChooseData] = useState();
+  const changeModalVisible = (bool) => {
+    setIsModalVisible(bool);
+  };
+  const setData = (data) => {
+    setChooseData(data);
+  };
 
-  }
-  const setData=(data)=>{
-    setChooseData(data)
-  }
-
-//   const handleAddEmployee = () => {
-//     // Xử lý thêm nhân viên ở đây
-//     console.log("Thêm nhân viên:", { name, username, password });
-//   };
+  //   const handleAddEmployee = () => {
+  //     // Xử lý thêm nhân viên ở đây
+  //     console.log("Thêm nhân viên:", { name, username, password });
+  //   };
 
   const handleDeleteEmployee = () => {
     // Xử lý xóa nhân viên ở đây
     console.log("Xóa nhân viên:", { fullName, userName });
   };
   const handleCreateUser = async () => {
-    console.log('Đang gọi API để tạo người dùng...'); // Kiểm tra
+    console.log("Đang gọi API để tạo người dùng..."); // Kiểm tra
     try {
-      const response = await axios.post('https://quan-ly-bida-backend.onrender.com/user/create', {
-        userName,
-        password,
-        fullName,
-      });
-  
-      console.log('Phản hồi từ API:', response.data); 
-  
-      
+      const response = await axios.post(
+        "https://quan-ly-bida-backend.onrender.com/user/create",
+        {
+          userName,
+          password,
+          fullName,
+        }
+      );
+
+      console.log("Phản hồi từ API:", response.data);
+
       if (response.data.code === 0) {
-       
-        Alert.alert('Thông báo', response.data.msg);
-        console.log('success')
+        Alert.alert("Thông báo", response.data.msg);
+        console.log("success");
       } else {
-        
-        Alert.alert('Thông báo', 'Có lỗi xảy ra khi tạo người dùng.');
-        console.log('success 2')
+        Alert.alert("Thông báo", "Có lỗi xảy ra khi tạo người dùng.");
+        console.log("success 2");
       }
     } catch (error) {
-      console.error('Lỗi khi tạo người dùng:', error);
-      Alert.alert('Thông báo', 'Có lỗi xảy ra khi tạo người dùng.');
+      console.error("Lỗi khi tạo người dùng:", error);
+      Alert.alert("Thông báo", "Có lỗi xảy ra khi tạo người dùng.");
     }
   };
-  
 
   return (
     <View style={styles.container}>
@@ -82,8 +79,11 @@ const EmployeeForm = () => {
 
       <View style={styles.buttonContainer}>
         <Button title="Thêm nhân viên" onPress={handleCreateUser} />
-        <Button title="Xóa nhân viên" onPress={handleDeleteEmployee} color="red" />
-
+        <Button
+          title="Xóa nhân viên"
+          onPress={handleDeleteEmployee}
+          color="red"
+        />
       </View>
       {/* <Modal
         transparent={true}
@@ -99,7 +99,7 @@ const EmployeeForm = () => {
       </Modal> */}
     </View>
   );
-};
+}
 
 const styles = StyleSheet.create({
   container: {
@@ -111,21 +111,18 @@ const styles = StyleSheet.create({
   },
   input: {
     height: 40,
-    borderColor: 'gray',
+    borderColor: "gray",
     borderWidth: 1,
     marginBottom: 16,
     paddingHorizontal: 10,
   },
   buttonContainer: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
+    flexDirection: "row",
+    justifyContent: "space-between",
   },
-  modalView:{
-    backgroundColor:'red',
-    height:500,
-    width:600,
-
-  }
+  modalView: {
+    backgroundColor: "red",
+    height: 500,
+    width: 600,
+  },
 });
-
-export default EmployeeForm;

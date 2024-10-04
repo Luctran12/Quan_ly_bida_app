@@ -1,20 +1,41 @@
-import {
-  StyleSheet,
-  Text,
-  View,
-  TextInput,
-  TouchableOpacity,
-  Image,
-  ScrollView,
-  KeyboardAvoidingView,
-  Platform,
-} from "react-native";
 import FontAwesome6 from "@expo/vector-icons/FontAwesome6";
 import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
-import SimpleLineIcons from "@expo/vector-icons/SimpleLineIcons";
 import Octicons from "@expo/vector-icons/Octicons";
-
-export default function HomePage(navigation) {
+import SimpleLineIcons from "@expo/vector-icons/SimpleLineIcons";
+import { createNativeStackNavigator } from "@react-navigation/native-stack";
+import { Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import DoanhThuColumn from "./DoanhThuColumn";
+import ManageEmployee from "./ManageEmployee";
+import SettingUser from "./SettingUser";
+const Stack = createNativeStackNavigator();
+export default function HomePage({ navigation }) {
+  return (
+    <Stack.Navigator initialRouteName="AdminHome">
+      <Stack.Screen
+        options={{ headerShown: false }}
+        name="AdminHome"
+        component={AdminHome}
+      />
+      <Stack.Screen
+        //options={{ headerShown: false }}
+        name="ManagePage"
+        component={ManageEmployee}
+      />
+      <Stack.Screen
+        //options={{ headerShown: false }}
+        name="Settings"
+        component={SettingUser}
+      />
+      <Stack.Screen
+        //options={{ headerShown: false }}
+        name="Revenue"
+        component={DoanhThuColumn}
+      />
+      {/* <Stack.Screen name="Settings" component={SettingUser} />  */}
+    </Stack.Navigator>
+  );
+}
+function AdminHome({ navigation }) {
   var x = "hello";
   {
     console.log(x);
@@ -28,42 +49,59 @@ export default function HomePage(navigation) {
           <Text style={styles.headerTitle}>CHỦ QUÁN</Text>
           <Text style={styles.headerText}>Nguyen Van A</Text>
         </View>
-        <View style={styles.headerSide}>
-          <Image
-            source={require("../../assets/headerAvata.png")}
-            style={styles.headerAvata}
-          />
+        <View
+          style={{
+            borderWidth: 1,
+            height: 120,
+            width: 120,
+            justifyContent: "center",
+            alignItems: "center",
+            //borderRadius: "50%",
+            backgroundColor: "gray",
+          }}
+        >
+          <View style={styles.headerSide}>
+            <Image
+              source={require("../../assets/headerAvata.png")}
+              style={styles.headerAvata}
+            />
+          </View>
         </View>
       </View>
 
-      <View style={styles.gridContainer}>
+      <View style={styles.gridContainerFistRow}>
         <TouchableOpacity
           style={styles.gridItems}
           onPress={() => {
-            navigation.navigate("Manage");
+            navigation.navigate("ManagePage");
           }}
         >
           <Octicons
             name="people"
-            size={100}
+            size={60}
             color="black"
             style={styles.gridIcon}
           />
           <Text> Quản Lý Nhân Viên</Text>
         </TouchableOpacity>
-        <TouchableOpacity style={styles.gridItems}>
+        <TouchableOpacity
+          style={styles.gridItems}
+          onPress={() => navigation.navigate("Revenue")}
+        >
           <FontAwesome6
             name="sack-dollar"
-            size={100}
+            size={60}
             color="black"
             style={styles.gridIcon}
           />
           <Text>Doanh Thu</Text>
         </TouchableOpacity>
+      </View>
+      <View style={styles.gridContainerSecondRow}>
         <TouchableOpacity style={styles.gridItems}>
           <MaterialCommunityIcons
             name="table-furniture"
-            size={100}
+            size={60}
             color="black"
             style={styles.gridIcon}
           />
@@ -72,12 +110,12 @@ export default function HomePage(navigation) {
         <TouchableOpacity
           style={styles.gridItems}
           onPress={() => {
-            navigation.navigate("Setting");
+            navigation.navigate("Settings");
           }}
         >
           <SimpleLineIcons
             name="settings"
-            size={100}
+            size={60}
             color="black"
             style={styles.gridIcon}
           />
@@ -91,19 +129,18 @@ export default function HomePage(navigation) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#eed5b2",
+    backgroundColor: "#7bc0b9",
     padding: 20,
     height: "100%",
     width: "100%",
   },
   header: {
-    flex: 1,
+    marginTop: 50,
     alignItems: "center",
-    justifyContent: "space-between",
-    marginBottom: 20,
+    //justifyContent: "space-between",
+    marginBottom: 60,
     flexDirection: "row",
-    borderWidth: 2,
-    borderColor: "red",
+    //backgroundColor: "#71ebdf",
   },
   headerSide: {
     flex: 1,
@@ -122,25 +159,35 @@ const styles = StyleSheet.create({
     marginBottom: 10,
   },
   headerAvata: {
-    width: 150,
-    height: 200,
+    width: 100,
+    height: 100,
     resizeMode: "contain",
+    //backgroundColor: "gray",
   },
-  gridContainer: {
-    flex: 2,
-    borderWidth: 2,
-    borderColor: "red",
+  gridContainerFistRow: {
+    //borderWidth: 2,
+    //borderColor: "black"
     flexDirection: "row",
-    flexWrap: "wrap",
+    //flexWrap: "wrap",
+    justifyContent: "space-around",
+  },
+  gridContainerSecondRow: {
+    //borderWidth: 2,
+    //borderColor: "black"
+    flexDirection: "row",
+    //flexWrap: "wrap",
     justifyContent: "space-around",
   },
   gridItems: {
-    marginTop: 30,
+    height: 190,
+    width: 160,
+    justifyContent: "center",
+    alignItems: "center",
+    borderWidth: 1,
+    marginBottom: 40,
+    backgroundColor: "white",
+    borderRadius: 20,
+    //marginTop: 30,
     // elevation: 10,
-  },
-  gridIcon: {
-    borderWidth: 2,
-    borderRadius: 30,
-    padding: 10,
   },
 });

@@ -1,24 +1,12 @@
-import React, { useState, useEffect } from "react";
-import {
-  View,
-  Text,
-  TouchableOpacity,
-  StyleSheet,
-  Modal,
-  StatusBar,
-} from "react-native";
-import BookFood from "./components/FoodSource/BookFood.js";
-import Login from "./components/Login_Function/LoginForm";
-import UserPage from "./components/User_Page/UserPage";
-import ManageEmployeePage from "./components/User_Page/ManageEmployee";
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
-import SettingPage from "./components/User_Page/SettingUser";
-import { ModalManage } from "./components/User_Page/ModalofManage";
+import { onAuthStateChanged } from "firebase/auth";
+import React, { useEffect, useState } from "react";
+import { StyleSheet } from "react-native";
+import { FIREBASE_AUTH } from "./components/Login_Function/firebaseConfig.js";
+import Login from "./components/Login_Function/LoginForm";
 import RegisterScreen from "./components/Login_Function/RegisterForm";
 import HomePage from "./components/User_Page/HomePage";
-import { onAuthStateChanged } from "firebase/auth";
-import { FIREBASE_AUTH } from "./components/Login_Function/firebaseConfig.js";
 
 const Stack = createNativeStackNavigator();
 export default function App() {
@@ -39,9 +27,17 @@ export default function App() {
     <NavigationContainer>
       <Stack.Navigator initialRouteName="Login">
         {/* {user ? ( */}
-        <Stack.Screen name="Home" component={HomePage} />
+        <Stack.Screen
+          options={{ headerShown: false }}
+          name="Home"
+          component={HomePage}
+        />
         {/* ) : ( */}
-        <Stack.Screen name="Login" component={Login} />
+        <Stack.Screen
+          options={{ headerShown: false }}
+          name="Login"
+          component={Login}
+        />
         {/* )} */}
 
         <Stack.Screen name="Register" component={RegisterScreen} />
