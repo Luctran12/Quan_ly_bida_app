@@ -285,7 +285,7 @@ export default function Table({
       const response= await request.get(url)
       console.log("==========> total: ",response.data.result)
       const totalCash= (Math.round((elapsedTime / (60000 * 60)) * cost) + parseInt(response.data.result) )
-      console.log(totalCash);
+      console.log("Cash: "+ totalCash);
       setCash(totalCash);
       Alert.alert("tính tiền", "tổng tiền: " + "" + totalCash + "đ", [
         {
