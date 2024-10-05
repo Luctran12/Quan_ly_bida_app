@@ -41,7 +41,7 @@ const fetchTableData = async() => {
             orderMap = {myMap}
             id={item.id}
             type={item.type}
-            cost={item.cost}
+            cost={item.costPerHour}
             idSelected={tableId} // Truyền bàn nguồn
             handleSelectItem={handleSelectItem} // Truyền hàm chọn bàn
             timePlayFromSourceTable={timePlayFromTableId} // Truyền thời gian của bàn nguồn

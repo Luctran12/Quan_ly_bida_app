@@ -18,6 +18,7 @@ export default function Table({
   orderMap
 }) {
 
+  const [cash,setCash] = useState();
   const [date,setDate] = useState();
   const [endTime,setEndTime]= useState('');
   const [totalTime,setTotalTime]= useState('');
@@ -33,11 +34,6 @@ export default function Table({
   const [changeOrCheckoutModalVisible, setChangeOrCheckoutVisible] = useState(false);
   const [selectedTable, setSelectedTable]= useState()
   const [isOrderId, setIsOrderId]= useState()
-  const orderTableMap = new Map();
-
-// Thêm dữ liệu với tableId là key, orderId là value
-  const orderId = 123;
-  const tableId = 4;
 
 
   useEffect(() => {
@@ -78,7 +74,7 @@ export default function Table({
     if (isRunning) {
       interval = setInterval(() => {
         setElapsedTime(Date.now() - startTime);
-        setTotal(Math.round((elapsedTime / (60000 * 60)) * 30000));
+        //setTotal(Math.round((elapsedTime / (60000 * 60)) * cost));
       }, 1000); // Cập nhật mỗi giây
     } else if (!isRunning && startTime !== null) {
       clearInterval(interval);
@@ -282,18 +278,31 @@ export default function Table({
 //   });
 // >>>>>>> 9c2c2358eebf06f12ccdfa8d46bc3ecb76cb10af
   
-  const handleCheckout = (timePlay) => {
-    const cash = Math.round((elapsedTime / (60000 * 60)) * 30000);
-    Alert.alert("tính tiền", "tổng tiền: " + "" + cash + "đ", [
-      {
-        text: "Hủy",
-        style: "destructive",
-      },
-      {
-        text: "hoàn thành",
-        onPress: checkoutAndTurnOffModal,
-      },
-    ]);
+  const handleCheckout = async (timePlay) => {
+    console.log(isOrderId);
+    const url= '/order_table/getTotalCost/' + isOrderId;
+    try{
+      const response= await request.get(url)
+      console.log("==========> total: ",response.data.result)
+      const totalCash= (Math.round((elapsedTime / (60000 * 60)) * cost) + parseInt(response.data.result) )
+      console.log(totalCash);
+      setCash(totalCash);
+      Alert.alert("tính tiền", "tổng tiền: " + "" + totalCash + "đ", [
+        {
+          text: "Hủy",
+          style: "destructive",
+        },
+        {
+          text: "hoàn thành",
+          onPress: checkoutAndTurnOffModal,
+        },
+      ]);
+    }catch(Error){
+      console.log(Error);
+    }
+
+    
+    
   };
   //   const handleReset = () => {
   //     setElapsedTime(0); // Đặt lại thời gian
@@ -337,7 +346,7 @@ export default function Table({
       })
       console.log("========response status: " + response.data.result)
     }catch(Error){
-      console.log("loi roi thg loz.");
+      console.log("Loi roi ku");
     } 
     //orderTableMap.delete(id);
     console.log(id);
