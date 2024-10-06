@@ -7,12 +7,14 @@ import { FIREBASE_AUTH } from "./components/Login_Function/firebaseConfig.js";
 import Login from "./components/Login_Function/LoginForm";
 import RegisterScreen from "./components/Login_Function/RegisterForm";
 import HomePage from "./components/User_Page/HomePage";
+import Test from "./components/User_Page/test.js";
 
 const Stack = createNativeStackNavigator();
 export default function App() {
   const Stack = createNativeStackNavigator();
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [user, setUser] = useState(null);
+
   useEffect(() => {
     onAuthStateChanged(FIREBASE_AUTH, (user) => {
       console.log("user", user);
@@ -26,19 +28,27 @@ export default function App() {
   return (
     <NavigationContainer>
       <Stack.Navigator initialRouteName="Login">
-        {/* {user ? ( */}
-        <Stack.Screen
-          options={{ headerShown: false }}
-          name="Home"
-          component={HomePage}
-        />
-        {/* ) : ( */}
-        <Stack.Screen
-          options={{ headerShown: false }}
-          name="Login"
-          component={Login}
-        />
-        {/* )} */}
+        {user ? (
+          user.email === "owner@gmail.com" ? (
+            <Stack.Screen
+              options={{ headerShown: false }}
+              name="Home2" // Updated to "Home2" for the owner
+              component={HomePage}
+            />
+          ) : (
+            <Stack.Screen
+              options={{ headerShown: false }}
+              name="Home" // Updated to "Home" for non-owner users
+              component={Test}
+            />
+          )
+        ) : (
+          <Stack.Screen
+            options={{ headerShown: false }}
+            name="Login"
+            component={Login}
+          />
+        )}
 
         <Stack.Screen name="Register" component={RegisterScreen} />
       </Stack.Navigator>

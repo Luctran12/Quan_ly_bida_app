@@ -7,6 +7,8 @@ import {
   StyleSheet,
 } from "react-native";
 import { FIREBASE_AUTH } from "./firebaseConfig";
+import { FIRESTORE_DB } from "./firebaseConfig";
+import { doc, getDoc, setDoc } from "firebase/firestore";
 import { createUserWithEmailAndPassword } from "firebase/auth";
 
 export default function RegisterScreen({ navigation }) {
@@ -20,6 +22,9 @@ export default function RegisterScreen({ navigation }) {
         email,
         password
       );
+      await setDoc(doc(FIRESTORE_DB, "emails", response.user.uid), {
+        email: email,
+      });
       console.log(response);
       alert("Success create account");
       // navigation.navigate("Login");

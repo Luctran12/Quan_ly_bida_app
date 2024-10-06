@@ -24,7 +24,7 @@ export default function Login({ navigation }) {
     try {
       const response = await signInWithEmailAndPassword(auth, email, password);
       console.log(response);
-      navigation.navigate("Home");
+      // navigation.navigate("Home");
     } catch (error) {
       console.log(error);
       alert("Sign in failed: " + error.message);

@@ -7,9 +7,8 @@ import { Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import DoanhThuColumn from "./DoanhThuColumn";
 import ManageEmployee from "./ManageEmployee";
 import SettingUser from "./SettingUser";
-import Test from "./test";
 const Stack = createNativeStackNavigator();
-export default function HomePage({ navigation }) {
+export default function Test({ navigation }) {
   return (
     <Stack.Navigator initialRouteName="AdminHome">
       <Stack.Screen
@@ -31,11 +30,6 @@ export default function HomePage({ navigation }) {
         //options={{ headerShown: false }}
         name="Revenue"
         component={DoanhThuColumn}
-      />
-      <Stack.Screen
-        //options={{ headerShown: false }}
-        name="Test"
-        component={Test}
       />
       {/* <Stack.Screen name="Settings" component={SettingUser} />  */}
     </Stack.Navigator>
@@ -73,64 +67,6 @@ function AdminHome({ navigation }) {
             />
           </View>
         </View>
-      </View>
-
-      <View style={styles.gridContainerFistRow}>
-        <TouchableOpacity
-          style={styles.gridItems}
-          onPress={() => {
-            navigation.navigate("ManagePage");
-          }}
-        >
-          <Octicons
-            name="people"
-            size={60}
-            color="black"
-            style={styles.gridIcon}
-          />
-          <Text> Quản Lý Nhân Viên</Text>
-        </TouchableOpacity>
-        <TouchableOpacity
-          style={styles.gridItems}
-          onPress={() => navigation.navigate("Revenue")}
-        >
-          <FontAwesome6
-            name="sack-dollar"
-            size={60}
-            color="black"
-            style={styles.gridIcon}
-          />
-          <Text>Doanh Thu</Text>
-        </TouchableOpacity>
-      </View>
-      <View style={styles.gridContainerSecondRow}>
-        <TouchableOpacity
-          style={styles.gridItems}
-          onPress={() => navigation.navigate("Test")}
-        >
-          <MaterialCommunityIcons
-            name="table-furniture"
-            size={60}
-            color="black"
-            style={styles.gridIcon}
-          />
-
-          <Text>Tình Trạng Bàn</Text>
-        </TouchableOpacity>
-        <TouchableOpacity
-          style={styles.gridItems}
-          onPress={() => {
-            navigation.navigate("Settings");
-          }}
-        >
-          <SimpleLineIcons
-            name="settings"
-            size={60}
-            color="black"
-            style={styles.gridIcon}
-          />
-          <Text>Chỉnh Sửa</Text>
-        </TouchableOpacity>
       </View>
     </View>
     // </Tab.Navigator>
