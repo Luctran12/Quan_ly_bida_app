@@ -7,7 +7,7 @@ import { FIREBASE_AUTH } from "./components/Login_Function/firebaseConfig.js";
 import Login from "./components/Login_Function/LoginForm";
 import RegisterScreen from "./components/Login_Function/RegisterForm";
 import HomePage from "./components/User_Page/HomePage";
-
+import { Provider } from "./components/User_Page/Context.js";
 const Stack = createNativeStackNavigator();
 export default function App() {
   const Stack = createNativeStackNavigator();
@@ -24,6 +24,7 @@ export default function App() {
 
   // }
   return (
+    <Provider>
     <NavigationContainer>
       <Stack.Navigator initialRouteName="Login">
         {/* {user ? ( */}
@@ -40,9 +41,13 @@ export default function App() {
         />
         {/* )} */}
 
-        <Stack.Screen name="Register" component={RegisterScreen} />
+        <Stack.Screen 
+        name="Register" 
+        component={RegisterScreen} 
+        />
       </Stack.Navigator>
     </NavigationContainer>
+    </Provider>
   );
 }
 

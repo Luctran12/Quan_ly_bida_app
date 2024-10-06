@@ -101,7 +101,7 @@ export default function Login({ navigation }) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#eed5b2",
+    backgroundColor: "#7bc0b9",
     width: "100%",
   },
   scrollContainer: {

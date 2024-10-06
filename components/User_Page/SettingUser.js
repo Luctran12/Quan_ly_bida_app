@@ -1,18 +1,40 @@
-import React, { useState } from 'react';
+import React, { useState, createContext} from 'react';
 import { View, Text, TextInput, Button, Image, TouchableOpacity, StyleSheet } from 'react-native';
+import { createNativeStackNavigator } from "@react-navigation/native-stack";
+import HomePage from './HomePage';
+import { useSetting } from './Context';
+// export const inforContext = createContext()
+// Mục tiêu là làm sao khi thay đổi xog thì phải trở về HomePage
+// const Stack = createNativeStackNavigator();
+// export default  SettingPage =({navigation})=>{
+//   return(
+//   <Stack.Navigator initialRouteName="SettingNav">
+//     <Stack.Screen 
+//       options={{ headerShown: false }}
+//       name="SettingNav" component={SettingNav}
+//     />
+//     <Stack.Screen 
+//       name="Home" component={HomePage}
+//     />
 
-const SettingPage = (navigation) => {
+   
+
+//   </Stack.Navigator>
+//   );
+// }
+export default SettingPage = ({navigation}) => {
   const [username, setUsername] = useState('John Doe');
   const [password, setPassword] = useState('******');
-  const [selectedAvatar, setSelectedAvatar] = useState(null);
-
+  const [selectedAvatar, setSelectedAvatar] = useState('../../assets/headerAvata.png');
+  const {setName}= useSetting()
   const avatars = {
-    male: require('../../assets/headerAvata.png'), // Đường dẫn đến ảnh nam
+    male: '../../assets/headerAvata.png', // Đường dẫn đến ảnh nam
     female: require('../../assets/FemaleAvata.png'), // Đường dẫn đến ảnh nữ
   };
 
   const handleSaveChanges = () => {
     // Lưu thông tin người dùng
+    navigation.navigate("Home")
     console.log('Username:', username);
     console.log('Password:', password);
     console.log('Selected Avatar:', selectedAvatar);
@@ -20,6 +42,8 @@ const SettingPage = (navigation) => {
   };
 
   return (
+    
+    
     <View style={styles.container}>
       <Text style={styles.title}>Cài Đặt Tài Khoản</Text>
       
@@ -27,7 +51,7 @@ const SettingPage = (navigation) => {
       <Text style={styles.label}>Chọn ảnh đại diện:</Text>
       <View style={styles.avatarContainer}>
         <TouchableOpacity onPress={() => setSelectedAvatar(avatars.male)}>
-          <Image source={avatars.male} style={[styles.avatar, selectedAvatar === avatars.male && styles.selected]} />
+          <Image source={require('../../assets/headerAvata.png')} style={[styles.avatar, selectedAvatar === avatars.male && styles.selected]} />
           <Text>Nam</Text>
         </TouchableOpacity>
         <TouchableOpacity onPress={() => setSelectedAvatar(avatars.female)}>
@@ -41,7 +65,12 @@ const SettingPage = (navigation) => {
       <TextInput
         style={styles.input}
         value={username}
-        onChangeText={setUsername}
+        // onChangeText={setName}
+        onChangeText={text => {
+          setUsername(text);
+          setName(text); // Cập nhật name trong context
+        }}
+        
       />
 
       {/* Password Section */}
@@ -54,8 +83,16 @@ const SettingPage = (navigation) => {
       />
 
       {/* Save Button */}
-      <Button title="Lưu thay đổi" onPress={handleSaveChanges} />
+      <Button title="Lưu thay đổi" onPress={()=>
+        {
+          
+          // navigation.navigate("AdminHome");
+          navigation.goBack();
+        }
+        } 
+        />
     </View>
+    
   );
 };
 
@@ -101,4 +138,3 @@ const styles = StyleSheet.create({
   },
 });
 
-export default SettingPage;

@@ -7,8 +7,14 @@ import { Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import DoanhThuColumn from "./DoanhThuColumn";
 import ManageEmployee from "./ManageEmployee";
 import SettingUser from "./SettingUser";
+import { inforContext } from "./SettingUser";
+import {useContext, useState} from 'react'
+import { useSetting } from "./Context";
 const Stack = createNativeStackNavigator();
-export default function HomePage({ navigation }) {
+
+export default function HomePage() {
+ 
+ 
   return (
     <Stack.Navigator initialRouteName="AdminHome">
       <Stack.Screen
@@ -35,11 +41,15 @@ export default function HomePage({ navigation }) {
     </Stack.Navigator>
   );
 }
-function AdminHome({ navigation }) {
-  var x = "hello";
-  {
-    console.log(x);
-  }
+function AdminHome({ navigation}) {
+  // const [name,setName]= useState("nguyen van A");
+  // const infor = useContext(inforContext)
+  // console.log('---',infor)
+  // console.log('---',name)
+  // setName(infor)
+  const {name} = useSetting()
+  console.log(name)
+
   return (
     // <Tab.Navigator>
 
@@ -47,7 +57,7 @@ function AdminHome({ navigation }) {
       <View style={styles.header}>
         <View style={styles.headerSide}>
           <Text style={styles.headerTitle}>CHỦ QUÁN</Text>
-          <Text style={styles.headerText}>Nguyen Van A</Text>
+          <Text style={styles.headerText}>{name}</Text>
         </View>
         <View
           style={{

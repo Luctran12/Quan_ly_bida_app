@@ -1,7 +1,9 @@
+import { ScrollView } from "react-native-gesture-handler";
+
 export default function DoanhThuPage() {
   return (
-    <View>
+    <ScrollView>
       <FlatList />
-    </View>
+    </ScrollView>
   );
 }
