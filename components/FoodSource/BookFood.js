@@ -91,10 +91,15 @@ const BookFood = () =>{
         // //setBill(bill+ totalPerFood)
         
     }
-    const pressCancel= () =>{
-        setQuantity('')
-        setTable('')
-        setIsModalVisisable(false)
+    if (
+      !quantity ||
+      parseInt(quantity) <= 0 ||
+      !table ||
+      parseInt(table) <= 0
+    ) {
+      Alert.alert("Thông báo", "Vui lòng nhập số lượng và chọn bàn hợp lệ!");
+    } else {
+      Alert.alert("Thông báo", "Thêm món thành công!");
     }
     // const resetBill= () =>{
     //     setOrderedItems([])
@@ -102,7 +107,33 @@ const BookFood = () =>{
     //     Alert.alert("Hoá đơn đã làm mới");
     // }
 
-    return(
+    setQuantity("");
+    setTable("");
+    setIsModalVisisable(false);
+  };
+  const pressCancel = () => {
+    setQuantity("");
+    setTable("");
+    setIsModalVisisable(false);
+  };
+  // const PressPay= ()=>{
+  //     if(bill<=0 ){
+  //         Alert.alert("Thông báo", "Vui lòng thêm món ăn")
+  //     }else{
+  //         console.log(bill);
+  //     }
+
+  // }
+  // const resetBill=()=>{
+  //     setSelectFood(null)
+  //     setQuantity('')
+  //     setTable('')
+  //     setIsModalVisisable(false)
+  //     setBill(0);
+  //     Alert.alert("Thông báo", "Làm mới thành công")
+  // }
+
+  return (
     <SafeAreaView style={styles.safe}>
         {/* <Text style={styles.title}>🍴Food and drink😋</Text> */}
             <FlatList 
@@ -144,11 +175,7 @@ const BookFood = () =>{
             //bill={bill}
         /> */}
     </SafeAreaView>
-
-
-
-    )
-}
+  );
 const styles=StyleSheet.create({
     list: {
         paddingHorizontal: 8,
@@ -171,4 +198,6 @@ const styles=StyleSheet.create({
    
 
 })
+
+
 export default BookFood;

@@ -1,23 +1,64 @@
-import React from 'react';
-import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
-import BookFood from "./components/FoodSource/BookFood.js"
-import AdminTable from './components/AdminFunction/AdminTable.js';
-import TableStatusScreen from './components/AdminFunction/TableStatusScreen.js';
-export default function App(){
+
+import { NavigationContainer } from "@react-navigation/native";
+import { createNativeStackNavigator } from "@react-navigation/native-stack";
+import { onAuthStateChanged } from "firebase/auth";
+import React, { useEffect, useState } from "react";
+import { StyleSheet } from "react-native";
+import { FIREBASE_AUTH } from "./components/Login_Function/firebaseConfig.js";
+import Login from "./components/Login_Function/LoginForm";
+import RegisterScreen from "./components/Login_Function/RegisterForm";
+import HomePage from "./components/User_Page/HomePage";
+import {SettingProvider} from "./components/User_Page/contextAPI/SettingContext.js";
+
+
+const Stack = createNativeStackNavigator();
+export default function App() {
+  const Stack = createNativeStackNavigator();
+  const [isModalVisible, setIsModalVisible] = useState(false);
+  const [user, setUser] = useState(null);
+  useEffect(() => {
+    onAuthStateChanged(FIREBASE_AUTH, (user) => {
+      console.log("user", user);
+      setUser(user);
+    });
+  }, []);
+  // const changeModalVisible=(bool)=>{
+  //   setIsModalVisible(bool)
+
+  // }
   return (
-    <View style={styles.container}>
-       <TableStatusScreen/>
-    </View>
+    <SettingProvider>
+      <NavigationContainer>
+        <Stack.Navigator initialRouteName="Login">
+          <Stack.Screen
+            options={{ headerShown: false }}
+            name="Home"
+            component={HomePage}
+          />
+          <Stack.Screen
+            options={{ headerShown: false }}
+            name="Login"
+            component={Login}
+          />
+          <Stack.Screen name="Register" component={RegisterScreen} />
+        </Stack.Navigator>
+      </NavigationContainer>
+    </SettingProvider>
   );
-};
+  
+}
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
     padding: 20,
    // backgroundColor: "black"
+
+    backgroundColor: "white",
+    alignItems: "center",
+    justifyContent: "center",
+    // paddingTop: 50,
+
+    // borderWidth:2
   },
-  
 });
-
-
