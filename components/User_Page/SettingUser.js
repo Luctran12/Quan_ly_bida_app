@@ -2,8 +2,8 @@ import React, { useState } from 'react';
 import { View, Text, TextInput, Button, Image, TouchableOpacity, StyleSheet } from 'react-native';
 import { useSetting } from './contextAPI/SettingContext';
 const SettingPage = (navigation) => {
-  const [username, setUsername] = useState('Nhập tên mới');
-  const [password, setPassword] = useState('******');
+  const [username, setUsername] = useState('');
+  const [password, setPassword] = useState('');
   const [selectedAvatar, setSelectedAvatar] = useState(null);
   const {setName, setSex, name}= useSetting();
 
@@ -44,6 +44,7 @@ const SettingPage = (navigation) => {
       <TextInput
         style={styles.input}
         value={username}
+        placeholder='Nhap ten nguoi dung'
         onChangeText={text => {
         setUsername(text);
         setName(text); // Cập nhật name trong context
@@ -55,6 +56,7 @@ const SettingPage = (navigation) => {
       <TextInput
         style={styles.input}
         value={password}
+        placeholder='******'
         onChangeText={setPassword}
         secureTextEntry
       />
