@@ -1,41 +1,58 @@
-import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
-import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { NavigationContainer } from "@react-navigation/native";
-import React from "react";
+import { createNativeStackNavigator } from "@react-navigation/native-stack";
+import { onAuthStateChanged } from "firebase/auth";
+import { default as React, useEffect, useState } from "react";
 import { StyleSheet } from "react-native";
-import BookFood from "./components/FoodSource/BookFood";
-import TablesScreen from "./components/table_screens/TablesScreen";
-import { OrderProvider } from "./components/context/OrderContext";
-const Tab = createBottomTabNavigator();
+
+import { FIREBASE_AUTH } from "./components/Login_Function/firebaseConfig.js";
+import Login from "./components/Login_Function/LoginForm.js";
+import RegisterScreen from "./components/Login_Function/RegisterForm.js";
+
+import { SettingProvider } from "./components/User_Page/contextAPI/SettingContext.js";
+import HomePage from "./components/User_Page/HomePage.js";
+
 export default function App() {
+  const Stack = createNativeStackNavigator();
+
+  const [isModalVisible, setIsModalVisible] = useState(false);
+  const [user, setUser] = useState(null);
+  useEffect(() => {
+    onAuthStateChanged(FIREBASE_AUTH, (user) => {
+      console.log("user", user);
+      setUser(user);
+    });
+  }, []);
+  // const changeModalVisible=(bool)=>{
+  //   setIsModalVisible(bool)
+
+  // }
   return (
-    <OrderProvider>
-    <NavigationContainer>
-      <Tab.Navigator
-        screenOptions={({ route }) => ({
-          tabBarIcon: ({ focused, color, size }) => {
-            let iconName;
+    // <OrderProvider>
+    //   <NavigationContainer>
+    //     <Stac.Navigator initialRouteName="UserPage">
+    //       <Stac.Screen name="Home" component={HomeScreen} />
+    //       <Stac.Screen name="UserPage" component={UserPage} />
+    //     </Stac.Navigator>
+    //   </NavigationContainer>
+    // </OrderProvider>
 
-            if (route.name === "Bida") {
-              iconName = "billiards";
-            } else if (route.name === "Food & Drink") {
-              iconName = "food";
-            }
-
-            // You can return any component that you like here!
-            return (
-              <MaterialCommunityIcons name={iconName} size={24} color="black" />
-            );
-          },
-          tabBarActiveTintColor: "#45e143",
-          tabBarInactiveTintColor: "gray",
-        })}
-      >
-        <Tab.Screen name="Bida" component={TablesScreen} />
-        <Tab.Screen name="Food & Drink" component={BookFood} />
-      </Tab.Navigator>
-    </NavigationContainer>
-    </OrderProvider>
+    <SettingProvider>
+      <NavigationContainer>
+        <Stack.Navigator initialRouteName="Login">
+          <Stack.Screen
+            options={{ headerShown: false }}
+            name="Home"
+            component={HomePage}
+          />
+          <Stack.Screen
+            options={{ headerShown: false }}
+            name="Login"
+            component={Login}
+          />
+          <Stack.Screen name="Register" component={RegisterScreen} />
+        </Stack.Navigator>
+      </NavigationContainer>
+    </SettingProvider>
   );
 }
 
@@ -45,8 +62,5 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     backgroundColor: "#fff",
-    alignItems: "center",
-    justifyContent: "center",
   },
- 
 });

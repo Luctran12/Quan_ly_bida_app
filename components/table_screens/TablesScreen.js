@@ -1,12 +1,12 @@
-import { useState , useEffect} from "react";
+import { useEffect, useState } from "react";
 import { FlatList, View } from "react-native";
-import Table from "./Table";
 import request from "../utils/request";
+import Table from "./Table";
 export default function TablesScreen() {
   const [tableId, setTableId] = useState(0); // ID bàn nguồn
   const [timePlayFromTableId, setTimePlayFromTableId] = useState(); // Thời gian bắt đầu của bàn nguồn
   const [goalTableId, setGoalTableId] = useState(0); // ID bàn đích
-  const [tableData, setTableData] = useState(null)
+  const [tableData, setTableData] = useState(null);
   const handleChangeTable = (goalId) => {
     console.log(`Chuyển từ bàn ${tableId} sang bàn ${goalId}`);
     setGoalTableId(goalId); // Lưu ID bàn đích để tự động mở
@@ -17,20 +17,27 @@ export default function TablesScreen() {
     setTimePlayFromTableId(startTimeFromTable); // Lưu thời gian bắt đầu của bàn nguồn
     console.log("Bàn nguồn đã chọn:", itemId, "Thời gian:", startTimeFromTable);
   };
-  useEffect(()=> {
+  useEffect(() => {
     fetchTableData();
-}, []);
-const fetchTableData = async() => {
-    try{
-        const response = await request.get('/billiard_table/getAllTable')
-        setTableData(( response).data.result)
-       // console.log((response).data.result)
-    }catch(error){
-        console.error(error);
+  }, []);
+  const fetchTableData = async () => {
+    try {
+      const response = await request.get("/billiard_table/getAllTable");
+      setTableData(response.data.result);
+      // console.log((response).data.result)
+    } catch (error) {
+      console.error(error);
     }
-}
+  };
   return (
-    <View style={{ flex: 1, justifyContent: "center", alignItems: "center", backgroundColor: "black" }}>
+    <View
+      style={{
+        flex: 1,
+        justifyContent: "center",
+        alignItems: "center",
+        backgroundColor: "#6fdacf",
+      }}
+    >
       <FlatList
         numColumns={2}
         data={tableData}
@@ -39,7 +46,7 @@ const fetchTableData = async() => {
           <Table
             id={item.id}
             type={item.type}
-            cost={item.cost}
+            cost={item.costPerHour}
             idSelected={tableId} // Truyền bàn nguồn
             handleSelectItem={handleSelectItem} // Truyền hàm chọn bàn
             timePlayFromSourceTable={timePlayFromTableId} // Truyền thời gian của bàn nguồn

@@ -1,99 +1,112 @@
-import { StatusBar } from "expo-status-bar";
-import { useState } from "react";
-import { StyleSheet, Text, View, Button, TextInput,Image, TouchableOpacity } from "react-native";
-import Login from "./LoginForm";
+import React, { useState } from "react";
+import {
+  View,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  StyleSheet,
+} from "react-native";
+import { FIREBASE_AUTH } from "./firebaseConfig";
+import { createUserWithEmailAndPassword } from "firebase/auth";
 
-export default function RegisterNewAcc({ onCancel }) {
+export default function RegisterScreen({ navigation }) {
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const auth = FIREBASE_AUTH;
+  const signUp = async () => {
+    try {
+      const response = await createUserWithEmailAndPassword(
+        auth,
+        email,
+        password
+      );
+      console.log(response);
+      alert("Success create account");
+      // navigation.navigate("Login");
+    } catch (error) {
+      console.log(error);
+      alert(error);
+    }
+  };
 
   return (
-
-
     <View style={styles.container}>
-      <View style={styles.titleFrame}>
-      <Image
-                style={styles.logo}
-                source={require('../../assets/LoGo.png')}
-        />
-        <Text style={styles.titleText}>Đăng ký</Text>
-      </View>
-      
-      <View style={styles.inputFrames}>
-        <View style={styles.inputFrameEach}>
-          <TextInput
-            style={styles.TextInput}
-            placeholder="tên đăng nhập"
-          />
-        </View>
+      <Text style={styles.title}>Welcome</Text>
 
-        <View style={styles.inputFrameEach}>
-          <TextInput
-            style={styles.TextInput}
-            placeholder="mật khẩu"
-          />
-        </View>
-        <View style={styles.inputFrameEach}>
-          <TextInput
-            style={styles.TextInput}
-            placeholder="nhập lại mật khẩu"
-          />
-        </View>
-      </View>
-      
-
-
-
-
-
-      <Button
-        title="thoát"
-        onPress={onCancel}
-
+      <TextInput
+        style={styles.input}
+        placeholder="Email"
+        value={email}
+        onChangeText={(text) => setEmail(text)}
       />
-      <StatusBar style="auto" />
 
+      <TextInput
+        style={styles.input}
+        placeholder="Password"
+        textContentType="password"
+        secureTextEntry={true}
+        value={password}
+        onChangeText={(text) => setPassword(text)}
+      />
 
+      <TouchableOpacity style={styles.button} onPress={() => signUp()}>
+        <Text style={styles.buttonText}>Đăng ký</Text>
+      </TouchableOpacity>
 
+      <TouchableOpacity
+        onPress={() => {
+          navigation.navigate("Login");
+        }}
+      >
+        <Text style={styles.linkText}>Quay lại</Text>
+      </TouchableOpacity>
     </View>
-
-
-
-
   );
 }
 
 const styles = StyleSheet.create({
   container: {
-    borderWidth: 2,
     flex: 1,
-    backgroundColor: "#fff",
+    justifyContent: "center",
     alignItems: "center",
-    width: "100%"
+    backgroundColor: "#eed5b2",
+    width: "100%",
   },
-  titleFrame:{
-    borderWidth:2,
-    marginTop:80
+  title: {
+    fontSize: 36,
+    fontWeight: "bold",
+    marginBottom: 20,
   },
-  titleText: {
-    fontSize: 40
+  input: {
+    width: "80%",
+    height: 60,
+    borderBottomWidth: 1,
+    borderColor: "#ccc",
+    borderRadius: 10,
+    padding: 10,
+    marginBottom: 15,
+    fontSize: 18,
   },
-  logo:{
-    width: 150,
-    height: 150,
-    marginBottom: 12,
+  button: {
+    width: "80%",
+    height: 40,
+    backgroundColor: "#000",
+    justifyContent: "center",
+    alignItems: "center",
+    borderRadius: 10,
+    marginBottom: 10,
   },
-  text: {
-    
+  placeholderText: {
+    fontSize: 18,
+    marginLeft: 20,
   },
-  inputFrames: {
-    borderWidth:1,
-    width:'70%',
-    
+  buttonText: {
+    color: "#fff",
+    fontSize: 18,
   },
-  inputFrameEach: {
-    width:'100%'
+  linkText: {
+    color: "#000",
+    fontSize: 16,
+    marginTop: 10,
   },
-  TextInput: {
-    marginLeft: 5
-  }
-
 });

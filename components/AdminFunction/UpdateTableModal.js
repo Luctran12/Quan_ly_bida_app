@@ -6,8 +6,13 @@ const UpdateTableModal = ({ isVisible, onClose, onUpdate, tableId, initialCost, 
   const [newStatus, setNewStatus] = useState(initialStatus);
 
   const handleUpdate = () => {
+<<<<<<< HEAD
     onUpdate(tableId, newCost, newStatus);
     onClose(); 
+=======
+    onUpdate(tableId, newCost, newStatus); // Gọi hàm cập nhật
+    onClose(); // Đóng modal sau khi cập nhật
+>>>>>>> Long
   };
 
   return (

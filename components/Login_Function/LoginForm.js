@@ -1,11 +1,35 @@
 import { StatusBar } from "expo-status-bar";
 import { useState } from "react";
-import { StyleSheet, Text, View, TextInput, TouchableOpacity, Image, ScrollView, KeyboardAvoidingView, Platform } from "react-native";
+import {
+  StyleSheet,
+  Text,
+  View,
+  TextInput,
+  TouchableOpacity,
+  Image,
+  ScrollView,
+  KeyboardAvoidingView,
+  Platform,
+} from "react-native";
 import RegisterNewAcc from "./RegisterForm";
+import { FIREBASE_AUTH } from "./firebaseConfig";
+import { signInWithEmailAndPassword } from "firebase/auth";
 
-export default function Login() {
+export default function Login({ navigation }) {
   const [press, isPress] = useState(false);
-
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const auth = FIREBASE_AUTH;
+  const signIn = async () => {
+    try {
+      const response = await signInWithEmailAndPassword(auth, email, password);
+      console.log(response);
+      navigation.navigate("Home");
+    } catch (error) {
+      console.log(error);
+      alert("Sign in failed: " + error.message);
+    }
+  };
   return (
     <KeyboardAvoidingView
       behavior={Platform.OS === "ios" ? "padding" : "height"}
@@ -17,20 +41,34 @@ export default function Login() {
             <View style={styles.top}>
               <Image
                 style={styles.logo}
-                source={require('../../assets/LoGo.png')}
+                source={require("../../assets/LoGo.png")}
               />
               <Text style={styles.textTitle}>Welcome</Text>
             </View>
 
             <View style={styles.mid}>
               <View style={styles.userInput}>
-                <TextInput style={styles.placeholderText} placeholder="Username" />
+                <TextInput
+                  style={styles.placeholderText}
+                  placeholder="Email"
+                  value={email}
+                  onChangeText={setEmail}
+                />
               </View>
               <View style={styles.userInput}>
-                <TextInput style={styles.placeholderText} placeholder="Password" secureTextEntry={true} />
+                <TextInput
+                  style={styles.placeholderText}
+                  placeholder="Password"
+                  secureTextEntry={true}
+                  value={password}
+                  onChangeText={setPassword}
+                />
               </View>
               <View style={styles.buttonMid}>
-                <TouchableOpacity style={styles.button}>
+                <TouchableOpacity
+                  style={styles.button}
+                  onPress={() => signIn()}
+                >
                   <Text style={styles.text}>Đăng nhập</Text>
                 </TouchableOpacity>
                 <TouchableOpacity>
@@ -41,10 +79,14 @@ export default function Login() {
 
             <View style={styles.bot}>
               <View style={styles.buttonBot}>
-                <TouchableOpacity style={styles.ButCreateNewAcc} onPress={() => isPress(true)}>
+                <TouchableOpacity
+                  style={styles.ButCreateNewAcc}
+                  onPress={() => {
+                    navigation.navigate("Register");
+                  }}
+                >
                   <Text style={styles.txtCreateAcc}>Tạo tài khoản</Text>
                 </TouchableOpacity>
-                
               </View>
             </View>
           </>
@@ -60,18 +102,18 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: "#eed5b2",
-    width: '100%',
+    width: "100%",
   },
   scrollContainer: {
     flexGrow: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
+    justifyContent: "center",
+    alignItems: "center",
     padding: 20,
   },
   top: {
     // borderWidth:2,
-    alignItems: 'center',
-    justifyContent: 'center',
+    alignItems: "center",
+    justifyContent: "center",
     marginBottom: 20,
   },
   logo: {
@@ -81,68 +123,69 @@ const styles = StyleSheet.create({
   },
   textTitle: {
     fontSize: 40,
-    fontWeight: 'bold',
+    fontWeight: "bold",
   },
   mid: {
     // borderWidth:2,
-    width: '80%',
-    alignItems: 'center',
+    width: "90%",
+    alignItems: "center",
   },
   userInput: {
-    width: '100%',
+    width: "100%",
     borderBottomWidth: 1,
     borderRadius: 20,
     margin: 15,
     paddingVertical: 10,
+    borderColor: "#ccc",
   },
   placeholderText: {
     fontSize: 18,
     marginLeft: 20,
   },
   buttonMid: {
-    width: '60%',
-    alignItems: 'center',
+    width: "90%",
+    alignItems: "center",
     marginVertical: 10,
   },
   button: {
-    backgroundColor: 'black',
+    backgroundColor: "black",
     borderRadius: 10,
-    width: '100%',
+    width: "100%",
     borderWidth: 2,
     height: 40,
     marginBottom: 8,
-    alignItems: 'center',
-    justifyContent: 'center',
+    alignItems: "center",
+    justifyContent: "center",
   },
   text: {
-    color: 'white',
+    color: "white",
+    fontSize: 16,
   },
   textForgotPass: {
-    color: 'black',
-    textDecorationLine: 'underline',
+    color: "black",
+    textDecorationLine: "underline",
     fontSize: 16,
   },
   bot: {
-    
     // borderWidth:2,
     marginTop: 50,
-    width: '100%',
-    alignItems: 'center',
+    width: "100%",
+    alignItems: "center",
   },
   buttonBot: {
-    width: '60%',
-    alignItems: 'center',
+    width: "80%",
+    alignItems: "center",
   },
   ButCreateNewAcc: {
-    width: '100%',
+    width: "100%",
     height: 40,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: 'black',
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "black",
     borderRadius: 10,
   },
   txtCreateAcc: {
     fontSize: 16,
-    color: 'white',
+    color: "white",
   },
 });

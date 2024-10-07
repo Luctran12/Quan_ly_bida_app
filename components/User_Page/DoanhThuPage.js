@@ -1,8 +1,12 @@
+import { View } from "react-native";
+import { GestureHandlerRootView } from "react-native-gesture-handler";
+import DoanhThuColumn from "./DoanhThuColumn";
 export default function DoanhThuPage() {
-  //Hàm request tới api status lấy về dữ liệu id,total,date, starttime,endtime,totaltime,order
   return (
-    <View>
-      <FlatList />
-    </View>
+    <GestureHandlerRootView style={{ flex: 1 }}>
+      <View>
+        <DoanhThuColumn />
+      </View>
+    </GestureHandlerRootView>
   );
 }
