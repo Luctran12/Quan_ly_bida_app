@@ -2,7 +2,8 @@ import { useEffect, useState } from "react";
 import { FlatList, View } from "react-native";
 import request from "../utils/request";
 import Table from "./Table";
-export default function TablesScreen() {
+export default function TablesScreen({ route }) {
+  const isOwner = route.params;
   const [tableId, setTableId] = useState(0); // ID bàn nguồn
   const [timePlayFromTableId, setTimePlayFromTableId] = useState(); // Thời gian bắt đầu của bàn nguồn
   const [goalTableId, setGoalTableId] = useState(0); // ID bàn đích

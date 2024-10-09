@@ -80,7 +80,7 @@ function AdminHome({ navigation }) {
             width: 120,
             justifyContent: "center",
             alignItems: "center",
-            //borderRadius: "50%",
+            borderRadius: "58%",
             backgroundColor: "gray",
           }}
         >
@@ -125,7 +125,11 @@ function AdminHome({ navigation }) {
       <View style={styles.gridContainerSecondRow}>
         <TouchableOpacity
           style={styles.gridItems}
-          onPress={() => navigation.navigate("Table")}
+          onPress={() =>
+            navigation.navigate("Table", {
+              isOwner: true,
+            })
+          }
         >
           <MaterialCommunityIcons
             name="table-furniture"
@@ -173,6 +177,7 @@ const styles = StyleSheet.create({
   headerSide: {
     flex: 1,
     alignItems: "center",
+
     // borderWidth:2,
     // borderColor:'red',
   },
@@ -219,4 +224,3 @@ const styles = StyleSheet.create({
     // elevation: 10,
   },
 });
-//CON ME MAY

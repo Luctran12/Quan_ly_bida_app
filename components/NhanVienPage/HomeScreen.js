@@ -1,12 +1,16 @@
+import AntDesign from "@expo/vector-icons/AntDesign";
 import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
+import { useNavigation } from "@react-navigation/native";
+import { TouchableOpacity } from "react-native";
 import { OrderProvider } from "../context/OrderContext";
 import BookFood from "../FoodSource/BookFood";
 import TablesScreen from "../table_screens/TablesScreen";
-
 const Tab = createBottomTabNavigator();
 
-export default function HomeScreen() {
+export default function HomeScreen({ route }) {
+  const navigation = useNavigation();
+  const { isOwner = false } = route.params || {};
   return (
     <OrderProvider>
       <Tab.Navigator
@@ -29,7 +33,33 @@ export default function HomeScreen() {
           tabBarInactiveTintColor: "gray",
         })}
       >
-        <Tab.Screen name="Bida" component={TablesScreen} />
+        <Tab.Screen
+          name="Bida"
+          component={TablesScreen}
+          options={
+            isOwner
+              ? {
+                  headerLeft: (props) => (
+                    <TouchableOpacity
+                      style={{ marginLeft: 10 }}
+                      onPress={() => navigation.push("Home2")}
+                    >
+                      <AntDesign name="back" size={28} color="black" />
+                    </TouchableOpacity>
+                  ),
+                }
+              : {
+                  headerLeft: (props) => (
+                    <TouchableOpacity
+                      style={{ marginLeft: 10 }}
+                      onPress={() => navigation.navigate("Login")}
+                    >
+                      <AntDesign name="back" size={28} color="black" />
+                    </TouchableOpacity>
+                  ),
+                }
+          }
+        />
         <Tab.Screen name="Food & Drink" component={BookFood} />
       </Tab.Navigator>
     </OrderProvider>

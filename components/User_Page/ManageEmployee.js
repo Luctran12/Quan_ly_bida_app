@@ -1,9 +1,11 @@
-import axios from "axios";
+import { createUserWithEmailAndPassword } from "firebase/auth";
 import React, { useState } from "react";
-import { Alert, Button, StyleSheet, Text, TextInput, View } from "react-native";
-export default function ManageEmployee() {
+import { Button, StyleSheet, Text, TextInput, View } from "react-native";
+import { FIREBASE_AUTH } from "../Login_Function/firebaseConfig";
+export default function ManageEmployee({ navigation }) {
+  const auth = FIREBASE_AUTH;
   const [fullName, setName] = useState("");
-  const [userName, setUserName] = useState("");
+  const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [isModalVisible, setIsModalVisible] = useState(true);
   const [chooseData, setChooseData] = useState();
@@ -13,6 +15,22 @@ export default function ManageEmployee() {
   const setData = (data) => {
     setChooseData(data);
   };
+  //code cua gia dai
+  const signUp = async () => {
+    try {
+      const response = await createUserWithEmailAndPassword(
+        auth,
+        email,
+        password
+      );
+      navigation.push("ManagePage");
+      console.log(response);
+      alert("Success create account");
+    } catch (error) {
+      console.log(error);
+      alert(error);
+    }
+  };
 
   //   const handleAddEmployee = () => {
   //     // Xử lý thêm nhân viên ở đây
@@ -21,34 +39,36 @@ export default function ManageEmployee() {
 
   const handleDeleteEmployee = () => {
     // Xử lý xóa nhân viên ở đây
-    console.log("Xóa nhân viên:", { fullName, userName });
+    //console.log("Xóa nhân viên:", { fullName, userName });
   };
-  const handleCreateUser = async () => {
-    console.log("Đang gọi API để tạo người dùng..."); // Kiểm tra
-    try {
-      const response = await axios.post(
-        "https://quan-ly-bida-backend.onrender.com/user/create",
-        {
-          userName,
-          password,
-          fullName,
-        }
-      );
+  // const handleCreateUser = async () => {
+  //   console.log("Đang gọi API để tạo người dùng..."); // Kiểm tra
+  //   await signUp();
+  //   navigation.navigate("Home2");
+  //   // try {
+  //   //   const response = await axios.post(
+  //   //     "https://quan-ly-bida-backend.onrender.com/user/create",
+  //   //     {
+  //   //       userName,
+  //   //       password,
+  //   //       fullName,
+  //   //     }
+  //   //   );
 
-      console.log("Phản hồi từ API:", response.data);
+  //   //   console.log("Phản hồi từ API:", response.data);
 
-      if (response.data.code === 0) {
-        Alert.alert("Thông báo", response.data.msg);
-        console.log("success");
-      } else {
-        Alert.alert("Thông báo", "Có lỗi xảy ra khi tạo người dùng.");
-        console.log("success 2");
-      }
-    } catch (error) {
-      console.error("Lỗi khi tạo người dùng:", error);
-      Alert.alert("Thông báo", "Có lỗi xảy ra khi tạo người dùng.");
-    }
-  };
+  //   //   if (response.data.code === 0) {
+  //   //     Alert.alert("Thông báo", response.data.msg);
+  //   //     console.log("success");
+  //   //   } else {
+  //   //     Alert.alert("Thông báo", "Có lỗi xảy ra khi tạo người dùng.");
+  //   //     console.log("success 2");
+  //   //   }
+  //   // } catch (error) {
+  //   //   console.error("Lỗi khi tạo người dùng:", error);
+  //   //   Alert.alert("Thông báo", "Có lỗi xảy ra khi tạo người dùng.");
+  //   // }
+  // };
 
   return (
     <View style={styles.container}>
@@ -64,8 +84,8 @@ export default function ManageEmployee() {
       <TextInput
         style={styles.input}
         placeholder="Nhập username"
-        value={userName}
-        onChangeText={setUserName}
+        value={email}
+        onChangeText={setEmail}
       />
 
       <Text style={styles.label}>Password:</Text>
@@ -78,7 +98,7 @@ export default function ManageEmployee() {
       />
 
       <View style={styles.buttonContainer}>
-        <Button title="Thêm nhân viên" onPress={handleCreateUser} />
+        <Button title="Thêm nhân viên" onPress={() => signUp()} />
         <Button
           title="Xóa nhân viên"
           onPress={handleDeleteEmployee}

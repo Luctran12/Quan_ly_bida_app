@@ -1,22 +1,19 @@
-import { StatusBar } from "expo-status-bar";
+import { signInWithEmailAndPassword } from "firebase/auth";
 import { useState } from "react";
 import {
-  StyleSheet,
-  Text,
-  View,
-  TextInput,
-  TouchableOpacity,
   Image,
-  ScrollView,
   KeyboardAvoidingView,
   Platform,
+  ScrollView,
+  StyleSheet,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  View,
 } from "react-native";
-import RegisterNewAcc from "./RegisterForm";
 import { FIREBASE_AUTH } from "./firebaseConfig";
-import { signInWithEmailAndPassword } from "firebase/auth";
 
 export default function Login({ navigation }) {
-  const [press, isPress] = useState(false);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const auth = FIREBASE_AUTH;
@@ -24,7 +21,7 @@ export default function Login({ navigation }) {
     try {
       const response = await signInWithEmailAndPassword(auth, email, password);
       console.log(response);
-      navigation.navigate("Home");
+      //navigation.navigate("Home");
     } catch (error) {
       console.log(error);
       alert("Sign in failed: " + error.message);
@@ -36,7 +33,7 @@ export default function Login({ navigation }) {
       style={styles.container}
     >
       <ScrollView contentContainerStyle={styles.scrollContainer}>
-        {!press ? (
+        {
           <>
             <View style={styles.top}>
               <Image
@@ -90,9 +87,7 @@ export default function Login({ navigation }) {
               </View>
             </View>
           </>
-        ) : (
-          <RegisterNewAcc onCancel={() => isPress(false)} />
-        )}
+        }
       </ScrollView>
     </KeyboardAvoidingView>
   );
