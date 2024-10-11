@@ -51,6 +51,11 @@ export default function HomePage({ navigation }) {
         name="Table"
         component={HomeScreen}
       />
+      <Stack.Screen
+        //options={{ headerShown: false }}
+        name="ManagePage2"
+        component={ManageEmployee}
+      />
       {/* <Stack.Screen name="Settings" component={SettingUser} />  */}
     </Stack.Navigator>
   );
