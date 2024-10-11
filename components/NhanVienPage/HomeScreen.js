@@ -52,7 +52,7 @@ export default function HomeScreen({ route }) {
                   headerLeft: (props) => (
                     <TouchableOpacity
                       style={{ marginLeft: 10 }}
-                      onPress={() => navigation.navigate("Login")}
+                      onPress={() => navigation.navigate("Login2")}
                     >
                       <AntDesign name="back" size={28} color="black" />
                     </TouchableOpacity>

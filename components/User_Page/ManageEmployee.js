@@ -1,6 +1,6 @@
 import { createUserWithEmailAndPassword } from "firebase/auth";
 import React, { useState } from "react";
-import { Button, StyleSheet, Text, TextInput, View } from "react-native";
+import { Alert, Button, StyleSheet, Text, TextInput, View } from "react-native";
 import { FIREBASE_AUTH } from "../Login_Function/firebaseConfig";
 export default function ManageEmployee({ navigation }) {
   const auth = FIREBASE_AUTH;
@@ -9,6 +9,7 @@ export default function ManageEmployee({ navigation }) {
   const [password, setPassword] = useState("");
   const [isModalVisible, setIsModalVisible] = useState(true);
   const [chooseData, setChooseData] = useState();
+
   const changeModalVisible = (bool) => {
     setIsModalVisible(bool);
   };
@@ -23,13 +24,20 @@ export default function ManageEmployee({ navigation }) {
         email,
         password
       );
-      navigation.push("ManagePage");
       console.log(response);
+      const currentUser = auth.currentUser;
+      if (currentUser) {
+        navigation.navigate("ManagePage");
+      }
       alert("Success create account");
     } catch (error) {
       console.log(error);
       alert(error);
     }
+    // alert("Tạo tài khoản thành công :)");
+    // setName("");
+    // setEmail("");
+    // setPassword("");
   };
 
   //   const handleAddEmployee = () => {
@@ -38,6 +46,7 @@ export default function ManageEmployee({ navigation }) {
   //   };
 
   const handleDeleteEmployee = () => {
+    Alert.alert("Xóa thành công");
     // Xử lý xóa nhân viên ở đây
     //console.log("Xóa nhân viên:", { fullName, userName });
   };

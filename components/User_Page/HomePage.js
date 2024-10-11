@@ -51,6 +51,11 @@ export default function HomePage({ navigation }) {
         name="Table"
         component={HomeScreen}
       />
+      <Stack.Screen
+        //options={{ headerShown: false }}
+        name="ManagePage2"
+        component={ManageEmployee}
+      />
       {/* <Stack.Screen name="Settings" component={SettingUser} />  */}
     </Stack.Navigator>
   );
@@ -80,7 +85,7 @@ function AdminHome({ navigation }) {
             width: 120,
             justifyContent: "center",
             alignItems: "center",
-            borderRadius: "58%",
+            //borderRadius: "58%",
             backgroundColor: "gray",
           }}
         >

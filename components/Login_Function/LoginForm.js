@@ -18,9 +18,10 @@ export default function Login({ navigation }) {
   const [password, setPassword] = useState("");
   const auth = FIREBASE_AUTH;
   const signIn = async () => {
+    console.log("========", email);
     try {
       const response = await signInWithEmailAndPassword(auth, email, password);
-      console.log(response);
+      console.log("=======", response);
       //navigation.navigate("Home");
     } catch (error) {
       console.log(error);
