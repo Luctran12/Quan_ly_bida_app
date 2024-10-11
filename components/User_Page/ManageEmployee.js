@@ -23,7 +23,7 @@ export default function ManageEmployee({ navigation }) {
         email,
         password
       );
-      navigation.push("ManagePage");
+      // navigation.push("ManagePage");
       console.log(response);
       alert("Success create account");
     } catch (error) {

@@ -80,7 +80,7 @@ function AdminHome({ navigation }) {
             width: 120,
             justifyContent: "center",
             alignItems: "center",
-            borderRadius: "58%",
+            // borderRadius: "58%",
             backgroundColor: "gray",
           }}
         >

@@ -16,11 +16,25 @@ export default function App() {
 
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [user, setUser] = useState(null);
+  // useEffect(() => {
+  //   onAuthStateChanged(FIREBASE_AUTH, (user) => {
+  //     console.log("user", user);
+  //     setUser(user);
+  //   });
+  // }, []);
   useEffect(() => {
-    onAuthStateChanged(FIREBASE_AUTH, (user) => {
+    const unsubscribe = onAuthStateChanged(FIREBASE_AUTH, (user) => {
       console.log("user", user);
       setUser(user);
+
+      // Unsubscribe after the first check
+      if (user) {
+        unsubscribe();
+      }
     });
+
+    // Cleanup the subscription when component unmounts
+    return () => unsubscribe();
   }, []);
   // const changeModalVisible=(bool)=>{
   //   setIsModalVisible(bool)
@@ -75,6 +89,11 @@ export default function App() {
               component={Login}
             />
           )}
+          <Stack.Screen
+            options={{ headerShown: false }}
+            name="Login2"
+            component={Login}
+          />
 
           <Stack.Screen name="Register" component={RegisterScreen} />
         </Stack.Navigator>
