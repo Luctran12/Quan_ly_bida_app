@@ -1,21 +1,32 @@
+import AntDesign from "@expo/vector-icons/AntDesign";
 import { createUserWithEmailAndPassword } from "firebase/auth";
 import React, { useState } from "react";
-import { Alert, Button, StyleSheet, Text, TextInput, View } from "react-native";
+import {
+  Alert,
+  Button,
+  FlatList,
+  Modal,
+  StyleSheet,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  View,
+} from "react-native";
 import { FIREBASE_AUTH } from "../Login_Function/firebaseConfig";
 export default function ManageEmployee({ navigation }) {
   const auth = FIREBASE_AUTH;
   const [fullName, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [isModalVisible, setIsModalVisible] = useState(true);
-  const [chooseData, setChooseData] = useState();
-
+  /// const [isModalVisible, setIsModalVisible] = useState(true);
+  //const [chooseData, setChooseData] = useState();
+  const [settingVisible, setSettingVisible] = useState(false);
   const changeModalVisible = (bool) => {
-    setIsModalVisible(bool);
+    setSettingVisible(bool);
   };
-  const setData = (data) => {
-    setChooseData(data);
-  };
+  // const setData = (data) => {
+  //   setChooseData(data);
+  // };
   //code cua gia dai
   const signUp = async () => {
     try {
@@ -24,6 +35,7 @@ export default function ManageEmployee({ navigation }) {
         email,
         password
       );
+
       console.log(response);
       const currentUser = auth.currentUser;
       if (currentUser) {
@@ -80,52 +92,59 @@ export default function ManageEmployee({ navigation }) {
   // };
 
   return (
-    <View style={styles.container}>
-      <Text style={styles.label}>Tên nhân viên:</Text>
-      <TextInput
-        style={styles.input}
-        placeholder="Nhập tên"
-        value={fullName}
-        onChangeText={setName}
+    <View>
+      <Text style={{ fontSize: 19, alignSelf: "center" }}>
+        Danh sách nhân viên
+      </Text>
+      {/* display employee list in FlatList */}
+      <FlatList />
+      <Button
+        title="Chỉnh sửa nhân viên"
+        onPress={() => changeModalVisible(true)}
       />
+      <Modal visible={settingVisible}>
+        <View style={styles.container}>
+          <TouchableOpacity
+            style={{ marginLeft: 10 }}
+            onPress={() => changeModalVisible(false)}
+          >
+            <AntDesign name="back" size={28} color="black" />
+          </TouchableOpacity>
+          <Text style={styles.label}>Tên nhân viên:</Text>
+          <TextInput
+            style={styles.input}
+            placeholder="Nhập tên"
+            value={fullName}
+            onChangeText={setName}
+          />
 
-      <Text style={styles.label}>Username:</Text>
-      <TextInput
-        style={styles.input}
-        placeholder="Nhập username"
-        value={email}
-        onChangeText={setEmail}
-      />
+          <Text style={styles.label}>Username:</Text>
+          <TextInput
+            style={styles.input}
+            placeholder="Nhập username"
+            value={email}
+            onChangeText={setEmail}
+          />
 
-      <Text style={styles.label}>Password:</Text>
-      <TextInput
-        style={styles.input}
-        placeholder="Nhập password"
-        value={password}
-        onChangeText={setPassword}
-        secureTextEntry
-      />
+          <Text style={styles.label}>Password:</Text>
+          <TextInput
+            style={styles.input}
+            placeholder="Nhập password"
+            value={password}
+            onChangeText={setPassword}
+            secureTextEntry
+          />
 
-      <View style={styles.buttonContainer}>
-        <Button title="Thêm nhân viên" onPress={() => signUp()} />
-        <Button
-          title="Xóa nhân viên"
-          onPress={handleDeleteEmployee}
-          color="red"
-        />
-      </View>
-      {/* <Modal
-        transparent={true}
-        animationType='fade'
-        visible={isModalVisible}
-        nRequestClose={()=> changeModalVisible(false)}
-      >
-      
-         <ModalManage
-          changeModalVisible={changeModalVisible}
-          setData={setData}
-         />
-      </Modal> */}
+          <View style={styles.buttonContainer}>
+            <Button title="Thêm nhân viên" onPress={() => signUp()} />
+            <Button
+              title="Xóa nhân viên"
+              onPress={handleDeleteEmployee}
+              color="red"
+            />
+          </View>
+        </View>
+      </Modal>
     </View>
   );
 }

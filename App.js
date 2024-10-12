@@ -17,27 +17,24 @@ export default function App() {
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [user, setUser] = useState(null);
 
-  // const checkUser = () => {
-  //   const auth = getAuth(); // Get the Firebase auth instance
-  //   const currentUser = auth.currentUser; // Check if there's a logged-in user
-
-  //   if (currentUser) {
-  //     console.log("User is already logged in:", currentUser.email);
-  //     setUser(currentUser); // Set the user state if the user is logged in
-  //   } else {
-  //     console.log("No user is logged in");
-  //   }
-  // };
-
   // useEffect(() => {
-  //   checkUser(); // Call the checkUser function once on component mount
+  //   onAuthStateChanged(FIREBASE_AUTH, (user) => {
+  //     console.log("user", user);
+  //     setUser(user);
+  //   });
   // }, []);
 
   useEffect(() => {
-    onAuthStateChanged(FIREBASE_AUTH, (user) => {
+    const unsubscribe = onAuthStateChanged(FIREBASE_AUTH, (user) => {
       console.log("user", user);
       setUser(user);
+
+      // Unsubscribe after the first check
+      if (user) {
+        unsubscribe();
+      }
     });
+
     return () => unsubscribe();
   }, []);
   // useEffect(() => {
@@ -109,12 +106,12 @@ export default function App() {
               component={Login}
             />
           )}
-
           <Stack.Screen
             options={{ headerShown: false }}
             name="Login2"
             component={Login}
           />
+
           <Stack.Screen name="Register" component={RegisterScreen} />
         </Stack.Navigator>
       </NavigationContainer>
