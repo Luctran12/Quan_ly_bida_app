@@ -20,6 +20,7 @@ export default function ManageEmployee({ navigation }) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [employeeList, setEmployeeList] = useState([]);
+  const [employeeEmailList, setEmployeeEmailList] = useState([]);
   // const [isModalVisible, setIsModalVisible] = useState(true);
   // const [chooseData, setChooseData] = useState();
   const [settingVisible, setSettingVisible] = useState(false);
@@ -37,6 +38,9 @@ export default function ManageEmployee({ navigation }) {
       const querySnapshot = await getDocs(emailsCollectionRef);
       const employees = querySnapshot.docs.map((doc) => doc.data().name); // Extract "name" field
       setEmployeeList(employees); // Set employee names to state
+      // console.log(employees);
+      const employeesEmail = querySnapshot.docs.map((doc) => doc.data().email);
+      setEmployeeEmailList(employeesEmail);
     } catch (error) {
       console.error("Error fetching employee names:", error);
     }
@@ -79,8 +83,13 @@ export default function ManageEmployee({ navigation }) {
       <FlatList
         data={employeeList}
         keyExtractor={(item, index) => index.toString()}
-        renderItem={({ item }) => (
-          <Text style={styles.employeeName}>{item}</Text> // Display each name
+        renderItem={({ item, index }) => (
+          <View style={styles.employeeContainer}>
+            <Text style={styles.employeeName}>
+              {item} : {employeeEmailList[index]}{" "}
+              {/* Display corresponding email */}
+            </Text>
+          </View>
         )}
       />
       <Button
