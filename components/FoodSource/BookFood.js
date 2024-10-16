@@ -7,16 +7,16 @@ import FoodModal from "./FoodModal";
 //import PostOrderId from "../utils/PostOrderId";
 
 const imageMap = {
-  Kem: require("../../assets/Food/kem.png"),
-  Sting: require("../../assets/Food/sting.png"),
-  Pepsi: require("../../assets/Food/pepsi.png"),
+  "Kem": require("../../assets/Food/kem.png"),
+  "Sting": require("../../assets/Food/sting.png"),
+  "Pepsi": require("../../assets/Food/pepsi.png"),
   "Mì tôm": require("../../assets/Food/mitom.png"),
-  "Trà đá": require("../../assets/Food/trada.png"),
+  "Trà Đá": require("../../assets/Food/trada.png"),
   "Nui xào": require("../../assets/Food/nui.png"),
   "Cà Phê": require("../../assets/Food/cf.png"),
-  "Bạc xỉu": require("../../assets/Food/cfs.png"),
+  "Cà phê sữa": require("../../assets/Food/cfs.png"),
   "Trà sữa": require("../../assets/Food/ts.png"),
-  "Trà đào": require("../../assets/Food/td.png"),
+  "Trà Đào": require("../../assets/Food/td.png"),
 };
 const BookFood = () => {
   const { orderId, tableId } = useOrder();

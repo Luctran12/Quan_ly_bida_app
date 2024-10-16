@@ -3,7 +3,7 @@
     "name": "Quan_ly_bida",
     "slug": "Quan_ly_bida",
     "version": "1.0.0",
-    "orientation": "portrait",
+    "orientation": "orientation",
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "light",
     "splash": {

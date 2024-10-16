@@ -270,6 +270,7 @@ export default function Table({
   // >>>>>>> 9c2c2358eebf06f12ccdfa8d46bc3ecb76cb10af
 
   const handleCheckout = async (timePlay) => {
+    setChangeOrCheckoutVisible(false);
     console.log(isOrderId);
     const url = "/order_table/getTotalCost/" + isOrderId;
     try {

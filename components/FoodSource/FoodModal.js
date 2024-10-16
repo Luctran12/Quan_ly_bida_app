@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, StyleSheet, Modal, TextInput, Button,Platform, Text, Dimensions } from 'react-native';
+import { View, StyleSheet, Modal, TextInput, Button, Text, Dimensions } from 'react-native';
 
 export default function FoodModal({
     isVisible,
@@ -10,128 +10,90 @@ export default function FoodModal({
     onCancel,
     onConfirm,
     nameFood,
-    
 })  {
-    //const nameDisplay= nameFood.toLowerCase();
     return (
-        
         <Modal
             animationType="slide"
             visible={isVisible}
             transparent={true}
-            onRequestClose={true}
+            onRequestClose={onCancel}
         >
-            <View style={styles.popup}>
-                <View style={styles.textFoodContainer}>
-                <Text style={styles.textFood}>Bạn đã chọn {nameFood.toLowerCase()}</Text>
-                </View>
-            
-                <View style={styles.inputQuantityContainer}>
+            <View style={styles.overlay}>
+                <View style={styles.popup}>
+                    <Text style={styles.textFood}>Bạn đã chọn {nameFood.toLowerCase()}</Text>
                     
-                <TextInput
-                    style={styles.inputQuantity}
-                    placeholder="Vui lòng nhập số lượng"
-                    placeholderTextColor="#3399CC"
-                    keyboardType="numeric"
-                    value={quantity}
-                    onChangeText={setQuantity}
-                />
-                </View>
-                <View style={styles.inputTableNumContainer}>
-                <TextInput
-                    style={styles.inputTableNum}
-                    placeholder="Vui lòng nhập số bàn"
-                    placeholderTextColor="#3399CC"
-                    keyboardType="numeric"
-                    value={table}
-                    onChangeText={setTable}
-                />
-                </View>
-                <View style={styles.buttonInPopup}>
-                    <Button
-                        title="Thêm món"
-                        onPress={onConfirm}
+                    <TextInput
+                        style={styles.input}
+                        placeholder="Vui lòng nhập số lượng"
+                        placeholderTextColor="#7f8c8d"
+                        keyboardType="numeric"
+                        value={quantity}
+                        onChangeText={setQuantity}
                     />
-                    <Button
-                        title="Huỷ"
-                        onPress={onCancel}
-                        color="red"
+                    
+                    <TextInput
+                        style={styles.input}
+                        placeholder="Vui lòng nhập số bàn"
+                        placeholderTextColor="#7f8c8d"
+                        keyboardType="numeric"
+                        value={table}
+                        onChangeText={setTable}
                     />
+                    
+                    <View style={styles.buttonContainer}>
+                        <Button
+                            title="Thêm món"
+                            onPress={onConfirm}
+                            color="#27ae60"
+                        />
+                        <Button
+                            title="Huỷ"
+                            onPress={onCancel}
+                            color="#e74c3c"
+                        />
+                    </View>
                 </View>
             </View>
         </Modal>
     );
 };
 
+const { height } = Dimensions.get("window");
 
-
-
-const {height} = Dimensions.get("window")
 const styles = StyleSheet.create({
+    overlay: {
+        flex: 1,
+        justifyContent: "center",
+        backgroundColor: "rgba(0, 0, 0, 0.5)",
+    },
+    popup: {
+        backgroundColor: "#fff",
+        borderRadius: 15,
+        padding: 20,
+        marginHorizontal: 20,
+        justifyContent: "center",
+        alignItems: "center",
+    },
+    textFood: {
+        color: "#2c3e50",
+        fontSize: 18,
+        fontWeight: "600",
+        marginBottom: 15,
+        textAlign: "center",
+    },
     input: {
-        fontSize: 15,
+        width: "100%",
         padding: 10,
         marginVertical: 10,
-    },
-    popup:{
-        backgroundColor:"#FFFFFF",
-        borderRadius: 10,
         borderWidth: 1,
-        borderColor: "#2ecc71",
-        // height: Platform.OS === "android" ? "30%" : "25%",
-        // width: Platform.OS === "android" ? "80%" : "80%%",
-        height: height* 0.3,
-        width: "85%",
-        alignSelf: "center",
-        marginVertical: Platform.OS === "android" ? 100 : 250,
-        justifyContent: "center",
-        
-
+        borderColor: "#bdc3c7",
+        borderRadius: 8,
+        fontSize: 16,
     },
-    inputQuantityContainer: {
-        
-        justifyContent: "center",
-        height: "25%",
+    buttonContainer: {
+        flexDirection: "row",
+        justifyContent: "space-between",
         width: "100%",
-        backgroundColor: "#ecf0f1",
-        alignItems: "center"
-
+        marginTop: 20,
     },
-    inputTableNumContainer:{
-        justifyContent: "center",
-        height: "25%",
-        width: "100%",
-        marginBottom: 10,
-        
-        backgroundColor: "#ecf0f1",
-        alignItems: "center",
-    },
-    buttonInPopup:{
-        flexDirection:"row",
-        justifyContent: "space-around",
-        
-    },
-    inputQuantity: {
-        fontSize: 15,
-        padding: 10,
-    },
-    inputTableNum: {
-        fontSize: 15,
-        padding: 10,
-    },
-    textFoodContainer:{
-        alignItems: "center",
-        padding: 10,
-    },
-    textFood:{
-        color: "#2c3e50",
-        fontSize: 15,
-        fontStyle: "italic",
-        marginBottom: 10,
-    },
-    
-   
-   
 });
-
-

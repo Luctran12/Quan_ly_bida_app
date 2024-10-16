@@ -12,83 +12,68 @@ import {
   View,
 } from "react-native";
 import { FIREBASE_AUTH } from "./firebaseConfig";
+import { LinearGradient } from 'expo-linear-gradient'; // Sử dụng gradient nền
 
 export default function Login({ navigation }) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const auth = FIREBASE_AUTH;
   const signIn = async () => {
-    console.log("========", email);
     try {
       const response = await signInWithEmailAndPassword(auth, email, password);
-      console.log("=======", response);
-      //navigation.navigate("Home");
+      console.log("Login successful", response);
     } catch (error) {
       console.log(error);
       alert("Sign in failed: " + error.message);
     }
   };
+
   return (
     <KeyboardAvoidingView
       behavior={Platform.OS === "ios" ? "padding" : "height"}
       style={styles.container}
     >
       <ScrollView contentContainerStyle={styles.scrollContainer}>
-        {
-          <>
-            <View style={styles.top}>
-              <Image
-                style={styles.logo}
-                source={require("../../assets/LoGo.png")}
+        <LinearGradient
+          colors={['#ffffff', '#B5FFFC']}
+          style={styles.gradientBackground}
+        >
+          <View style={styles.top}>
+            <Image
+              style={styles.logo}
+              source={require("../../assets/LoGo.png")}
+            />
+            <Text style={styles.textTitle}>Welcome Back</Text>
+          </View>
+
+          <View style={styles.mid}>
+            <View style={styles.userInput}>
+              <TextInput
+                style={styles.placeholderText}
+                placeholder="Email"
+                value={email}
+                onChangeText={setEmail}
               />
-              <Text style={styles.textTitle}>Welcome</Text>
             </View>
-
-            <View style={styles.mid}>
-              <View style={styles.userInput}>
-                <TextInput
-                  style={styles.placeholderText}
-                  placeholder="Email"
-                  value={email}
-                  onChangeText={setEmail}
-                />
-              </View>
-              <View style={styles.userInput}>
-                <TextInput
-                  style={styles.placeholderText}
-                  placeholder="Password"
-                  secureTextEntry={true}
-                  value={password}
-                  onChangeText={setPassword}
-                />
-              </View>
-              <View style={styles.buttonMid}>
-                <TouchableOpacity
-                  style={styles.button}
-                  onPress={() => signIn()}
-                >
-                  <Text style={styles.text}>Đăng nhập</Text>
-                </TouchableOpacity>
-                <TouchableOpacity>
-                  <Text style={styles.textForgotPass}>Quên mật khẩu</Text>
-                </TouchableOpacity>
-              </View>
+            <View style={styles.userInput}>
+              <TextInput
+                style={styles.placeholderText}
+                placeholder="Password"
+                secureTextEntry={true}
+                value={password}
+                onChangeText={setPassword}
+              />
             </View>
-
-            <View style={styles.bot}>
-              <View style={styles.buttonBot}>
-                <TouchableOpacity
-                  style={styles.ButCreateNewAcc}
-                  onPress={() => {
-                    navigation.navigate("Register");
-                  }}
-                >
-                  <Text style={styles.txtCreateAcc}>Tạo tài khoản</Text>
-                </TouchableOpacity>
-              </View>
+            <View style={styles.buttonMid}>
+              <TouchableOpacity style={styles.button} onPress={signIn}>
+                <Text style={styles.text}>Đăng nhập</Text>
+              </TouchableOpacity>
+              {/* <TouchableOpacity>
+                <Text style={styles.textForgotPass}>Quên mật khẩu?</Text>
+              </TouchableOpacity> */}
             </View>
-          </>
-        }
+          </View>
+        </LinearGradient>
       </ScrollView>
     </KeyboardAvoidingView>
   );
@@ -97,91 +82,85 @@ export default function Login({ navigation }) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#eed5b2",
     width: "100%",
   },
   scrollContainer: {
     flexGrow: 1,
     justifyContent: "center",
     alignItems: "center",
+  },
+  gradientBackground: {
+    flex: 1,
+    width: "100%",
+    alignItems: "center",
+    justifyContent: "center",
     padding: 20,
   },
   top: {
-    // borderWidth:2,
     alignItems: "center",
-    justifyContent: "center",
-    marginBottom: 20,
+    marginBottom: 40,
   },
   logo: {
-    width: 150,
-    height: 150,
-    marginBottom: 12,
+    width: 120,
+    height: 120,
+    marginBottom: 20,
   },
   textTitle: {
-    fontSize: 40,
+    fontSize: 36,
     fontWeight: "bold",
+    color: "#333",
+    marginBottom: 10,
   },
   mid: {
-    // borderWidth:2,
-    width: "90%",
+    width: "100%",
     alignItems: "center",
   },
   userInput: {
     width: "100%",
     borderBottomWidth: 1,
-    borderRadius: 20,
-    margin: 15,
-    paddingVertical: 10,
     borderColor: "#ccc",
+    marginVertical: 15,
+    paddingVertical: 10,
+    backgroundColor: "#ffffff",
+    borderRadius: 25,
+    paddingHorizontal: 15,
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 5,
+    elevation: 3,
   },
   placeholderText: {
     fontSize: 18,
-    marginLeft: 20,
+    color: "#333",
   },
   buttonMid: {
-    width: "90%",
+    width: "100%",
     alignItems: "center",
-    marginVertical: 10,
+    marginTop: 20,
   },
   button: {
-    backgroundColor: "black",
-    borderRadius: 10,
+    backgroundColor: "#FF6F61",
+    borderRadius: 30,
     width: "100%",
-    borderWidth: 2,
-    height: 40,
-    marginBottom: 8,
+    paddingVertical: 12,
     alignItems: "center",
     justifyContent: "center",
+    marginBottom: 15,
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.3,
+    shadowRadius: 5,
+    elevation: 5,
   },
   text: {
     color: "white",
-    fontSize: 16,
+    fontSize: 18,
+    fontWeight: "bold",
   },
   textForgotPass: {
-    color: "black",
+    color: "#FF6F61",
     textDecorationLine: "underline",
     fontSize: 16,
-  },
-  bot: {
-    // borderWidth:2,
-    marginTop: 50,
-    width: "100%",
-    alignItems: "center",
-  },
-  buttonBot: {
-    width: "80%",
-    alignItems: "center",
-  },
-  ButCreateNewAcc: {
-    width: "100%",
-    height: 40,
-    justifyContent: "center",
-    alignItems: "center",
-    backgroundColor: "black",
-    borderRadius: 10,
-  },
-  txtCreateAcc: {
-    fontSize: 16,
-    color: "white",
   },
 });
