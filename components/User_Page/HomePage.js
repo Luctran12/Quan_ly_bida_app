@@ -52,7 +52,7 @@ export default function HomePage({ navigation }) {
         component={HomeScreen} // Màn hình HomeScreen
       />
       <Stack.Screen
-      options={{headerShown:false}}
+      options={{headerShown:true}}
         name="EditTable"
         component={EditTable}/>
     </Stack.Navigator>
