@@ -13,6 +13,8 @@ import DoanhThuColumn from "./DoanhThuColumn";
 import ManageEmployee from "./ManageEmployee";
 import SettingUser from "./SettingUser";
 import EditTable from "./EditTable";
+// import SettingPage from "./components/User_Page/SettingUser.js";
+import CreateQR from "./CreateQR.js";
 // import EditTable from "./EditTable";
 const Stack = createNativeStackNavigator();
 
@@ -33,6 +35,7 @@ export default function HomePage({ navigation }) {
       />
       <Stack.Screen name="ManagePage" component={ManageEmployee} />
       <Stack.Screen name="Settings" component={SettingUser} />
+      <Stack.Screen name="CreateQR" component={CreateQR} />
       <Stack.Screen name="Revenue" component={DoanhThuColumn} />
       <Stack.Screen
         name="Table"
