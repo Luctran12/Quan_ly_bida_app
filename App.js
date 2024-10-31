@@ -1,64 +1,129 @@
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
-import { onAuthStateChanged } from "firebase/auth";
-import React, { useEffect, useState } from "react";
+import { default as React, useEffect, useState } from "react";
 import { StyleSheet } from "react-native";
+
+import { onAuthStateChanged } from "firebase/auth";
 import { FIREBASE_AUTH } from "./components/Login_Function/firebaseConfig.js";
-import Login from "./components/Login_Function/LoginForm";
-import RegisterScreen from "./components/Login_Function/RegisterForm";
-import HomePage from "./components/User_Page/HomePage";
-import { Provider } from "./components/User_Page/Context.js";
-const Stack = createNativeStackNavigator();
+import Login from "./components/Login_Function/LoginForm.js";
+import RegisterScreen from "./components/Login_Function/RegisterForm.js";
+import HomeScreen from "./components/NhanVienPage/HomeScreen.js";
+import { SettingProvider } from "./components/User_Page/contextAPI/SettingContext.js";
+import HomePage from "./components/User_Page/HomePage.js";
+
 export default function App() {
   const Stack = createNativeStackNavigator();
+  const [emailChecked, setEmailChecked] = useState(false);
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [user, setUser] = useState(null);
+
+  // useEffect(() => {
+  //   onAuthStateChanged(FIREBASE_AUTH, (user) => {
+  //     console.log("user", user);
+  //     setUser(user);
+  //   });
+  // }, []);
+
   useEffect(() => {
-    onAuthStateChanged(FIREBASE_AUTH, (user) => {
+    const unsubscribe = onAuthStateChanged(FIREBASE_AUTH, (user) => {
       console.log("user", user);
       setUser(user);
+
+      // Unsubscribe after the first check
+      if (user) {
+        unsubscribe();
+      }
     });
+
+    return () => unsubscribe();
   }, []);
+  // useEffect(() => {
+  //   const unsubscribe = onAuthStateChanged(FIREBASE_AUTH, (user) => {
+  //      if (user) {
+  //     setUser(user);
+  //     }
+  //     // Optionally, you can unsubscribe after setting the user
+  //      unsubscribe(); // To stop further checks
+  //   });
+
+  //   return () => {
+  //     // Clean up by unsubscribing when the component unmounts
+  //     if (unsubscribe) {
+  //       unsubscribe();
+  //     }
+  //   };
+  // }, []);
   // const changeModalVisible=(bool)=>{
   //   setIsModalVisible(bool)
 
   // }
   return (
-    <Provider>
-    <NavigationContainer>
-      <Stack.Navigator initialRouteName="Login">
-        {/* {user ? ( */}
-        <Stack.Screen
-          options={{ headerShown: false }}
-          name="Home"
-          component={HomePage}
-        />
-        {/* ) : ( */}
-        <Stack.Screen
-          options={{ headerShown: false }}
-          name="Login"
-          component={Login}
-        />
-        {/* )} */}
+    // <OrderProvider>
+    //   <NavigationContainer>
+    //     <Stac.Navigator initialRouteName="UserPage">
+    //       <Stac.Screen name="Home" component={HomeScreen} />
+    //       <Stac.Screen name="UserPage" component={UserPage} />
+    //     </Stac.Navigator>
+    //   </NavigationContainer>
+    // </OrderProvider>
 
-        <Stack.Screen 
-        name="Register" 
-        component={RegisterScreen} 
-        />
-      </Stack.Navigator>
-    </NavigationContainer>
-    </Provider>
+    <SettingProvider>
+      {/* <NavigationContainer>
+        <Stack.Navigator initialRouteName="Login">
+          <Stack.Screen
+            options={{ headerShown: false }}
+            name="Home"
+            component={HomePage}
+          />
+          <Stack.Screen
+            options={{ headerShown: false }}
+            name="Login"
+            component={Login}
+          />
+          <Stack.Screen name="Register" component={RegisterScreen} />
+        </Stack.Navigator>
+      </NavigationContainer> */}
+      <NavigationContainer>
+        <Stack.Navigator initialRouteName="Login">
+          {user ? (
+            user.email === "owner@gmail.com" ? (
+              <Stack.Screen
+                options={{ headerShown: false }}
+                name="Home2" // Updated to "Home2" for the owner
+                component={HomePage}
+              />
+            ) : (
+              <Stack.Screen
+                options={{ headerShown: false }}
+                name="Home" // Updated to "Home" for non-owner users
+                component={HomeScreen}
+              />
+            )
+          ) : (
+            <Stack.Screen
+              options={{ headerShown: false }}
+              name="Login"
+              component={Login}
+            />
+          )}
+          <Stack.Screen
+            options={{ headerShown: false }}
+            name="Login2"
+            component={Login}
+          />
+
+          <Stack.Screen name="Register" component={RegisterScreen} />
+        </Stack.Navigator>
+      </NavigationContainer>
+    </SettingProvider>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "white",
-    alignItems: "center",
     justifyContent: "center",
-    // paddingTop: 50,
-
-    // borderWidth:2
+    alignItems: "center",
+    backgroundColor: "#fff",
   },
 });

@@ -1,81 +1,92 @@
-import React, { useState, createContext} from 'react';
-import { View, Text, TextInput, Button, Image, TouchableOpacity, StyleSheet } from 'react-native';
-import { createNativeStackNavigator } from "@react-navigation/native-stack";
-import HomePage from './HomePage';
-import { useSetting } from './Context';
-// export const inforContext = createContext()
-// Mục tiêu là làm sao khi thay đổi xog thì phải trở về HomePage
-// const Stack = createNativeStackNavigator();
-// export default  SettingPage =({navigation})=>{
-//   return(
-//   <Stack.Navigator initialRouteName="SettingNav">
-//     <Stack.Screen 
-//       options={{ headerShown: false }}
-//       name="SettingNav" component={SettingNav}
-//     />
-//     <Stack.Screen 
-//       name="Home" component={HomePage}
-//     />
+import React, { useState } from "react";
+import {
+  View,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  Image,
+  StyleSheet,
+  KeyboardAvoidingView,
+} from "react-native";
+import { useSetting } from "./contextAPI/SettingContext";
+import { LinearGradient } from "expo-linear-gradient"; // Expo Linear Gradient
 
-   
+const SettingPage = (navigation) => {
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
+  const [selectedAvatar, setSelectedAvatar] = useState(null);
+  const { setName, setSex } = useSetting();
 
-//   </Stack.Navigator>
-//   );
-// }
-export default SettingPage = ({navigation}) => {
-  const [username, setUsername] = useState('John Doe');
-  const [password, setPassword] = useState('******');
-  const [selectedAvatar, setSelectedAvatar] = useState('../../assets/headerAvata.png');
-  const {setName}= useSetting()
   const avatars = {
-    male: '../../assets/headerAvata.png', // Đường dẫn đến ảnh nam
-    female: require('../../assets/FemaleAvata.png'), // Đường dẫn đến ảnh nữ
+    male: require("../../assets/headerAvata.png"),
+    female: require("../../assets/FemaleAvata.png"),
   };
 
   const handleSaveChanges = () => {
-    // Lưu thông tin người dùng
-    navigation.navigate("Home")
-    console.log('Username:', username);
-    console.log('Password:', password);
-    console.log('Selected Avatar:', selectedAvatar);
-    alert('Thông tin đã được lưu!');
+    console.log("Username:", username);
+    console.log("Password:", password);
+    console.log("Selected Avatar:", selectedAvatar);
+    alert("Thông tin đã được lưu!");
   };
 
   return (
-    
-    
     <View style={styles.container}>
-      <Text style={styles.title}>Cài Đặt Tài Khoản</Text>
-      
+      {/* <Text style={styles.title}>Cài Đặt Tài Khoản</Text> */}
+
       {/* Avatar Section */}
       <Text style={styles.label}>Chọn ảnh đại diện:</Text>
       <View style={styles.avatarContainer}>
-        <TouchableOpacity onPress={() => setSelectedAvatar(avatars.male)}>
-          <Image source={require('../../assets/headerAvata.png')} style={[styles.avatar, selectedAvatar === avatars.male && styles.selected]} />
-          <Text>Nam</Text>
+        <TouchableOpacity
+          onPress={() => {
+            setSelectedAvatar(avatars.male);
+            setSex("male");
+          }}
+          style={styles.avatarWrapper}
+        >
+          <Image
+            source={avatars.male}
+            style={[
+              styles.avatar,
+              selectedAvatar === avatars.male && styles.selected,
+            ]}
+          />
+          <Text style={styles.avatarLabel}>Nam</Text>
         </TouchableOpacity>
-        <TouchableOpacity onPress={() => setSelectedAvatar(avatars.female)}>
-          <Image source={avatars.female} style={[styles.avatar, selectedAvatar === avatars.female && styles.selected]} />
-          <Text>Nữ</Text>
+
+        <TouchableOpacity
+          onPress={() => {
+            setSelectedAvatar(avatars.female);
+            setSex("female");
+          }}
+          style={styles.avatarWrapper}
+        >
+          <Image
+            source={avatars.female}
+            style={[
+              styles.avatar,
+              selectedAvatar === avatars.female && styles.selected,
+            ]}
+          />
+          <Text style={styles.avatarLabel}>Nữ</Text>
         </TouchableOpacity>
       </View>
 
       {/* Username Section */}
       <Text style={styles.label}>Tên người dùng:</Text>
       <TextInput
+        placeholder="Nhập tên mới"
         style={styles.input}
         value={username}
-        // onChangeText={setName}
-        onChangeText={text => {
+        onChangeText={(text) => {
           setUsername(text);
-          setName(text); // Cập nhật name trong context
+          setName(text);
         }}
-        
       />
 
       {/* Password Section */}
       <Text style={styles.label}>Mật khẩu:</Text>
       <TextInput
+        placeholder="******"
         style={styles.input}
         value={password}
         onChangeText={setPassword}
@@ -83,16 +94,10 @@ export default SettingPage = ({navigation}) => {
       />
 
       {/* Save Button */}
-      <Button title="Lưu thay đổi" onPress={()=>
-        {
-          
-          // navigation.navigate("AdminHome");
-          navigation.goBack();
-        }
-        } 
-        />
+      <TouchableOpacity style={styles.saveButton} onPress={handleSaveChanges}>
+        <Text style={styles.saveButtonText}>Lưu Thay Đổi</Text>
+      </TouchableOpacity>
     </View>
-    
   );
 };
 
@@ -100,41 +105,76 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     padding: 20,
-    backgroundColor: '#fff',
+    //justifyContent: 'center',
+    //alignItems: 'center',
   },
   title: {
-    fontSize: 24,
-    fontWeight: 'bold',
-    marginBottom: 20,
-    textAlign: 'center',
+    fontSize: 28,
+    fontWeight: "bold",
+    marginBottom: 10,
+    color: "#333",
   },
   label: {
-    fontSize: 16,
-    fontWeight: 'bold',
-    marginTop: 10,
+    fontSize: 18,
+    fontWeight: "600",
+    marginTop: 5,
+    marginBottom: 10,
+
+    color: "#333",
   },
   input: {
     borderWidth: 1,
-    borderColor: '#ccc',
-    padding: 10,
-    borderRadius: 5,
-    marginTop: 5,
-    marginBottom: 15,
+    borderColor: "#ddd",
+    padding: 15,
+    borderRadius: 10,
+    backgroundColor: "#fff",
+    width: "100%",
+    marginVertical: 10,
+    fontSize: 16,
   },
   avatarContainer: {
-    flexDirection: 'row',
-    justifyContent: 'space-around',
-    marginBottom: 20,
+    flexDirection: "row",
+    justifyContent: "space-around",
+    marginTop: 10,
+    marginBottom: 30,
+    width: "100%",
+  },
+  avatarWrapper: {
+    alignItems: "center",
   },
   avatar: {
-    width: 100,
-    height: 100,
-    borderRadius: 50,
+    width: 120,
+    height: 120,
+    borderRadius: 60,
     borderWidth: 2,
-    borderColor: 'transparent',
+    borderColor: "transparent",
+    marginBottom: 10,
   },
   selected: {
-    borderColor: '#007bff',
+    borderColor: "#007bff",
+    shadowColor: "#007bff",
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.8,
+    shadowRadius: 10,
+  },
+  avatarLabel: {
+    fontSize: 16,
+    fontWeight: "500",
+    color: "#333",
+  },
+  saveButton: {
+    backgroundColor: "#007bff",
+    paddingVertical: 15,
+    paddingHorizontal: 40,
+    borderRadius: 30,
+    marginTop: 10,
+    width: "100%",
+    alignItems: "center",
+  },
+  saveButtonText: {
+    color: "#fff",
+    fontSize: 18,
+    fontWeight: "600",
   },
 });
-
+export default SettingPage;

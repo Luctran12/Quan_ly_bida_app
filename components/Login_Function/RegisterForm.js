@@ -1,13 +1,14 @@
+import { createUserWithEmailAndPassword } from "firebase/auth";
+import { doc, setDoc } from "firebase/firestore";
 import React, { useState } from "react";
 import {
-  View,
+  StyleSheet,
   Text,
   TextInput,
   TouchableOpacity,
-  StyleSheet,
+  View,
 } from "react-native";
-import { FIREBASE_AUTH } from "./firebaseConfig";
-import { createUserWithEmailAndPassword } from "firebase/auth";
+import { FIREBASE_AUTH, FIRESTORE_DB } from "./firebaseConfig";
 
 export default function RegisterScreen({ navigation }) {
   const [email, setEmail] = useState("");
@@ -20,6 +21,9 @@ export default function RegisterScreen({ navigation }) {
         email,
         password
       );
+      await setDoc(doc(FIRESTORE_DB, "emails", response.user.uid), {
+        email: email,
+      });
       console.log(response);
       alert("Success create account");
       // navigation.navigate("Login");
@@ -55,7 +59,7 @@ export default function RegisterScreen({ navigation }) {
 
       <TouchableOpacity
         onPress={() => {
-          navigation.navigate("Login");
+          navigation.navigate("Login2");
         }}
       >
         <Text style={styles.linkText}>Quay lại</Text>
