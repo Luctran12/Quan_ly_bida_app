@@ -1,15 +1,14 @@
+import { createUserWithEmailAndPassword } from "firebase/auth";
+import { doc, setDoc } from "firebase/firestore";
 import React, { useState } from "react";
 import {
-  View,
+  StyleSheet,
   Text,
   TextInput,
   TouchableOpacity,
-  StyleSheet,
+  View,
 } from "react-native";
-import { FIREBASE_AUTH } from "./firebaseConfig";
-import { FIRESTORE_DB } from "./firebaseConfig";
-import { doc, getDoc, setDoc } from "firebase/firestore";
-import { createUserWithEmailAndPassword } from "firebase/auth";
+import { FIREBASE_AUTH, FIRESTORE_DB } from "./firebaseConfig";
 
 export default function RegisterScreen({ navigation }) {
   const [email, setEmail] = useState("");
@@ -60,7 +59,7 @@ export default function RegisterScreen({ navigation }) {
 
       <TouchableOpacity
         onPress={() => {
-          navigation.navigate("Login");
+          navigation.navigate("Login2");
         }}
       >
         <Text style={styles.linkText}>Quay lại</Text>

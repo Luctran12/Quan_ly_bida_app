@@ -1,15 +1,31 @@
 import FontAwesome6 from "@expo/vector-icons/FontAwesome6";
+import { LinearGradient } from "expo-linear-gradient";
+import { Ionicons } from "@expo/vector-icons";
 import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
 import Octicons from "@expo/vector-icons/Octicons";
 import SimpleLineIcons from "@expo/vector-icons/SimpleLineIcons";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
+import React, { useState } from "react";
 import { Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import HomeScreen from "../NhanVienPage/HomeScreen";
+import { useSetting } from "./contextAPI/SettingContext";
 import DoanhThuColumn from "./DoanhThuColumn";
 import ManageEmployee from "./ManageEmployee";
 import SettingUser from "./SettingUser";
-import Test from "./test";
+import EditTable from "./EditTable";
+// import SettingPage from "./components/User_Page/SettingUser.js";
+import CreateQR from "./CreateQR.js";
+// import EditTable from "./EditTable";
 const Stack = createNativeStackNavigator();
+
+const imageMap = {
+  male: require("../../assets/headerAvata.png"),
+  female: require("../../assets/FemaleAvata.png"),
+};
+
 export default function HomePage({ navigation }) {
+  const [nameHome, setNameHome] = useState();
+
   return (
     <Stack.Navigator initialRouteName="AdminHome">
       <Stack.Screen
@@ -17,43 +33,37 @@ export default function HomePage({ navigation }) {
         name="AdminHome"
         component={AdminHome}
       />
+      <Stack.Screen name="ManagePage" component={ManageEmployee} />
+      <Stack.Screen name="Settings" component={SettingUser} />
+      <Stack.Screen name="CreateQR" component={CreateQR} />
+      <Stack.Screen name="Revenue" component={DoanhThuColumn} />
       <Stack.Screen
-        //options={{ headerShown: false }}
-        name="ManagePage"
-        component={ManageEmployee}
+        name="Table"
+        component={TableManagementScreen} // Màn hình chọn quản lý bàn
       />
       <Stack.Screen
-        //options={{ headerShown: false }}
-        name="Settings"
-        component={SettingUser}
+        options={{ headerShown: false }}
+        name="HomeScreen"
+        component={HomeScreen} // Màn hình HomeScreen
       />
       <Stack.Screen
-        //options={{ headerShown: false }}
-        name="Revenue"
-        component={DoanhThuColumn}
+        options={{ headerShown: false }}
+        name="EditTable"
+        component={EditTable}
       />
-      <Stack.Screen
-        //options={{ headerShown: false }}
-        name="Test"
-        component={Test}
-      />
-      {/* <Stack.Screen name="Settings" component={SettingUser} />  */}
     </Stack.Navigator>
   );
 }
-function AdminHome({ navigation }) {
-  var x = "hello";
-  {
-    console.log(x);
-  }
-  return (
-    // <Tab.Navigator>
 
+function AdminHome({ navigation }) {
+  const { name, sex } = useSetting();
+
+  return (
     <View style={styles.container}>
       <View style={styles.header}>
         <View style={styles.headerSide}>
           <Text style={styles.headerTitle}>CHỦ QUÁN</Text>
-          <Text style={styles.headerText}>Nguyen Van A</Text>
+          <Text style={styles.headerText}>{name}</Text>
         </View>
         <View
           style={{
@@ -62,15 +72,11 @@ function AdminHome({ navigation }) {
             width: 120,
             justifyContent: "center",
             alignItems: "center",
-            //borderRadius: "50%",
             backgroundColor: "gray",
           }}
         >
           <View style={styles.headerSide}>
-            <Image
-              source={require("../../assets/headerAvata.png")}
-              style={styles.headerAvata}
-            />
+            <Image source={imageMap[sex]} style={styles.headerAvata} />
           </View>
         </View>
       </View>
@@ -106,7 +112,7 @@ function AdminHome({ navigation }) {
       <View style={styles.gridContainerSecondRow}>
         <TouchableOpacity
           style={styles.gridItems}
-          onPress={() => navigation.navigate("Test")}
+          onPress={() => navigation.navigate("Table")}
         >
           <MaterialCommunityIcons
             name="table-furniture"
@@ -133,13 +139,43 @@ function AdminHome({ navigation }) {
         </TouchableOpacity>
       </View>
     </View>
-    // </Tab.Navigator>
   );
 }
+
+function TableManagementScreen({ navigation }) {
+  return (
+    <LinearGradient colors={["#f0f8ff", "#ffffff"]} style={styles.tableMange}>
+      <View style={styles.header}>
+        <Text style={styles.headerTableManage}>Quản Lý Bàn</Text>
+      </View>
+
+      <TouchableOpacity
+        style={styles.buttonManage}
+        onPress={() => navigation.navigate("HomeScreen", { isOwner: true })}
+      >
+        <Ionicons name="clipboard-outline" size={24} color="white" />
+        <Text style={styles.buttonText}>Quản Lý Bàn</Text>
+      </TouchableOpacity>
+
+      <TouchableOpacity
+        style={styles.buttonEditTable}
+        onPress={() => navigation.navigate("EditTable")}
+      >
+        <Ionicons name="add-circle-outline" size={24} color="white" />
+        <Text style={styles.buttonText}>Thêm/Xoá Bàn</Text>
+      </TouchableOpacity>
+
+      <View style={styles.footer}>
+        <Text style={styles.footerText}>Hãy chọn một chức năng để bắt đầu</Text>
+      </View>
+    </LinearGradient>
+  );
+}
+
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#7bc0b9",
+    backgroundColor: "#e6f5fa",
     padding: 20,
     height: "100%",
     width: "100%",
@@ -147,21 +183,17 @@ const styles = StyleSheet.create({
   header: {
     marginTop: 50,
     alignItems: "center",
-    //justifyContent: "space-between",
     marginBottom: 60,
     flexDirection: "row",
-    //backgroundColor: "#71ebdf",
   },
   headerSide: {
     flex: 1,
     alignItems: "center",
-    // borderWidth:2,
-    // borderColor:'red',
   },
   headerTitle: {
     fontSize: 30,
     fontWeight: "bold",
-    color: "#333",
+    color: "#2e86ab", // Màu chữ xanh đồng bộ
   },
   headerText: {
     fontSize: 20,
@@ -172,32 +204,87 @@ const styles = StyleSheet.create({
     width: 100,
     height: 100,
     resizeMode: "contain",
-    //backgroundColor: "gray",
   },
   gridContainerFistRow: {
-    //borderWidth: 2,
-    //borderColor: "black"
     flexDirection: "row",
-    //flexWrap: "wrap",
     justifyContent: "space-around",
+    marginBottom: 20,
+    marginTop: 20,
   },
   gridContainerSecondRow: {
-    //borderWidth: 2,
-    //borderColor: "black"
     flexDirection: "row",
-    //flexWrap: "wrap",
     justifyContent: "space-around",
   },
   gridItems: {
-    height: 190,
-    width: 160,
+    height: 170,
+    width: 140,
     justifyContent: "center",
     alignItems: "center",
     borderWidth: 1,
-    marginBottom: 40,
+    borderColor: "#ccc",
     backgroundColor: "white",
-    borderRadius: 20,
-    //marginTop: 30,
-    // elevation: 10,
+    borderRadius: 15,
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 4,
+    elevation: 5,
+    marginBottom: 20,
+  },
+  tableMange: {
+    flex: 1,
+    //justifyContent: 'center',
+    alignItems: "center",
+  },
+  headerTableManage: {
+    fontSize: 24,
+    fontWeight: "bold",
+    color: "#333",
+  },
+  buttonManage: {
+    flexDirection: "row",
+    alignItems: "center",
+    backgroundColor: "#1e90ff",
+    paddingVertical: 15,
+    paddingHorizontal: 25,
+    borderRadius: 30,
+    marginVertical: 10,
+    width: "80%",
+    justifyContent: "center",
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.3,
+    shadowRadius: 5,
+    elevation: 5,
+  },
+  buttonEditTable: {
+    flexDirection: "row",
+    alignItems: "center",
+    backgroundColor: "#32cd32",
+    paddingVertical: 15,
+    paddingHorizontal: 25,
+    borderRadius: 30,
+    marginVertical: 10,
+    width: "80%",
+    justifyContent: "center",
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.3,
+    shadowRadius: 5,
+    elevation: 5,
+  },
+  buttonText: {
+    color: "#ffffff",
+    fontSize: 18,
+    marginLeft: 10,
+    textAlign: "center",
+  },
+  footer: {
+    marginTop: 40,
+    alignItems: "center",
+  },
+  footerText: {
+    fontSize: 16,
+    color: "#666",
   },
 });
