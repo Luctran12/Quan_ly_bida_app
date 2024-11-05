@@ -38,6 +38,7 @@ export default function Table({
   const [isOrderId, setIsOrderId] = useState();
   const [foodData,setFoodData] = useState([]);
   const[billVisiable, setBillVisiable] = useState(false);
+  const [totalCash, setTotalCash]= useState()
 
   // useEffect(() => {
   //   console.log("Start Time Req:", startTimeReq);
@@ -285,6 +286,7 @@ export default function Table({
         Math.round((elapsedTime / (60000 * 60)) * cost) +
         parseInt(response.data.result);
       console.log("Cash: " + totalCash);
+      setTotalCash(totalCash);
       console.log("mon an: ")
       setFoodData(response2.data.result.orderFoodItems)
       console.log("foood Data:",response2.data.result.orderFoodItems)
@@ -309,7 +311,7 @@ export default function Table({
       console.log(Error);
     }
     
-  };
+  };  
   //   const handleReset = () => {
   //     setElapsedTime(0); // Đặt lại thời gian
   //     setStartTime(null); // Đặt lại thời gian bắt đầu
@@ -473,6 +475,7 @@ export default function Table({
     elapsedTime={elapsedTime}
     foodData={foodData}
     checkoutAndTurnOffModal={checkoutAndTurnOffModal}
+    totalCash={totalCash}
     />
     </View>
   );

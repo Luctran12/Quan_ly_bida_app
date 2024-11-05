@@ -45,6 +45,8 @@ const BookFood = () => {
   };
 
   const addFood = async () => {
+    setQuantity("");
+    setTable("");
     if (
       !quantity ||
       parseInt(quantity) <= 0 ||
@@ -83,8 +85,7 @@ const BookFood = () => {
         });
         console.log("==========success==========", response.data);
 
-        setQuantity("");
-        setTable("");
+        
       }
     } catch (error) {
       Alert.alert("thông báo, có lỗi xảy ra!?");
