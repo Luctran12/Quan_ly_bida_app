@@ -1,18 +1,21 @@
+import { Ionicons } from "@expo/vector-icons";
 import FontAwesome6 from "@expo/vector-icons/FontAwesome6";
-import { LinearGradient } from 'expo-linear-gradient'; 
-import { Ionicons } from '@expo/vector-icons'; 
 import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
 import Octicons from "@expo/vector-icons/Octicons";
 import SimpleLineIcons from "@expo/vector-icons/SimpleLineIcons";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
+import { LinearGradient } from "expo-linear-gradient";
 import React, { useState } from "react";
 import { Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import HomeScreen from "../NhanVienPage/HomeScreen";
 import { useSetting } from "./contextAPI/SettingContext";
 import DoanhThuColumn from "./DoanhThuColumn";
+import EditTable from "./EditTable";
 import ManageEmployee from "./ManageEmployee";
 import SettingUser from "./SettingUser";
-import EditTable from "./EditTable";
+// import SettingPage from "./components/User_Page/SettingUser.js";
+import CreateQR from "./CreateQR.js";
+// import EditTable from "./EditTable";
 const Stack = createNativeStackNavigator();
 
 const imageMap = {
@@ -30,31 +33,24 @@ export default function HomePage({ navigation }) {
         name="AdminHome"
         component={AdminHome}
       />
-      <Stack.Screen
-        name="ManagePage"
-        component={ManageEmployee}
-      />
-      <Stack.Screen
-        name="Settings"
-        component={SettingUser}
-      />
-      <Stack.Screen
-        name="Revenue"
-        component={DoanhThuColumn}
-      />
+      <Stack.Screen name="ManagePage" component={ManageEmployee} />
+      <Stack.Screen name="Settings" component={SettingUser} />
+      <Stack.Screen name="CreateQR" component={CreateQR} />
+      <Stack.Screen name="Revenue" component={DoanhThuColumn} />
       <Stack.Screen
         name="Table"
         component={TableManagementScreen} // Màn hình chọn quản lý bàn
       />
       <Stack.Screen
-      options={{headerShown:false}}
+        options={{ headerShown: false }}
         name="HomeScreen"
         component={HomeScreen} // Màn hình HomeScreen
       />
       <Stack.Screen
-      options={{headerShown:true}}
+        options={{ headerShown: false }}
         name="EditTable"
-        component={EditTable}/>
+        component={EditTable}
+      />
     </Stack.Navigator>
   );
 }
@@ -80,10 +76,7 @@ function AdminHome({ navigation }) {
           }}
         >
           <View style={styles.headerSide}>
-            <Image
-              source={imageMap[sex]}
-              style={styles.headerAvata}
-            />
+            <Image source={imageMap[sex]} style={styles.headerAvata} />
           </View>
         </View>
       </View>
@@ -119,9 +112,7 @@ function AdminHome({ navigation }) {
       <View style={styles.gridContainerSecondRow}>
         <TouchableOpacity
           style={styles.gridItems}
-          onPress={() =>
-            navigation.navigate("Table") 
-          }
+          onPress={() => navigation.navigate("Table")}
         >
           <MaterialCommunityIcons
             name="table-furniture"
@@ -152,7 +143,7 @@ function AdminHome({ navigation }) {
 
 function TableManagementScreen({ navigation }) {
   return (
-    <LinearGradient colors={['#f0f8ff', '#ffffff']} style={styles.tableMange}>
+    <LinearGradient colors={["#f0f8ff", "#ffffff"]} style={styles.tableMange}>
       <View style={styles.header}>
         <Text style={styles.headerTableManage}>Quản Lý Bàn</Text>
       </View>
@@ -183,7 +174,7 @@ function TableManagementScreen({ navigation }) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#e6f5fa", 
+    backgroundColor: "#e6f5fa",
     padding: 20,
     height: "100%",
     width: "100%",
@@ -216,8 +207,8 @@ const styles = StyleSheet.create({
   gridContainerFistRow: {
     flexDirection: "row",
     justifyContent: "space-around",
-    marginBottom: 20, 
-    marginTop:20,
+    marginBottom: 20,
+    marginTop: 20,
   },
   gridContainerSecondRow: {
     flexDirection: "row",
@@ -234,7 +225,7 @@ const styles = StyleSheet.create({
     borderRadius: 15,
     shadowColor: "#000",
     shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.1, 
+    shadowOpacity: 0.1,
     shadowRadius: 4,
     elevation: 5,
     marginBottom: 20,
@@ -242,57 +233,57 @@ const styles = StyleSheet.create({
   tableMange: {
     flex: 1,
     //justifyContent: 'center',
-    alignItems: 'center',
+    alignItems: "center",
   },
   headerTableManage: {
     fontSize: 24,
-    fontWeight: 'bold',
-    color: '#333',
+    fontWeight: "bold",
+    color: "#333",
   },
   buttonManage: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    backgroundColor: '#1e90ff',  
+    flexDirection: "row",
+    alignItems: "center",
+    backgroundColor: "#1e90ff",
     paddingVertical: 15,
     paddingHorizontal: 25,
     borderRadius: 30,
     marginVertical: 10,
-    width: '80%',
-    justifyContent: 'center',
-    shadowColor: '#000',
+    width: "80%",
+    justifyContent: "center",
+    shadowColor: "#000",
     shadowOffset: { width: 0, height: 4 },
     shadowOpacity: 0.3,
     shadowRadius: 5,
     elevation: 5,
   },
   buttonEditTable: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    backgroundColor: '#32cd32',  
+    flexDirection: "row",
+    alignItems: "center",
+    backgroundColor: "#32cd32",
     paddingVertical: 15,
     paddingHorizontal: 25,
     borderRadius: 30,
     marginVertical: 10,
-    width: '80%',
-    justifyContent: 'center',
-    shadowColor: '#000',
+    width: "80%",
+    justifyContent: "center",
+    shadowColor: "#000",
     shadowOffset: { width: 0, height: 4 },
     shadowOpacity: 0.3,
     shadowRadius: 5,
     elevation: 5,
   },
   buttonText: {
-    color: '#ffffff',
+    color: "#ffffff",
     fontSize: 18,
     marginLeft: 10,
-    textAlign: 'center',
+    textAlign: "center",
   },
   footer: {
     marginTop: 40,
-    alignItems: 'center',
+    alignItems: "center",
   },
   footerText: {
     fontSize: 16,
-    color: '#666',
+    color: "#666",
   },
 });
