@@ -13,7 +13,8 @@ const firebaseConfig = {
 };
 
 export const FIREBASE_APP = initializeApp(firebaseConfig);
-
 export const FIREBASE_AUTH = getAuth(FIREBASE_APP);
 export const FIRESTORE_DB = getFirestore(FIREBASE_APP);
-export const emailsRef = collection(FIRESTORE_DB, "emails");
+// export const emailsRef = collection(FIRESTORE_DB, "emails");
+// export const bankAccountRef = collection(FIRESTORE_DB, "bankAccounts");
+// 2 line above is clean code if in the future we want to make the code more clean
