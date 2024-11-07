@@ -1,6 +1,6 @@
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { useEffect, useState } from "react";
-import { Alert, StyleSheet, Text, TouchableOpacity, View, Modal, Button } from "react-native";
+import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { useOrder } from "../context/OrderContext";
 import request from "../utils/request";
 import ChangeOrCheckoutModal from "./ChangeOrCheckoutModal";
@@ -24,7 +24,7 @@ export default function Table({
   const [endTime, setEndTime] = useState("");
   const [totalTime, setTotalTime] = useState("");
   const [startTimeReq, setStartTimeReq] = useState("");
-  const { setOrderId,food, setTableId } = useOrder(); //bien thay doi gia tri orderId
+  const { setOrderId, food, setTableId } = useOrder(); //bien thay doi gia tri orderId
   const [available, setAvailable] = useState(false);
   const [startTime, setStartTime] = useState(0); // Lưu thời gian bắt đầu
   const [elapsedTime, setElapsedTime] = useState(0); // Thời gian đã trôi qua
@@ -36,9 +36,9 @@ export default function Table({
     useState(false);
   const [selectedTable, setSelectedTable] = useState();
   const [isOrderId, setIsOrderId] = useState();
-  const [foodData,setFoodData] = useState([]);
-  const[billVisiable, setBillVisiable] = useState(false);
-  const [totalCash, setTotalCash]= useState()
+  const [foodData, setFoodData] = useState([]);
+  const [billVisiable, setBillVisiable] = useState(false);
+  const [totalCash, setTotalCash] = useState();
 
   // useEffect(() => {
   //   console.log("Start Time Req:", startTimeReq);
@@ -170,7 +170,7 @@ export default function Table({
       2,
       "0"
     )}:${String(seconds).padStart(2, "0")}`;
-   // console.log(typeof time);
+    // console.log(typeof time);
     return time;
   }
 
@@ -214,12 +214,13 @@ export default function Table({
     handleStop();
   }
 
-  const checkoutAndTurnOffModal =  () => {
-    setBillVisiable(false)
+  const checkoutAndTurnOffModal = () => {
+    console.log("=== handle checkout and turnoff modal");
+    setBillVisiable(false);
     handleResetAllStatus();
     setChangeOrCheckoutVisible(false);
     // setCheckoutStatus(Math.random());
-     delay(10000);
+    delay(10000);
     postStatus();
   };
   // =======
@@ -270,32 +271,45 @@ export default function Table({
   //   });
   // >>>>>>> 9c2c2358eebf06f12ccdfa8d46bc3ecb76cb10af
 
-  const handleCheckout = async  (timePlay) => {
+  const handleCheckout = async (timePlay) => {
     setChangeOrCheckoutVisible(false);
     console.log(isOrderId);
     const url = "/order_table/getTotalCost/" + isOrderId;
     const url2 = "/order_table/findById/" + isOrderId;
-    
-    console.log("-----: ", billVisiable)
-    
+
+    console.log("-----: ", billVisiable);
+
     try {
-      const response =  await request.get(url);
-      const response2 =  await request.get(url2);
+      const response = await request.get(url);
+      const response2 = await request.get(url2);
       console.log("==========> total: ", response.data?.result);
       const totalCash =
         Math.round((elapsedTime / (60000 * 60)) * cost) +
         parseInt(response.data.result);
       console.log("Cash: " + totalCash);
       setTotalCash(totalCash);
-      console.log("mon an: ")
-      setFoodData(response2.data.result.orderFoodItems)
-      console.log("foood Data:",response2.data.result.orderFoodItems)
-      response2.data.result.orderFoodItems.forEach(item =>{console.log(item)})
+      console.log("mon an: ");
+      setFoodData(response2.data.result.orderFoodItems);
+      console.log("foood Data:", response2.data.result.orderFoodItems);
+      response2.data.result.orderFoodItems.forEach((item) => {
+        console.log(item);
+      });
       setCash(totalCash);
-      console.log("thong tin bill: " + startTimeReq +" " + convertMillisecondsToTime(startTime + elapsedTime) + " " + " " +  convertElapsedToTime(elapsedTime)
-        + "Tong cong " +totalCash + "Tien mon an: " + response.data.result )
+      console.log(
+        "thong tin bill: " +
+          startTimeReq +
+          " " +
+          convertMillisecondsToTime(startTime + elapsedTime) +
+          " " +
+          " " +
+          convertElapsedToTime(elapsedTime) +
+          "Tong cong " +
+          totalCash +
+          "Tien mon an: " +
+          response.data.result
+      );
       // Alert.alert("tính tiền", "thong tin bill: " + "thoi gian bat dau" + startTimeReq +" \nthoi gian ket thuc " + convertMillisecondsToTime(startTime + elapsedTime) + " " + "\ntong thoi gian" +  convertElapsedToTime(elapsedTime)
-      //   + "\nTong cong " +totalCash 
+      //   + "\nTong cong " +totalCash
       //   , [
       //   {
       //     text: "Hủy",
@@ -310,8 +324,7 @@ export default function Table({
     } catch (Error) {
       console.log(Error);
     }
-    
-  };  
+  };
   //   const handleReset = () => {
   //     setElapsedTime(0); // Đặt lại thời gian
   //     setStartTime(null); // Đặt lại thời gian bắt đầu
@@ -361,7 +374,7 @@ export default function Table({
         totalTime: totalTime,
         date: date,
       });
-      console.log("========response status: " + response.data.result);
+      console.log("========response status: " + JSON.stringify(response.data));
     } catch (Error) {
       console.log("Loi roi ku");
     }
@@ -468,15 +481,15 @@ export default function Table({
         handleChangeTable={handleChangeTable}
         handleResetAllStatuss={handleResetAllStatus}
       />
-    <BillModal
-    visible={billVisiable}
-    startTime={startTime}
-    startTimeReq={startTimeReq}
-    elapsedTime={elapsedTime}
-    foodData={foodData}
-    checkoutAndTurnOffModal={checkoutAndTurnOffModal}
-    totalCash={totalCash}
-    />
+      <BillModal
+        visible={billVisiable}
+        startTime={startTime}
+        startTimeReq={startTimeReq}
+        elapsedTime={elapsedTime}
+        foodData={foodData}
+        checkoutAndTurnOffModal={checkoutAndTurnOffModal}
+        totalCash={totalCash}
+      />
     </View>
   );
 }

@@ -1,7 +1,8 @@
 import { useNavigation } from "@react-navigation/native";
-import React, { useState } from "react";
+import axios from "axios";
+import { collection, getDocs } from "firebase/firestore";
+import React, { useEffect, useState } from "react";
 import {
-  ActivityIndicator,
   Button,
   FlatList,
   Image,
@@ -11,7 +12,7 @@ import {
   View,
 } from "react-native";
 import { useOrder } from "../context/OrderContext";
-import axios from "axios";
+import { FIRESTORE_DB } from "../Login_Function/firebaseConfig";
 export const BillModal = ({
   visible,
   startTime,
@@ -24,20 +25,43 @@ export const BillModal = ({
   const [imageUrl, setImageUrl] = useState(null);
   const [loading, setLoading] = useState(true);
   const navigation = useNavigation();
-
+  const [name, setName] = useState("");
+  const [accNumber, setAccNumber] = useState("");
+  const [bankID, setBankID] = useState();
 
   const handleCheckout = () => {
     checkoutAndTurnOffModal();
     setLoading(true);
-  }
+  };
 
+  useEffect(() => {
+    const fetchBankAccountDetails = async () => {
+      try {
+        const bankAccountCollectionRef = collection(
+          FIRESTORE_DB,
+          "bankAccounts"
+        );
+        const querySnapshot = await getDocs(bankAccountCollectionRef);
+        if (!querySnapshot.empty) {
+          const accountData = querySnapshot.docs[0].data();
+          setName(accountData.accountName);
+          setAccNumber(accountData.accountNo);
+          setBankID(accountData.acqId);
+        }
+      } catch (error) {
+        console.error("Error fetching bank account details:", error);
+      }
+    };
+
+    fetchBankAccountDetails();
+  }, []);
   //tạo button thanh toán bằng QR rồi thêm xử lý onPress là hàm dưới
   const handleQR = () => {
     checkoutAndTurnOffModal;
     const requestBody = {
-      accountNo: "070129499492",
-      accountName: "Tran Luc",
-      acqId: 970403,
+      accountNo: accNumber,
+      accountName: name,
+      acqId: bankID,
       amount: totalCash, // Assuming an amount; you can adjust it as needed
       addInfo: "Thanh toan Billiard club",
       format: "text",
@@ -153,9 +177,7 @@ export const BillModal = ({
         <View
           style={{ justifyContent: "center", alignItems: "center", flex: 1 }}
         >
-          {loading ? (
-            null
-          ) : (
+          {loading ? null : (
             <Image
               source={{ uri: imageUrl }}
               style={{ width: 400, height: 400 }}
