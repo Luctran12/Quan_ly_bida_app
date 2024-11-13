@@ -12,7 +12,7 @@ import {
   View,
 } from "react-native";
 import { FIREBASE_AUTH } from "./firebaseConfig";
-import { LinearGradient } from 'expo-linear-gradient'; // Sử dụng gradient nền
+import { LinearGradient } from "expo-linear-gradient"; // Sử dụng gradient nền
 
 export default function Login({ navigation }) {
   const [email, setEmail] = useState("");
@@ -35,15 +35,14 @@ export default function Login({ navigation }) {
     >
       <ScrollView contentContainerStyle={styles.scrollContainer}>
         <LinearGradient
-          colors={['#ffffff', '#B5FFFC']}
+          colors={["#ffffff", "#f6f6f6"]}
           style={styles.gradientBackground}
         >
           <View style={styles.top}>
             <Image
               style={styles.logo}
-              source={require("../../assets/LoGo.png")}
+              source={require("../../assets/billiard-logo-remove-background.png")}
             />
-            <Text style={styles.textTitle}>Welcome Back</Text>
           </View>
 
           <View style={styles.mid}>
@@ -85,11 +84,13 @@ const styles = StyleSheet.create({
     width: "100%",
   },
   scrollContainer: {
+    borderWidth: 2,
     flexGrow: 1,
     justifyContent: "center",
     alignItems: "center",
   },
   gradientBackground: {
+    // borderWidth: 2,
     flex: 1,
     width: "100%",
     alignItems: "center",
@@ -97,32 +98,34 @@ const styles = StyleSheet.create({
     padding: 20,
   },
   top: {
-    alignItems: "center",
-    marginBottom: 40,
+    // borderWidth: 2,
+    flex: 2,
+    marginTop: 50,
   },
   logo: {
-    width: 120,
-    height: 120,
-    marginBottom: 20,
+    width: 450,
+    height: 420,
   },
   textTitle: {
     fontSize: 36,
     fontWeight: "bold",
     color: "#333",
-    marginBottom: 10,
   },
   mid: {
+    // borderWidth: 2,
+    flex: 1,
     width: "100%",
-    alignItems: "center",
+    alignItems: "flex-start",
+    marginBottom: 70,
   },
   userInput: {
     width: "100%",
     borderBottomWidth: 1,
     borderColor: "#ccc",
-    marginVertical: 15,
+    marginBottom: 15,
     paddingVertical: 10,
     backgroundColor: "#ffffff",
-    borderRadius: 25,
+    borderRadius: 10,
     paddingHorizontal: 15,
     shadowColor: "#000",
     shadowOffset: { width: 0, height: 2 },
@@ -140,7 +143,7 @@ const styles = StyleSheet.create({
     marginTop: 20,
   },
   button: {
-    backgroundColor: "#FF6F61",
+    backgroundColor: "#000000",
     borderRadius: 30,
     width: "100%",
     paddingVertical: 12,

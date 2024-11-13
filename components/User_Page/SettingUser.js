@@ -9,6 +9,9 @@ import {
   Modal,
 } from "react-native";
 import { useSetting } from "./contextAPI/SettingContext";
+import { FIRESTORE_DB } from "../Login_Function/firebaseConfig";
+import { setDoc, doc } from "firebase/firestore";
+import { getAuth } from "firebase/auth";
 
 const SettingPage = ({ navigation }) => {
   const [username, setUsername] = useState("");
@@ -42,7 +45,7 @@ const SettingPage = ({ navigation }) => {
     alert("Thông tin đã được lưu!");
   };
 
-  const handleGenerateQR = () => {
+  const handleGenerateQR = async () => {
     // Set acquirer ID based on bank name
     let id = 0;
     switch (bankName) {
@@ -65,21 +68,35 @@ const SettingPage = ({ navigation }) => {
         setBankError(true); // Show error if bank name is invalid
         return;
     }
-
     navigation.navigate("CreateQR", {
       accountNo: accountNumber,
       accountName: accountName,
       acqId: id, // Use the ID that corresponds to the selected bank
     });
 
-    setAcqId(id); // Set acqId state with the corresponding ID
-    setQrModalVisible(false); // Close the modal
-    // console.log("Account Number:", accountNumber);
-    // console.log("Account Name:", accountName);
-    // console.log("Bank Name:", bankName);
-    // alert("QR Code created!");
-    // setQrModalVisible(false);
-    // setAcqId(id); // Set acqId state with the corresponding ID
+    try {
+      // Get the current user ID from Firebase Auth
+      const auth = getAuth();
+      const user = auth.currentUser;
+      if (!user) {
+        console.error("User is not logged in");
+        return;
+      }
+
+      const uid = user.uid; // Get UID of the logged-in user
+      //The document ID is set to the current user's uid, ensuring that each user has a unique bank account document.
+      await setDoc(doc(FIRESTORE_DB, "bankAccounts", uid), {
+        accountNo: accountNumber,
+        accountName: accountName,
+        acqId: id,
+        amount: 0,
+      });
+
+      setAcqId(id); // Set acqId state with the corresponding ID
+      setQrModalVisible(false); // Close the modal
+    } catch (error) {
+      console.error("Error creating document in Firestore: ", error);
+    }
   };
 
   const validateBankName = (text) => {
