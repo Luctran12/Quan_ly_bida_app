@@ -13,7 +13,15 @@ import {
 import AntDesign from "@expo/vector-icons/AntDesign";
 import { FIREBASE_AUTH } from "../Login_Function/firebaseConfig";
 import { FIRESTORE_DB } from "../Login_Function/firebaseConfig";
-import { collection, doc, getDocs, setDoc } from "firebase/firestore";
+import {
+  collection,
+  doc,
+  getDocs,
+  setDoc,
+  query,
+  where,
+  deleteDoc,
+} from "firebase/firestore";
 import { createUserWithEmailAndPassword } from "firebase/auth";
 
 export default function ManageEmployee({ navigation }) {
@@ -48,26 +56,51 @@ export default function ManageEmployee({ navigation }) {
 
   const signUp = async () => {
     try {
-      const response = await createUserWithEmailAndPassword(auth, email, password);
+      const response = await createUserWithEmailAndPassword(
+        auth,
+        email,
+        password
+      );
       await setDoc(doc(FIRESTORE_DB, "emails", response.user.uid), {
         email: email,
         name: fullName,
       });
-      Alert.alert("Thông báo","Thêm nhân viên thành công!");
-      getAllEmployeeNames();
+      Alert.alert("Thông báo", "Thêm nhân viên thành công!");
+      getAllEmployeeNames(); // Refresh employee list
     } catch (error) {
       alert(error);
     }
   };
 
-  const handleDeleteEmployee = () => {
-    Alert.alert("Thông báo","Xoá nhân viên thành công!");
+  const handleDeleteEmployee = async () => {
+    try {
+      // Query for documents in 'emails' collection that match the provided email
+      const emailsCollectionRef = collection(FIRESTORE_DB, "emails");
+      const q = query(emailsCollectionRef, where("email", "==", email));
+      const querySnapshot = await getDocs(q);
+
+      if (!querySnapshot.empty) {
+        // Loop through the matched documents and delete each one
+        querySnapshot.forEach(async (docSnapshot) => {
+          console.log(docSnapshot.ref);
+          await deleteDoc(docSnapshot.ref);
+        });
+
+        Alert.alert("Thông báo", "Xóa nhân viên thành công!");
+        getAllEmployeeNames(); // Refresh employee list
+      } else {
+        Alert.alert("Thông báo", "Không tìm thấy nhân viên với email đã nhập.");
+      }
+    } catch (error) {
+      console.error("Error deleting employee:", error);
+      Alert.alert("Lỗi", "Đã xảy ra lỗi khi xóa nhân viên.");
+    }
   };
 
   return (
     <View style={styles.container}>
       <Text style={styles.header}>Danh sách nhân viên</Text>
-      
+
       {/* Danh sách nhân viên */}
       <FlatList
         data={employeeList}
@@ -80,7 +113,7 @@ export default function ManageEmployee({ navigation }) {
           </View>
         )}
       />
-      
+
       <TouchableOpacity
         style={styles.editButton}
         onPress={() => changeModalVisible(true)}
@@ -124,7 +157,10 @@ export default function ManageEmployee({ navigation }) {
             <TouchableOpacity style={styles.saveButton} onPress={signUp}>
               <Text style={styles.buttonText}>Thêm nhân viên</Text>
             </TouchableOpacity>
-            <TouchableOpacity style={styles.deleteButton} onPress={handleDeleteEmployee}>
+            <TouchableOpacity
+              style={styles.deleteButton}
+              onPress={handleDeleteEmployee}
+            >
               <Text style={styles.buttonText}>Xóa nhân viên</Text>
             </TouchableOpacity>
           </View>
@@ -176,7 +212,7 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: "#fff",
     padding: 20,
-    marginTop: 20
+    marginTop: 20,
   },
   modalHeader: {
     fontSize: 20,

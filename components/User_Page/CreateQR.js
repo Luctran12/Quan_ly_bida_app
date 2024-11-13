@@ -74,4 +74,5 @@ const CreateQR = ({ route, navigation }) => {
   );
 };
 
+
 export default CreateQR;
