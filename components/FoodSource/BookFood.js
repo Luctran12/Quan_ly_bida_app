@@ -129,7 +129,7 @@ const BookFood = () => {
 };
 const styles = StyleSheet.create({
   list: {
-    margin: 16,
+    margin: 10,
   },
 
   foodLayout: {
@@ -142,7 +142,7 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: "center",
     //marginTop: Platform.OS ==="android" ? 15 : 0,
-    backgroundColor: "#6fdacf",
+    backgroundColor: "#c4c0c4",
   },
 });
 export default BookFood;

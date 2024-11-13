@@ -36,7 +36,8 @@ export default function TablesScreen({ route }) {
         flex: 1,
         justifyContent: "center",
         alignItems: "center",
-        backgroundColor: "#6fdacf",
+        backgroundColor: "#c4c0c4",
+        
       }}
     >
       <FlatList

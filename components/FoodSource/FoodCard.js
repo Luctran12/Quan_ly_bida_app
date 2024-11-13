@@ -26,12 +26,12 @@ const FoodCard = ({ onPress, nameId, indexImage, name, cost }) => {
 const { width } = Dimensions.get("window");
 const styles = StyleSheet.create({
   item: {
-    width: width * 0.43,
-    height: width * 0.55,
+    width: width * 0.4,
+    height: width * 0.58,
     backgroundColor: "#f0f0f0",
     marginBottom: 8,
-    marginLeft: 5,
-    marginRight: 5,
+    marginLeft: 10,
+    marginRight: 10,
     borderWidth: 0,
     borderRadius: 10,
     borderColor: "#3498db",

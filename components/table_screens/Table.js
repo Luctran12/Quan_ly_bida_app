@@ -1,6 +1,6 @@
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { useEffect, useState } from "react";
-import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { StyleSheet, Text, TouchableOpacity, View,Dimensions, Image } from "react-native";
 import { useOrder } from "../context/OrderContext";
 import request from "../utils/request";
 import ChangeOrCheckoutModal from "./ChangeOrCheckoutModal";
@@ -39,6 +39,7 @@ export default function Table({
   const [foodData, setFoodData] = useState([]);
   const [billVisiable, setBillVisiable] = useState(false);
   const [totalCash, setTotalCash] = useState();
+  const [foodCost,setFoodCost] = useState();
 
   // useEffect(() => {
   //   console.log("Start Time Req:", startTimeReq);
@@ -290,6 +291,7 @@ export default function Table({
       setTotalCash(totalCash);
       console.log("mon an: ");
       setFoodData(response2.data.result.orderFoodItems);
+      setFoodCost(response2.data.result.totalCost);
       console.log("foood Data:", response2.data.result.orderFoodItems);
       response2.data.result.orderFoodItems.forEach((item) => {
         console.log(item);
@@ -414,8 +416,8 @@ export default function Table({
     <View
       style={[
         styles.container,
-        { backgroundColor: available ? "#5acddf" : "white" },
-        { borderWidth: 1, marginRight: 15, marginLeft: 8, marginBottom: 10 },
+        { backgroundColor: available ? "#2ec05e" : "#f0f0f0" }, //#3eb265
+        { borderWidth: 1, marginRight: 10, marginLeft: 8, marginBottom: 10 },
       ]}
     >
       <TouchableOpacity
@@ -436,30 +438,36 @@ export default function Table({
           </Text>
           <View style={{ alignItems: "center" }}>
             {available ? (
-              <Ionicons name="tablet-landscape" size={75} color="black" />
+              <Image
+              style={{width:100,height:65,marginBottom:5}}
+              source={require("../../assets/bida/animebd.png")}
+            />
             ) : (
-              <Ionicons
-                name="tablet-landscape-outline"
-                size={75}
-                color="black"
-              />
+              <Image
+              style={{width:100,height:65,marginBottom:5}}
+              source={require("../../assets/bida/animebd.png")}
+            />
             )}
           </View>
+            <Text style={{ paddingLeft: 7 }}>Giá: {cost} đ</Text>
+            <View style={{flexDirection:'row'}}>
 
-          <Text style={{ paddingLeft: 10 }}>Trạng thái: </Text>
+            
+          <Text style={{ paddingLeft: 7 }}>Trạng thái:</Text>
           <Text
             style={{
               marginBottom: 5,
-              paddingLeft: 10,
-              fontSize: 16,
+              
+              fontSize: 14,
               color: "red",
               fontWeight: "bold",
             }}
           >
-            {available ? "đang dùng" : "trống"}
+            {available ? " Đang dùng" : " Trống"}
           </Text>
-          <Text style={{ alignSelf: "center" }}>
-            {available ? "thời gian chơi: " + formatTime(elapsedTime) : ""}
+          </View>
+          <Text style={{ alignSelf: "center", fontSize:20, marginTop:10 }}>
+            {available ? "" + formatTime(elapsedTime) : ""}
           </Text>
         </View>
       </TouchableOpacity>
@@ -489,18 +497,20 @@ export default function Table({
         foodData={foodData}
         checkoutAndTurnOffModal={checkoutAndTurnOffModal}
         totalCash={totalCash}
+        foodCost={foodCost}
       />
     </View>
   );
 }
 
+const { width } = Dimensions.get("window");
 const styles = StyleSheet.create({
   container: {
-    height: 270,
-    width: 177,
+    width: width * 0.4,
+    height: width * 0.58,
     borderRadius: 10,
     marginRight: 10,
-    marginTop: 10,
+    marginTop: 25,
   },
   countTimeButton: {
     height: 30,

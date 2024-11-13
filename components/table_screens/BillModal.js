@@ -20,6 +20,7 @@ export const BillModal = ({
   foodData,
   checkoutAndTurnOffModal,
   totalCash,
+  foodCost
 }) => {
   const { orderId, tableId } = useOrder();
   const [imageUrl, setImageUrl] = useState(null);
@@ -92,6 +93,10 @@ export const BillModal = ({
     )}`;
   }
 
+  const formatCurrency = (number) => {
+    return new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(number);
+  };
+
   function convertElapsedToTime(ms) {
     let date = new Date(ms);
     let hours = date.getUTCHours();
@@ -131,8 +136,11 @@ export const BillModal = ({
             Thời gian kết thúc:{" "}
             {convertMillisecondsToTime(startTime + elapsedTime)}
           </Text>
-          <Text style={{ marginBottom: 10 }}>
+          <Text >
             Tổng thời gian chơi: {convertElapsedToTime(elapsedTime)}
+          </Text>
+          <Text style={{ marginBottom: 10 }}>
+            Tiền Bàn: {formatCurrency(totalCash - foodCost )}
           </Text>
 
           <View style={styles.tableHeader}>
@@ -156,14 +164,14 @@ export const BillModal = ({
                   (total, item) => total + item.food.cost * item.quantity,
                   0
                 )
-                .toLocaleString()}{" "}
+                .toLocaleString()}{""}
               đ
             </Text>
           </View>
 
           <View style={styles.total}>
             <Text style={styles.totalAmountLabel}>
-              Tổng thanh toán: {totalCash} đ
+              Tổng thanh toán: {formatCurrency(totalCash)} 
             </Text>
           </View>
 
