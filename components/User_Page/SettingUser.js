@@ -84,7 +84,7 @@ const SettingPage = ({ navigation }) => {
       }
 
       const uid = user.uid; // Get UID of the logged-in user
-
+      //The document ID is set to the current user's uid, ensuring that each user has a unique bank account document.
       await setDoc(doc(FIRESTORE_DB, "bankAccounts", uid), {
         accountNo: accountNumber,
         accountName: accountName,

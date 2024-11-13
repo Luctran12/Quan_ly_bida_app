@@ -55,6 +55,7 @@ export const BillModal = ({
     };
 
     fetchBankAccountDetails();
+    // fetchBankAccountDetails() is called at the end of useEffect because useEffect itself cannot be async.
   }, []);
   //tạo button thanh toán bằng QR rồi thêm xử lý onPress là hàm dưới
   const handleQR = () => {
