@@ -1,21 +1,18 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
-import { FlatList, SafeAreaView, StyleSheet, Text, View } from "react-native";
-import {
-  GestureHandlerRootView,
-  ScrollView,
-} from "react-native-gesture-handler";
+import { FlatList, SafeAreaView, StyleSheet, Text, View, TouchableOpacity, ScrollView } from "react-native";
+import { GestureHandlerRootView } from "react-native-gesture-handler";
+import { ModalDoanhThu } from "./ModalDoanhThu";
 
 export default function DoanhThuColumn() {
   const [data, setData] = useState([]);
+  const [showBill, setShowBill] = useState(false);
+  const [selectedBill, setSelectedBill] = useState(null);
 
   const handleRevenue = async () => {
-    console.log("Đang gọi API để tạo người dùng...");
     try {
-      const response = await axios.get(
-        "https://quan-ly-bida-backend.onrender.com/status/findAll"
-      );
-      setData(response.data.result); // Cập nhật state với dữ liệu từ API
+      const response = await axios.get("https://quan-ly-bida-backend.onrender.com/status/findAll");
+      setData(response.data.result);
     } catch (error) {
       console.error(error);
     }
@@ -25,15 +22,21 @@ export default function DoanhThuColumn() {
     handleRevenue();
   }, []);
 
-  const RenderItem = ({ id, date, orderId, startTime, endTime, totalCost }) => (
-    <View style={styles.row}>
-      <Text style={styles.text}>{id}</Text>
-      <Text style={styles.text}>{date}</Text>
-      <Text style={styles.text}>{orderId}</Text>
-      <Text style={styles.text}>{startTime}</Text>
-      <Text style={styles.text}>{endTime}</Text>
-      <Text style={styles.textTotal}>{totalCost}</Text>
-    </View>
+  const RenderItem = ({ item }) => (
+    <TouchableOpacity
+      style={styles.row}
+      onPress={() => {
+        setSelectedBill(item); // Lưu thông tin hóa đơn đã chọn
+        setShowBill(true); // Hiển thị modal
+      }}
+    >
+      <Text style={styles.text}>{item.billiardTable.id}</Text>
+      <Text style={styles.text}>{item.date}</Text>
+      <Text style={styles.text}>{item.order.id}</Text>
+      <Text style={styles.text}>{item.startTime}</Text>
+      <Text style={styles.text}>{item.endTime}</Text>
+      <Text style={styles.textTotal}>{item.totalCost}</Text>
+    </TouchableOpacity>
   );
 
   return (
@@ -51,21 +54,20 @@ export default function DoanhThuColumn() {
 
       <ScrollView horizontal>
         <FlatList
-          pagingEnabled={true}
           data={data}
-          renderItem={({ item }) => (
-            <RenderItem
-              id={item.billiardTable.id}
-              date={item.date}
-              orderId={item.order.id}
-              startTime={item.startTime}
-              endTime={item.endTime}
-              totalCost={item.totalCost}
-            />
-          )}
+          renderItem={({ item }) => <RenderItem item={item} />}
           keyExtractor={(item) => item.id.toString()}
         />
       </ScrollView>
+
+      {/* Hiển thị Modal khi bấm vào tổng chi phí */}
+      {showBill && selectedBill && (
+        <ModalDoanhThu
+          {...selectedBill}
+          show={showBill}
+          setShow={setShowBill}
+        />
+      )}
     </GestureHandlerRootView>
   );
 }
