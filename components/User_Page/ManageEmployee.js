@@ -32,6 +32,8 @@ export default function ManageEmployee({ navigation }) {
   const [employeeList, setEmployeeList] = useState([]);
   const [employeeEmailList, setEmployeeEmailList] = useState([]);
   const [settingVisible, setSettingVisible] = useState(false);
+  const [confirmVisible, setConfirmVisible] = useState(false);
+  const [selectedEmployee, setSelectedEmployee] = useState(null);
 
   const changeModalVisible = (bool) => {
     setSettingVisible(bool);
@@ -66,7 +68,7 @@ export default function ManageEmployee({ navigation }) {
         name: fullName,
       });
       Alert.alert("Thông báo", "Thêm nhân viên thành công!");
-      getAllEmployeeNames(); // Refresh employee list
+      getAllEmployeeNames();
     } catch (error) {
       alert(error);
     }
@@ -74,27 +76,34 @@ export default function ManageEmployee({ navigation }) {
 
   const handleDeleteEmployee = async () => {
     try {
-      // Query for documents in 'emails' collection that match the provided email
       const emailsCollectionRef = collection(FIRESTORE_DB, "emails");
-      const q = query(emailsCollectionRef, where("email", "==", email));
+      const q = query(
+        emailsCollectionRef,
+        where("email", "==", selectedEmployee.email)
+      );
       const querySnapshot = await getDocs(q);
 
       if (!querySnapshot.empty) {
-        // Loop through the matched documents and delete each one
         querySnapshot.forEach(async (docSnapshot) => {
-          console.log(docSnapshot.ref);
           await deleteDoc(docSnapshot.ref);
         });
 
         Alert.alert("Thông báo", "Xóa nhân viên thành công!");
-        getAllEmployeeNames(); // Refresh employee list
+        getAllEmployeeNames();
       } else {
         Alert.alert("Thông báo", "Không tìm thấy nhân viên với email đã nhập.");
       }
     } catch (error) {
       console.error("Error deleting employee:", error);
       Alert.alert("Lỗi", "Đã xảy ra lỗi khi xóa nhân viên.");
+    } finally {
+      setConfirmVisible(false);
     }
+  };
+
+  const handleEmployeePress = (name, email) => {
+    setSelectedEmployee({ name, email });
+    setConfirmVisible(true);
   };
 
   return (
@@ -106,11 +115,14 @@ export default function ManageEmployee({ navigation }) {
         data={employeeList}
         keyExtractor={(item, index) => index.toString()}
         renderItem={({ item, index }) => (
-          <View style={styles.employeeContainer}>
+          <TouchableOpacity
+            style={styles.employeeContainer}
+            onPress={() => handleEmployeePress(item, employeeEmailList[index])}
+          >
             <Text style={styles.employeeName}>
               {item}: {employeeEmailList[index]}
             </Text>
-          </View>
+          </TouchableOpacity>
         )}
       />
 
@@ -118,15 +130,16 @@ export default function ManageEmployee({ navigation }) {
         style={styles.editButton}
         onPress={() => changeModalVisible(true)}
       >
-        <Text style={styles.buttonText}>Chỉnh sửa nhân viên</Text>
+        <Text style={styles.buttonText}>Thêm nhân viên</Text>
       </TouchableOpacity>
 
+      {/* Modal for Adding/Editing Employee */}
       <Modal visible={settingVisible} animationType="slide">
         <View style={styles.modalContainer}>
           <TouchableOpacity onPress={() => changeModalVisible(false)}>
             <AntDesign name="back" size={30} color="black" />
           </TouchableOpacity>
-          <Text style={styles.modalHeader}>Chỉnh sửa nhân viên</Text>
+          <Text style={styles.modalHeader}>Thêm Nhân Viên</Text>
 
           <TextInput
             style={styles.input}
@@ -157,12 +170,29 @@ export default function ManageEmployee({ navigation }) {
             <TouchableOpacity style={styles.saveButton} onPress={signUp}>
               <Text style={styles.buttonText}>Thêm nhân viên</Text>
             </TouchableOpacity>
-            <TouchableOpacity
-              style={styles.deleteButton}
-              onPress={handleDeleteEmployee}
-            >
-              <Text style={styles.buttonText}>Xóa nhân viên</Text>
-            </TouchableOpacity>
+          </View>
+        </View>
+      </Modal>
+
+      {/* Confirmation Modal for Deletion */}
+      <Modal visible={confirmVisible} transparent animationType="fade">
+        <View style={styles.confirmModalContainer}>
+          <View style={styles.confirmModalContent}>
+            <Text style={styles.confirmText}>Bạn muốn xóa tài khoản này?</Text>
+            <View style={styles.modalButtonContainer}>
+              <TouchableOpacity
+                style={styles.saveButton}
+                onPress={handleDeleteEmployee}
+              >
+                <Text style={styles.buttonText}>Có</Text>
+              </TouchableOpacity>
+              <TouchableOpacity
+                style={styles.deleteButton}
+                onPress={() => setConfirmVisible(false)}
+              >
+                <Text style={styles.buttonText}>Không</Text>
+              </TouchableOpacity>
+            </View>
           </View>
         </View>
       </Modal>
@@ -236,14 +266,34 @@ const styles = StyleSheet.create({
     backgroundColor: "#2ecc71",
     padding: 10,
     borderRadius: 8,
-    width: "45%",
+    width: "40%",
     alignItems: "center",
+    marginHorizontal: 10,
   },
   deleteButton: {
     backgroundColor: "#e74c3c",
     padding: 10,
     borderRadius: 8,
-    width: "45%",
+    width: "40%",
     alignItems: "center",
+    marginHorizontal: 10,
+  },
+  confirmModalContainer: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "rgba(0,0,0,0.5)",
+  },
+  confirmModalContent: {
+    backgroundColor: "#fff",
+    padding: 20,
+    borderRadius: 10,
+    width: "80%",
+    alignItems: "center",
+  },
+  confirmText: {
+    fontSize: 16,
+    marginBottom: 20,
+    // Adds space between the text and buttons
   },
 });
