@@ -83,6 +83,7 @@ export const BillModal = ({
         console.error("Error fetching image URL:", error);
         setLoading(false);
       });
+      console.log("===> body QR request:",requestBody)
   };
 
   function convertMillisecondsToTime(ms) {

@@ -29,6 +29,8 @@ const CreateQR = ({ route, navigation }) => {
           template: "compact",
         };
 
+        console.log("===>body QR request:",requestBody)
+
         try {
           // Check if the document already exists
           const docSnapshot = await getDoc(bankDocRef);

@@ -70,19 +70,6 @@ function AdminHome({ navigation }) {
             <Image source={imageMap[sex]} style={styles.headerAvata} />
           </View>
         </View>
-        {/* <View
-          style={{
-            borderWidth: 1,
-            height: 120,
-            width: 120,
-            justifyContent: "center",
-            alignItems: "center",
-            borderRadius: 60
-            
-          }}
-        > */}
-
-        {/* </View> */}
       </View>
 
       <View style={styles.gridContainerFistRow}>
@@ -124,6 +111,7 @@ function AdminHome({ navigation }) {
             color="black"
             style={styles.gridIcon}
           />
+
           <Text>Tình Trạng Bàn</Text>
         </TouchableOpacity>
         <TouchableOpacity
