@@ -1,7 +1,5 @@
 import { useNavigation } from "@react-navigation/native";
-import axios from "axios";
-import { collection, getDocs } from "firebase/firestore";
-import React, { useEffect, useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   Button,
   FlatList,
@@ -12,7 +10,9 @@ import {
   View,
 } from "react-native";
 import { useOrder } from "../context/OrderContext";
+import axios from "axios";
 import { FIRESTORE_DB } from "../Login_Function/firebaseConfig";
+import { collection, getDocs } from "firebase/firestore";
 export const BillModal = ({
   visible,
   startTime,
@@ -55,6 +55,7 @@ export const BillModal = ({
     };
 
     fetchBankAccountDetails();
+    // fetchBankAccountDetails() is called at the end of useEffect because useEffect itself cannot be async.
   }, []);
   //tạo button thanh toán bằng QR rồi thêm xử lý onPress là hàm dưới
   const handleQR = () => {

@@ -2,7 +2,9 @@ import axios from "axios";
 import { getAuth } from "firebase/auth";
 import { doc, getDoc, setDoc } from "firebase/firestore";
 import React, { useEffect, useState } from "react";
-import { ActivityIndicator, Image, View } from "react-native";
+import { ActivityIndicator, Button, Image, View } from "react-native";
+import { getAuth } from "firebase/auth";
+import { doc, setDoc, getDoc } from "firebase/firestore";
 import { FIRESTORE_DB } from "../Login_Function/firebaseConfig";
 
 const CreateQR = ({ route, navigation }) => {
@@ -73,6 +75,5 @@ const CreateQR = ({ route, navigation }) => {
     </View>
   );
 };
-
 
 export default CreateQR;

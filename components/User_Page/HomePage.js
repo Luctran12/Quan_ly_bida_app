@@ -59,26 +59,30 @@ function AdminHome({ navigation }) {
   const { name, sex } = useSetting();
 
   return (
-    <View style={styles.container}>
+    <LinearGradient colors={["#ffffff", "#f6f6f6"]} style={styles.container}>
       <View style={styles.header}>
         <View style={styles.headerSide}>
-          <Text style={styles.headerTitle}>CHỦ QUÁN</Text>
-          <Text style={styles.headerText}>{name}</Text>
+          <View>
+            <Text style={styles.headerTitle}>CHỦ QUÁN</Text>
+            <Text style={styles.headerText}>{name}</Text>
+          </View>
+          <View style={styles.ownerImage}>
+            <Image source={imageMap[sex]} style={styles.headerAvata} />
+          </View>
         </View>
-        <View
+        {/* <View
           style={{
             borderWidth: 1,
             height: 120,
             width: 120,
             justifyContent: "center",
             alignItems: "center",
-            backgroundColor: "gray",
+            borderRadius: 60
+            
           }}
-        >
-          <View style={styles.headerSide}>
-            <Image source={imageMap[sex]} style={styles.headerAvata} />
-          </View>
-        </View>
+        > */}
+
+        {/* </View> */}
       </View>
 
       <View style={styles.gridContainerFistRow}>
@@ -137,7 +141,8 @@ function AdminHome({ navigation }) {
           <Text>Chỉnh Sửa</Text>
         </TouchableOpacity>
       </View>
-    </View>
+      {/* </LinearGradient> */}
+    </LinearGradient>
   );
 }
 
@@ -187,7 +192,9 @@ const styles = StyleSheet.create({
   },
   headerSide: {
     flex: 1,
+    flexDirection: "row",
     alignItems: "center",
+    justifyContent: "space-evenly",
   },
   headerTitle: {
     fontSize: 30,
@@ -200,9 +207,14 @@ const styles = StyleSheet.create({
     marginBottom: 10,
   },
   headerAvata: {
-    width: 100,
-    height: 100,
+    width: "100%",
+    height: "100%",
     resizeMode: "contain",
+  },
+  ownerImage: {
+    // borderWidth: 1,
+    height: 120,
+    width: 120,
   },
   gridContainerFistRow: {
     flexDirection: "row",
@@ -219,8 +231,8 @@ const styles = StyleSheet.create({
     width: 140,
     justifyContent: "center",
     alignItems: "center",
-    borderWidth: 1,
-    borderColor: "#ccc",
+    borderWidth: 4,
+    borderColor: "#e6f3fa",
     backgroundColor: "white",
     borderRadius: 15,
     shadowColor: "#000",
