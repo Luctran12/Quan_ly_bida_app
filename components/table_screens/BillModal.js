@@ -7,12 +7,15 @@ import {
   Modal,
   StyleSheet,
   Text,
+  TouchableHighlight,
+  TouchableOpacityComponent,
   View,
 } from "react-native";
 import { useOrder } from "../context/OrderContext";
 import axios from "axios";
 import { FIRESTORE_DB } from "../Login_Function/firebaseConfig";
 import { collection, getDocs } from "firebase/firestore";
+import { TouchableOpacity } from "react-native-gesture-handler";
 export const BillModal = ({
   visible,
   startTime,
@@ -179,17 +182,22 @@ export const BillModal = ({
           <Text style={styles.footer}>Xin cam on quy khach!</Text>
 
           <View style={styles.buttonContainer}>
-            <Button title="Hoàn thành" onPress={handleCheckout} />
+            <View style={{width:80, flexDirection:'row'}}>
+            <Button onPress={handleQR} title="Mã QR code" />
+            <View style={{width:'220%'}}></View>
+              <Button title="Hoàn thành" onPress={handleCheckout} />
+              </View>
+            
           </View>
         </View>
-        <Button onPress={handleQR} title="thanh toán qua QR code" />
+        
         <View
-          style={{ justifyContent: "center", alignItems: "center", flex: 1 }}
+          style={{ justifyContent: "center", alignItems: "center", flex: 1, marginBottom:10 }}
         >
           {loading ? null : (
             <Image
               source={{ uri: imageUrl }}
-              style={{ width: 400, height: 400 }}
+              style={{ width: 380, height: 360, borderRadius:30 }}
             />
           )}
         </View>

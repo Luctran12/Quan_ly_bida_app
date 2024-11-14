@@ -416,8 +416,8 @@ export default function Table({
     <View
       style={[
         styles.container,
-        { backgroundColor: available ? "#2ec05e" : "#f0f0f0" }, //#3eb265
-        { borderWidth: 1, marginRight: 10, marginLeft: 8, marginBottom: 10 },
+        { backgroundColor: available ? "#2ec05e" : "#f3f6f7" }, //#3eb265
+        {  marginRight: 10, marginLeft: 8, marginBottom: 5 },
       ]}
     >
       <TouchableOpacity
@@ -449,7 +449,7 @@ export default function Table({
             />
             )}
           </View>
-            <Text style={{ paddingLeft: 7 }}>Giá: {cost} đ</Text>
+            <Text style={{fontSize:15, paddingLeft: 7, marginTop:5, marginBottom:3 }}>Giá: {cost}/h</Text>
             <View style={{flexDirection:'row'}}>
 
             
@@ -458,7 +458,7 @@ export default function Table({
             style={{
               marginBottom: 5,
               
-              fontSize: 14,
+              fontSize: 15,
               color: "red",
               fontWeight: "bold",
             }}
