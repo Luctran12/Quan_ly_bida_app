@@ -6,28 +6,70 @@ import { ModalDoanhThu } from "./ModalDoanhThu";
 
 export default function DoanhThuColumn() {
   const [data, setData] = useState([]);
+  const [filteredData, setFilteredData] = useState([]);
   const [showBill, setShowBill] = useState(false);
   const [selectedBill, setSelectedBill] = useState(null);
+  const [selectedMonth, setSelectedMonth] = useState(null);
+  const [selectedDay, setSelectedDay] = useState(null);
 
+  useEffect(() => {
+    handleRevenue();
+  }, []); 
+
+  // Fetch data on component mount
   const handleRevenue = async () => {
     try {
       const response = await axios.get("https://quan-ly-bida-backend.onrender.com/status/findAll");
+      console.log('API Response:', response.data); // Log the response to check the structure
       setData(response.data.result);
+      setFilteredData(response.data.result); // Initially display all data
     } catch (error) {
       console.error(error);
     }
   };
 
-  useEffect(() => {
-    handleRevenue();
-  }, []);
+  // Filter data based on selected month and day
+  const filterData = () => {
+    const filtered = data.filter((item) => {
+      // Parse item.date
+      const [day, month, year] = item.date.split("/").map(Number);
 
+      // Set conditions for filtering based on selectedMonth and selectedDay
+      const monthMatches = selectedMonth === null || month === selectedMonth;
+      const dayMatches = selectedDay === null || day === selectedDay;
+
+      return monthMatches && dayMatches;
+    });
+
+    setFilteredData(filtered);
+  };
+
+  // Trigger filtering when selectedMonth or selectedDay changes
+  useEffect(() => {
+    filterData();
+  }, [selectedMonth, selectedDay, data]);
+
+  // Filter by current month
+  const filterByCurrentMonth = () => {
+    const currentMonth = new Date().getMonth() + 1; // JavaScript months are 0-indexed
+    setSelectedMonth(currentMonth);
+    setSelectedDay(null); // Set day to null to filter by month only
+  };
+
+  // Filter by current day
+  const filterByCurrentDay = () => {
+    const currentDate = new Date();
+    setSelectedDay(currentDate.getDate());
+    setSelectedMonth(currentDate.getMonth() + 1); // Ensure month matches the current day
+  };
+
+  // Render each item in the list
   const RenderItem = ({ item }) => (
     <TouchableOpacity
       style={styles.row}
       onPress={() => {
-        setSelectedBill(item); // Lưu thông tin hóa đơn đã chọn
-        setShowBill(true); // Hiển thị modal
+        setSelectedBill(item);
+        setShowBill(true);
       }}
     >
       <Text style={styles.text}>{item.billiardTable.id}</Text>
@@ -41,6 +83,21 @@ export default function DoanhThuColumn() {
 
   return (
     <GestureHandlerRootView style={{ flex: 1, alignItems: "center" }}>
+      <View style={styles.filterContainer}>
+        {/* Clear filters button */}
+        <TouchableOpacity onPress={() => { setSelectedMonth(null); setSelectedDay(null); setFilteredData(data); }} style={styles.filterButton}>
+          <Text style={styles.filterText}>Clear Filters</Text>
+        </TouchableOpacity>
+        {/* Filter by Current Month */}
+        <TouchableOpacity onPress={filterByCurrentMonth} style={styles.filterButton}>
+          <Text style={styles.filterText}>Filter by Current Month</Text>
+        </TouchableOpacity>
+        {/* Filter by Current Day */}
+        <TouchableOpacity onPress={filterByCurrentDay} style={styles.filterButton}>
+          <Text style={styles.filterText}>Filter by Current Day</Text>
+        </TouchableOpacity>
+      </View>
+
       <SafeAreaView style={styles.headerRow}>
         <View style={{ flexDirection: "row" }}>
           <Text style={styles.header}>Table</Text>
@@ -54,16 +111,21 @@ export default function DoanhThuColumn() {
 
       <ScrollView horizontal>
         <FlatList
-          data={data}
+          data={filteredData} // Use filteredData here
           renderItem={({ item }) => <RenderItem item={item} />}
           keyExtractor={(item) => item.id.toString()}
+          ListEmptyComponent={<Text style={{ textAlign: 'center' }}>No data available</Text>}
         />
       </ScrollView>
 
-      {/* Hiển thị Modal khi bấm vào tổng chi phí */}
       {showBill && selectedBill && (
         <ModalDoanhThu
-          {...selectedBill}
+          table={selectedBill.table}
+          startTime={selectedBill.startTime}
+          endTime={selectedBill.endTime}
+          totalTime={selectedBill.totalTime}
+          totalCost={selectedBill.totalCost}
+          order={selectedBill.order.orderFoodItems}
           show={showBill}
           setShow={setShowBill}
         />
@@ -73,6 +135,20 @@ export default function DoanhThuColumn() {
 }
 
 const styles = StyleSheet.create({
+  filterContainer: {
+    flexDirection: "row",
+    justifyContent: "space-around",
+    marginVertical: 10,
+  },
+  filterButton: {
+    padding: 10,
+    backgroundColor: "#ddd",
+    borderRadius: 5,
+  },
+  filterText: {
+    color: "#333",
+    fontWeight: "bold",
+  },
   headerRow: {
     flexDirection: "row",
     backgroundColor: "#1da1f2",

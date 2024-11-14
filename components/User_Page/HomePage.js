@@ -67,12 +67,12 @@ function AdminHome({ navigation }) {
         </View>
         <View
           style={{
-            borderWidth: 1,
+            
             height: 120,
             width: 120,
             justifyContent: "center",
             alignItems: "center",
-            backgroundColor: "gray",
+            
           }}
         >
           <View style={styles.headerSide}>

@@ -1,17 +1,34 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Modal, View, Text, TouchableOpacity, FlatList, StyleSheet } from 'react-native';
 
-export const ModalDoanhThu = ({ id, orderId, date, startTime, endTime, totalCost, orderFoodItems, totalTime, show, setShow }) => {
+export const ModalDoanhThu = ({ id, orderId, date, startTime, endTime, totalCost, order, totalTime, show, setShow }) => {
+  const[foodCost,setFoodCost] = useState(0);
   // Hàm render từng món ăn trong hóa đơn
   const renderFoodItem = ({ item, index }) => (
     <View style={styles.row}>
-      <Text style={styles.cell}>{index + 1}. {item.food.name}</Text>
+      <Text style={styles.cell} > {item.food.name}</Text>
       <Text style={styles.cell}>{item.food.cost.toLocaleString()} đ</Text>
       <Text style={styles.cell}>{item.quantity}</Text>
-      <Text style={styles.cell}>{(item.food.cost * item.quantity).toLocaleString()} đ</Text>
-      {console.log('=====>'+item.food.name)}
+      <Text style={{ marginLeft: 10 }}>{(item.food.cost * item.quantity).toLocaleString()} đ</Text>
+      {console.log('=====>abcdef' + item.food.name)}
     </View>
   );
+
+  useEffect(() => {
+    console.log("=====>, items order:", order);
+  }, []);
+
+  const calculateFoodCost = () => {
+   
+    const cost = order
+      .reduce(
+        (total, item) => total + item.food.cost * item.quantity,
+        0
+      )
+      console.log("==========>",typeof cost)
+      
+      return cost;
+  }
 
   return (
     <Modal
@@ -27,6 +44,7 @@ export const ModalDoanhThu = ({ id, orderId, date, startTime, endTime, totalCost
           <Text>Thời gian bắt đầu: {startTime}</Text>
           <Text>Thời gian kết thúc: {endTime}</Text>
           <Text>Tổng thời gian chơi: {totalTime}</Text>
+          <Text>Tiền bàn: {(totalCost - calculateFoodCost()).toLocaleString()} d</Text>
 
           <View style={styles.tableHeader}>
             <Text style={styles.headerCell}>Món ăn</Text>
@@ -37,10 +55,19 @@ export const ModalDoanhThu = ({ id, orderId, date, startTime, endTime, totalCost
 
           {/* Hiển thị danh sách các món ăn trong hóa đơn */}
           <FlatList
-            data={orderFoodItems}
+            data={order}
             renderItem={renderFoodItem}
             keyExtractor={(item) => item.id.toString()}
           />
+          <View style={{ flexDirection: 'row' }}>
+            <Text style={{marginRight:20}}>Tổng tiền thức ăn:</Text>
+
+            <Text style={styles.totalAmount}>
+              {calculateFoodCost(order)
+                .toLocaleString()}{" "}
+              đ
+            </Text>
+          </View>
 
           <Text style={styles.totalLabel}>Tổng thanh toán: {totalCost.toLocaleString()} đ</Text>
 
@@ -89,8 +116,10 @@ const styles = StyleSheet.create({
     paddingVertical: 5,
   },
   cell: {
-    flex: 1,
+
+    //color:"blue",
     textAlign: 'center',
+    marginRight: 25
   },
   totalLabel: {
     fontSize: 16,
